@@ -1,0 +1,7 @@
+<resources>
+    <string name="app_name">Visual Merchandising</string>
+    <string name="title_activity_product_list">ProductList</string>
+
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+</resources>

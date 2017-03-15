@@ -1,0 +1,28 @@
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    tools:context="com.tophawks.vm.visualmerchandising.VMHomeFragment">
+
+    <android.support.design.widget.AppBarLayout
+        android:layout_width="match_parent"
+        android:layout_height="?attr/actionBarSize">
+        <include layout="@layout/toolbar_layout"/>
+    </android.support.design.widget.AppBarLayout>
+
+    <com.daimajia.slider.library.SliderLayout
+        android:id="@+id/vm_home_image_slider"
+        android:layout_width="match_parent"
+        android:layout_height="220dp"
+        android:layout_gravity="left|top"
+        app:pager_animation="Fade"
+        app:pager_animation_span="1100"
+        android:padding="6sp"
+        />
+<android.support.v7.widget.RecyclerView
+    android:layout_width="match_parent"
+    android:layout_height="200sp"
+    android:id="@+id/vm_home_rv"></android.support.v7.widget.RecyclerView>
+</LinearLayout>

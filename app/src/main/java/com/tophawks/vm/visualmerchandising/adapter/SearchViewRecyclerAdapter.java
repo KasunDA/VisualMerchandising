@@ -1,0 +1,84 @@
+package com.tophawks.vm.visualmerchandising.adapter;
+
+import android.content.Context;
+import android.support.annotation.LayoutRes;
+import android.support.annotation.NonNull;
+import android.support.v7.widget.RecyclerView;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.view.ViewGroup;
+import android.widget.ArrayAdapter;
+import android.widget.ImageView;
+import android.widget.TextView;
+
+import com.squareup.picasso.Picasso;
+import com.tophawks.vm.visualmerchandising.R;
+import com.tophawks.vm.visualmerchandising.model.Product;
+
+import java.util.ArrayList;
+import java.util.zip.Inflater;
+
+/**
+ * Created by Sanidhya on 12-Mar-17.
+ */
+
+public class SearchViewRecyclerAdapter extends RecyclerView.Adapter<SearchViewRecyclerAdapter.ProductViewHolder>{
+
+    ArrayList<Product> productArrayList;
+    Context context;
+
+    public SearchViewRecyclerAdapter(Context context,ArrayList<Product> productArrayList) {
+        this.context=context;
+        this.productArrayList = productArrayList;
+    }
+
+    @Override
+    public ProductViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+
+        View view= LayoutInflater.from(context).inflate(R.layout.search_result_row,parent,false);
+        return (new ProductViewHolder(view));
+    }
+
+    @Override
+    public void onBindViewHolder(ProductViewHolder holder, int position) {
+        Picasso.with(context).load(productArrayList.get(position).getImageUrl()).into(holder.productThumbIV);
+        holder.productOriginalPriceTV.setText(""+productArrayList.get(position).getOriginalPrice());
+        holder.productWholeSalePriceTV.setText(""+productArrayList.get(position).getWholeSalePrice());
+        holder.productName.setText(productArrayList.get(position).getProductName());
+    }
+
+    @Override
+    public int getItemCount() {
+        return productArrayList.size();
+    }
+
+    class ProductViewHolder extends RecyclerView.ViewHolder {
+
+        ImageView productThumbIV;
+        TextView productOriginalPriceTV;
+        TextView productWholeSalePriceTV;
+        TextView productName;
+
+        public ProductViewHolder(View itemView) {
+            super(itemView);
+            this.productThumbIV=(ImageView)itemView.findViewById(R.id.row_item_thum_iv);
+            this.productOriginalPriceTV=(TextView)itemView.findViewById(R.id.row_item_original_price_tv);
+            this.productWholeSalePriceTV=(TextView)itemView.findViewById(R.id.row_item_wholesale_price_tv);
+            this.productName=(TextView)itemView.findViewById(R.id.row_item_name_tv);
+        }
+    }
+
+    public void productFilter(ArrayList<Product> newList)
+    {
+        productArrayList=new ArrayList<>();
+        productArrayList.addAll(newList);
+        notifyDataSetChanged();
+    }
+
+    public void sortProduct(ArrayList<Product> newList)
+    {
+        productArrayList=new ArrayList<>();
+        productArrayList.addAll(newList);
+        notifyDataSetChanged();
+    }
+}
