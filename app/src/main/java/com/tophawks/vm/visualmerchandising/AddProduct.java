@@ -37,7 +37,6 @@ public class AddProduct extends AppCompatActivity {
     EditText productName, originalPrice, discountPrice, wholeSalePrice, retailPrice, proQuantity, proColor, proSpec;
     Spinner categoryS, brandNameS;
     LinearLayout addProduct;
-    long itemId = 0;
     //IMAGE HOLDING URI
     Uri imageHold = null;
 
