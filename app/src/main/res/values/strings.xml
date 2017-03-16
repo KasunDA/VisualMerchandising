@@ -4,4 +4,14 @@
 
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string-array name="product_category">
+        <item>apparel</item>
+        <item>home decoration</item>
+        <item>electronics</item>
+    </string-array>
+    <string-array name="product_brand_name">
+        <item>philips</item>
+        <item>videocon</item>
+        <item>sony</item>
+    </string-array>
 </resources>

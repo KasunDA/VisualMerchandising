@@ -1,9 +1,7 @@
 package com.tophawks.vm.visualmerchandising;
 
-import android.net.Uri;
+import android.content.Intent;
 import android.os.Bundle;
-import android.support.design.widget.FloatingActionButton;
-import android.support.design.widget.Snackbar;
 import android.support.v4.view.MenuItemCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
@@ -52,13 +50,21 @@ public class AllProducts extends AppCompatActivity implements SearchView.OnQuery
                 Product.class, R.layout.search_result_row, ProductViewHolder.class, databaseReference
         ) {
             @Override
-            protected void populateViewHolder(ProductViewHolder holder, Product model, int position) {
+            protected void populateViewHolder(ProductViewHolder holder, final Product model, int position) {
 
                 productArrayList.add(model);
                 Picasso.with(getApplicationContext()).load(model.getImageUrl()).into(holder.productThumbIV);
                 holder.productOriginalPriceTV.setText("" + productArrayList.get(position).getOriginalPrice());
                 holder.productWholeSalePriceTV.setText("" + productArrayList.get(position).getWholeSalePrice());
                 holder.productName.setText(productArrayList.get(position).getProductName());
+                holder.mView.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        Intent blogDetail = new Intent(AllProducts.this, ProductDescription.class);
+                        blogDetail.putExtra("product_id", model.getItemId());
+                        startActivity(blogDetail);
+                    }
+                });
 
             }
         };
@@ -162,6 +168,7 @@ public class AllProducts extends AppCompatActivity implements SearchView.OnQuery
 
     public static class ProductViewHolder extends RecyclerView.ViewHolder {
 
+        View mView;
         ImageView productThumbIV;
         TextView productOriginalPriceTV;
         TextView productWholeSalePriceTV;
@@ -169,6 +176,7 @@ public class AllProducts extends AppCompatActivity implements SearchView.OnQuery
 
         public ProductViewHolder(View itemView) {
             super(itemView);
+            mView = itemView;
             this.productThumbIV = (ImageView) itemView.findViewById(R.id.row_item_thum_iv);
             this.productOriginalPriceTV = (TextView) itemView.findViewById(R.id.row_item_original_price_tv);
             this.productWholeSalePriceTV = (TextView) itemView.findViewById(R.id.row_item_wholesale_price_tv);

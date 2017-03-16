@@ -1,18 +1,14 @@
 package com.tophawks.vm.visualmerchandising;
 
 
-import android.content.Intent;
 import android.net.Uri;
-import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Toast;
 
 import com.daimajia.slider.library.Animations.DescriptionAnimation;
 import com.daimajia.slider.library.SliderLayout;
@@ -32,7 +28,6 @@ import com.tophawks.vm.visualmerchandising.model.Product;
 
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.Objects;
 
 
 /**
@@ -71,7 +66,7 @@ public class VMHomeFragment extends Fragment {
         databaseReference=FirebaseDatabase.getInstance().getReference();
 
         Query query=databaseReference.child("Product").orderByChild("originalPrice").limitToFirst(3);
-        query.addListenerForSingleValueEvent(new ValueEventListener() {
+        query.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
                 for (DataSnapshot product:dataSnapshot.getChildren()) {
@@ -87,7 +82,9 @@ public class VMHomeFragment extends Fragment {
                            ,Float.parseFloat(map.get("retailPrice").toString())
                            ,Float.parseFloat(map.get("originalPrice").toString())
                            ,Float.parseFloat(map.get("discountPrice").toString())
-                           , Integer.parseInt(map.get("productQuantity").toString())));
+                           , Integer.parseInt(map.get("productQuantity").toString())
+                           , (String) map.get("category"),
+                           (String) map.get("brandName")));
                 }
 
                 RecyclerView.LayoutManager manager=new LinearLayoutManager(getActivity(),LinearLayoutManager.HORIZONTAL,false);
@@ -95,7 +92,6 @@ public class VMHomeFragment extends Fragment {
                 popularRV.hasFixedSize();
                 adapter=new SearchViewRecyclerAdapter(getActivity(),productArrayList);
                 popularRV.setAdapter(adapter);
-
             }
 
             @Override

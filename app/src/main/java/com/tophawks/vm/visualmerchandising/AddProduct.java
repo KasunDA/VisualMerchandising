@@ -11,9 +11,12 @@ import android.text.TextUtils;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
 import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.LinearLayout;
+import android.widget.Spinner;
 import android.widget.Toast;
 
 import com.google.android.gms.tasks.OnSuccessListener;
@@ -26,26 +29,25 @@ import com.theartofdev.edmodo.cropper.CropImage;
 import com.theartofdev.edmodo.cropper.CropImageView;
 import com.tophawks.vm.visualmerchandising.model.Product;
 
-import java.util.ArrayList;
-
 public class AddProduct extends AppCompatActivity {
 
     private static final int GALLERY_REQUEST_CODE = 2;
     //DECLARE THE REFERENCES FOR VIEWS AND WIDGETS
     ImageButton productImage;
     EditText productName, originalPrice, discountPrice, wholeSalePrice, retailPrice, proQuantity, proColor, proSpec;
+    Spinner categoryS, brandNameS;
     LinearLayout addProduct;
-    ArrayList<Product> productArrayList;
     long itemId = 0;
     //IMAGE HOLDING URI
     Uri imageHold = null;
 
     //STRING FIELDS
-    String whoPrice, orgPrice, disPrice, retPrice, proName, quantity, proColorName, proSpecification;
+    String whoPrice, orgPrice, disPrice, retPrice, proName, quantity, proColorName, proSpecification, category, brandName;
 
     //DATABASE AND STORAGE REFERENCES
     StorageReference mStorageReference;
     DatabaseReference mDatabaseReference;
+    ArrayAdapter brandNameAdapter, categoryAdapter;
 
     //PROGRESS DIALOG
     ProgressDialog mProgress;
@@ -79,6 +81,37 @@ public class AddProduct extends AppCompatActivity {
         proSpec = (EditText) findViewById(R.id.product_specification);
         addProduct = (LinearLayout) findViewById(R.id.addProductButton);
 
+        categoryS = (Spinner) findViewById(R.id.detail_category_s);
+        brandNameS = (Spinner) findViewById(R.id.detail_brand_name_s);
+        brandNameAdapter = ArrayAdapter.createFromResource(this, R.array.product_brand_name, android.R.layout.simple_spinner_item);
+        categoryAdapter = ArrayAdapter.createFromResource(this, R.array.product_category, android.R.layout.simple_spinner_item);
+        brandNameAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        categoryAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        brandNameS.setAdapter(brandNameAdapter);
+        categoryS.setAdapter(categoryAdapter);
+
+        categoryS.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                category = parent.getItemAtPosition(position).toString();
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> parent) {
+
+            }
+        });
+        brandNameS.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                brandName = parent.getItemAtPosition(position).toString();
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> parent) {
+
+            }
+        });
         //ASSIGN REFERENCES
         mDatabaseReference = FirebaseDatabase.getInstance().getReference();
         mStorageReference = FirebaseStorage.getInstance().getReference();
@@ -92,6 +125,7 @@ public class AddProduct extends AppCompatActivity {
                 startActivityForResult(imagePickIntent, GALLERY_REQUEST_CODE);
             }
         });
+
         addProduct.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -123,7 +157,9 @@ public class AddProduct extends AppCompatActivity {
                 && !TextUtils.isEmpty(disPrice)
                 && !TextUtils.isEmpty(quantity)
                 && !TextUtils.isEmpty(proColorName)
-                && !TextUtils.isEmpty(proSpecification)) {
+                && !TextUtils.isEmpty(proSpecification)
+                && !TextUtils.isEmpty(category)
+                && !TextUtils.isEmpty(brandName)) {
 
             if (imageHold != null) {
 
@@ -138,8 +174,16 @@ public class AddProduct extends AppCompatActivity {
                         Uri downloadUri =taskSnapshot.getDownloadUrl();
                         DatabaseReference mChildDatabase = mDatabaseReference.child("Product").push();
                         //ENTER ALL THE PRODUCTS WITH KEYS IN THE DATASBSE
-                        Product productRef = new Product(mChildDatabase.getKey(), proName, proColorName, proSpecification, downloadUri.toString(), Float.valueOf(whoPrice),
-                                Float.valueOf(retPrice), Float.valueOf(orgPrice),Float.valueOf(disPrice), Integer.valueOf(quantity));
+                        Product productRef = new Product(mChildDatabase.getKey()
+                                , proName, proColorName
+                                , proSpecification
+                                , downloadUri.toString()
+                                , Float.valueOf(whoPrice)
+                                , Float.valueOf(retPrice)
+                                , Float.valueOf(orgPrice)
+                                , Float.valueOf(disPrice)
+                                , Integer.valueOf(quantity)
+                                , category, brandName);
                         mChildDatabase.setValue(productRef);
                         mProgress.dismiss();
                     }

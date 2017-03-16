@@ -1,8 +1,5 @@
 package com.tophawks.vm.visualmerchandising.model;
 
-import android.os.Parcel;
-import android.os.Parcelable;
-
 import java.io.Serializable;
 
 /**
@@ -16,10 +13,11 @@ public class Product implements Serializable{
     private float wholeSalePrice, retailPrice, originalPrice, discountPrice;
     private int productQuantity;
 
-    public Product() {
-    }
 
-    public Product(String itemId, String productName, String productColor, String productSpecification, String imageUrl, float wholeSalePrice, float retailPrice, float originalPrice, float discountPrice, int productQuantity) {
+    private String category, brandName;
+
+
+    public Product(String itemId, String productName, String productColor, String productSpecification, String imageUrl, float wholeSalePrice, float retailPrice, float originalPrice, float discountPrice, int productQuantity, String category, String brandName) {
         this.itemId = itemId;
         this.productName = productName;
         this.productColor = productColor;
@@ -30,6 +28,24 @@ public class Product implements Serializable{
         this.originalPrice = originalPrice;
         this.discountPrice = discountPrice;
         this.productQuantity = productQuantity;
+        this.category = category;
+        this.brandName = brandName;
+    }
+
+    public String getCategory() {
+        return category;
+    }
+
+    public void setCategory(String category) {
+        this.category = category;
+    }
+
+    public String getBrandName() {
+        return brandName;
+    }
+
+    public void setBrandName(String brandName) {
+        this.brandName = brandName;
     }
 
     public String getItemId() {
