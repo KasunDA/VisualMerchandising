@@ -31,7 +31,7 @@ import com.tophawks.vm.visualmerchandising.model.Product;
 
 public class AddProduct extends AppCompatActivity {
 
-    private static final int GALLERY_REQUEST_CODE = 2;
+    private static final int GALLERY_REQUEST_CODE = 299;
     //DECLARE THE REFERENCES FOR VIEWS AND WIDGETS
     ImageButton productImage;
     EditText productName, originalPrice, discountPrice, wholeSalePrice, retailPrice, proQuantity, proColor, proSpec;

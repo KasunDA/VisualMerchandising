@@ -41,7 +41,6 @@ public class VMHomeFragment extends Fragment {
     RecyclerView popularRV;
     ArrayList<Product> productArrayList;
     SearchViewRecyclerAdapter adapter;
-
     public VMHomeFragment() {
         // Required empty public constructor
     }
@@ -69,11 +68,11 @@ public class VMHomeFragment extends Fragment {
         query.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
-                for (DataSnapshot product:dataSnapshot.getChildren()) {
-                    HashMap<String,Object> map=(HashMap<String, Object>)product.getValue();
+                for (DataSnapshot products : dataSnapshot.getChildren()) {
+                    HashMap<String, Object> map = (HashMap<String, Object>) products.getValue();
 
                    productArrayList.add(new Product(
-                         product.getKey()
+                           products.getKey()
                            ,(String)map.get("productName")
                            ,(String)map.get("productColor")
                            ,(String)map.get("productSpecification")
@@ -92,6 +91,7 @@ public class VMHomeFragment extends Fragment {
                 popularRV.hasFixedSize();
                 adapter=new SearchViewRecyclerAdapter(getActivity(),productArrayList);
                 popularRV.setAdapter(adapter);
+
             }
 
             @Override

@@ -61,7 +61,8 @@ public class AllProducts extends AppCompatActivity implements SearchView.OnQuery
                     @Override
                     public void onClick(View v) {
                         Intent blogDetail = new Intent(AllProducts.this, ProductDescription.class);
-                        blogDetail.putExtra("product_id", model.getItemId());
+                        String itemIdForIntent = model.getItemId().toString();
+                        blogDetail.putExtra("product_id", itemIdForIntent);
                         startActivity(blogDetail);
                     }
                 });

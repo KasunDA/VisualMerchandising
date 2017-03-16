@@ -64,6 +64,7 @@ public class ProductDescription extends AppCompatActivity {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
 
+
                 productName.setText(String.valueOf(dataSnapshot.child("productName").getValue()));
                 retailPrice.setText(String.valueOf(dataSnapshot.child("retailPrice").getValue()));
                 wholeSalePrice.setText(String.valueOf(dataSnapshot.child("wholeSalePrice").getValue()));
@@ -72,7 +73,8 @@ public class ProductDescription extends AppCompatActivity {
                 specification.setText(dataSnapshot.child("productSpecification").getValue().toString());
                 color.setText(dataSnapshot.child("productColor").getValue().toString());
                 quantity.setText(String.valueOf(dataSnapshot.child("productQuantity").getValue()));
-
+                category.setText(dataSnapshot.child("category").getValue().toString());
+                brandName.setText(dataSnapshot.child("brandName").getValue().toString());
                 Picasso.with(getApplicationContext()).load(dataSnapshot.child("imageUrl").getValue().toString()).into(productDisplay);
 
             }

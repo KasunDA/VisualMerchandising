@@ -1,22 +1,20 @@
 package com.tophawks.vm.visualmerchandising.adapter;
 
 import android.content.Context;
-import android.support.annotation.LayoutRes;
-import android.support.annotation.NonNull;
+import android.content.Intent;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ArrayAdapter;
 import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.squareup.picasso.Picasso;
+import com.tophawks.vm.visualmerchandising.ProductDescription;
 import com.tophawks.vm.visualmerchandising.R;
 import com.tophawks.vm.visualmerchandising.model.Product;
 
 import java.util.ArrayList;
-import java.util.zip.Inflater;
 
 /**
  * Created by Sanidhya on 12-Mar-17.
@@ -36,7 +34,7 @@ public class SearchViewRecyclerAdapter extends RecyclerView.Adapter<SearchViewRe
     public ProductViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
 
         View view= LayoutInflater.from(context).inflate(R.layout.search_result_row,parent,false);
-        return (new ProductViewHolder(view));
+        return (new ProductViewHolder(view, context, productArrayList));
     }
 
     @Override
@@ -52,33 +50,47 @@ public class SearchViewRecyclerAdapter extends RecyclerView.Adapter<SearchViewRe
         return productArrayList.size();
     }
 
-    class ProductViewHolder extends RecyclerView.ViewHolder {
+    public void productFilter(ArrayList<Product> newList) {
+        productArrayList = new ArrayList<>();
+        productArrayList.addAll(newList);
+        notifyDataSetChanged();
+    }
+
+    public void sortProduct(ArrayList<Product> newList) {
+        productArrayList = new ArrayList<>();
+        productArrayList.addAll(newList);
+        notifyDataSetChanged();
+    }
+
+    class ProductViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
 
         ImageView productThumbIV;
         TextView productOriginalPriceTV;
         TextView productWholeSalePriceTV;
         TextView productName;
+        View itemView;
+        Context context;
+        ArrayList<Product> products;
 
-        public ProductViewHolder(View itemView) {
+        public ProductViewHolder(View itemView, Context context, ArrayList<Product> products) {
             super(itemView);
+            itemView.setOnClickListener(this);
+            this.context = context;
+            this.products = products;
             this.productThumbIV=(ImageView)itemView.findViewById(R.id.row_item_thum_iv);
             this.productOriginalPriceTV=(TextView)itemView.findViewById(R.id.row_item_original_price_tv);
             this.productWholeSalePriceTV=(TextView)itemView.findViewById(R.id.row_item_wholesale_price_tv);
             this.productName=(TextView)itemView.findViewById(R.id.row_item_name_tv);
         }
-    }
 
-    public void productFilter(ArrayList<Product> newList)
-    {
-        productArrayList=new ArrayList<>();
-        productArrayList.addAll(newList);
-        notifyDataSetChanged();
-    }
+        @Override
+        public void onClick(View v) {
 
-    public void sortProduct(ArrayList<Product> newList)
-    {
-        productArrayList=new ArrayList<>();
-        productArrayList.addAll(newList);
-        notifyDataSetChanged();
+            int position = getAdapterPosition();
+            Intent descriptionIntent = new Intent(context, ProductDescription.class);
+            descriptionIntent.putExtra("product_id", products.get(position).getItemId());
+            context.startActivity(descriptionIntent);
+
+        }
     }
 }
