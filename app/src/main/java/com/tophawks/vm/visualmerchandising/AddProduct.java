@@ -182,7 +182,7 @@ public class AddProduct extends AppCompatActivity {
                                 , Float.valueOf(orgPrice)
                                 , Float.valueOf(disPrice)
                                 , Integer.valueOf(quantity)
-                                , category, brandName);
+                                , category, brandName, 0);
                         mChildDatabase.setValue(productRef);
                         mProgress.dismiss();
                     }

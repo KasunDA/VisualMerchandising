@@ -1,9 +1,12 @@
 package com.tophawks.vm.visualmerchandising;
 
+import android.os.Build;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.text.TextUtils;
 import android.util.Log;
+import android.view.View;
+import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -15,15 +18,19 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 import com.squareup.picasso.Picasso;
 
-public class ProductDescription extends AppCompatActivity {
+import java.util.HashMap;
+
+public class ProductDescription extends AppCompatActivity implements View.OnClickListener {
 
 
     //FIREBASE DATABASE FIELDS
     DatabaseReference mFirebaseDtabase;
+    int productPopularity;
     //FIELDS FOR VIEWS AND STRINGS
     private String product_key_id = null;
     private TextView productName, retailPrice, wholeSalePrice, originalPrice, discountPrice, category, brandName, specification, color, quantity;
     private ImageView productDisplay;
+    private ImageButton like, dislike;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -43,7 +50,10 @@ public class ProductDescription extends AppCompatActivity {
         quantity = (TextView) findViewById(R.id.quantity_textview);
 
         productDisplay = (ImageView) findViewById(R.id.productDisplayOnClickImage);
-
+        like = (ImageButton) findViewById(R.id.description_like_ib);
+        dislike = (ImageButton) findViewById(R.id.description_dislike_ib);
+        like.setOnClickListener(this);
+        dislike.setOnClickListener(this);
         //GET INTENT EXTRA
         product_key_id = getIntent().getStringExtra("product_id").toString();
 
@@ -55,7 +65,7 @@ public class ProductDescription extends AppCompatActivity {
             mFirebaseDtabase = FirebaseDatabase.getInstance().getReference().child("Product");
         } else {
 
-            Toast.makeText(ProductDescription.this, "Unable to retrive the product info", Toast.LENGTH_LONG).show();
+            Toast.makeText(ProductDescription.this, "Unable to retrieve the product info", Toast.LENGTH_LONG).show();
             finish();
 
         }
@@ -75,6 +85,7 @@ public class ProductDescription extends AppCompatActivity {
                 quantity.setText(String.valueOf(dataSnapshot.child("productQuantity").getValue()));
                 category.setText(dataSnapshot.child("category").getValue().toString());
                 brandName.setText(dataSnapshot.child("brandName").getValue().toString());
+                productPopularity = Integer.parseInt(dataSnapshot.child("productPopularity").getValue().toString());
                 Picasso.with(getApplicationContext()).load(dataSnapshot.child("imageUrl").getValue().toString()).into(productDisplay);
 
             }
@@ -87,5 +98,50 @@ public class ProductDescription extends AppCompatActivity {
         });
 
 
+    }
+
+    @Override
+    public void onClick(View v) {
+        HashMap<String, Object> map = new HashMap<>();
+        int a = v.getId();
+        switch (a) {
+            case R.id.description_like_ib:
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+                    if (like.getBackground().getConstantState().equals(getDrawable(R.drawable.blue).getConstantState())) {
+                        productPopularity -= 1;
+                        like.setBackground(getDrawable(R.drawable.grey));
+                    } else if (dislike.getBackground().getConstantState().equals(getDrawable(R.drawable.blue).getConstantState())) {
+                        productPopularity += 2;
+                        dislike.setBackground(getDrawable(R.drawable.grey));
+                        like.setBackground(getDrawable(R.drawable.blue));
+                    } else {
+                        like.setBackground(getDrawable(R.drawable.blue));
+
+                        productPopularity += 1;
+                    }
+                }
+                map.clear();
+                map.put("productPopularity", productPopularity);
+                mFirebaseDtabase.child(product_key_id).updateChildren(map);
+                break;
+            case R.id.description_dislike_ib:
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+                    if (dislike.getBackground().getConstantState().equals(getDrawable(R.drawable.blue).getConstantState())) {
+                        productPopularity += 1;
+                        dislike.setBackground(getDrawable(R.drawable.grey));
+                    } else if (like.getBackground().getConstantState().equals(getDrawable(R.drawable.blue).getConstantState())) {
+                        productPopularity -= 2;
+                        like.setBackground(getDrawable(R.drawable.grey));
+                        dislike.setBackground(getDrawable(R.drawable.blue));
+                    } else {
+                        dislike.setBackground(getDrawable(R.drawable.blue));
+                        productPopularity -= 1;
+                    }
+                    map.clear();
+                    map.put("productPopularity", productPopularity);
+                    mFirebaseDtabase.child(product_key_id).updateChildren(map);
+                    break;
+                }
+        }
     }
 }

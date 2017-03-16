@@ -12,6 +12,7 @@ public class Product implements Serializable{
     private String productName, productColor, productSpecification, imageUrl;
     private float wholeSalePrice, retailPrice, originalPrice, discountPrice;
     private int productQuantity;
+    private int productPopularity;
 
 
     private String category, brandName;
@@ -19,8 +20,9 @@ public class Product implements Serializable{
     public Product() {
     }
 
-    public Product(String itemId, String productName, String productColor, String productSpecification, String imageUrl, float wholeSalePrice, float retailPrice, float originalPrice, float discountPrice, int productQuantity, String category, String brandName) {
+    public Product(String itemId, String productName, String productColor, String productSpecification, String imageUrl, float wholeSalePrice, float retailPrice, float originalPrice, float discountPrice, int productQuantity, String category, String brandName, int productPopularity) {
         this.itemId = itemId;
+        this.productPopularity = productPopularity;
         this.productName = productName;
         this.productColor = productColor;
         this.productSpecification = productSpecification;
@@ -32,6 +34,14 @@ public class Product implements Serializable{
         this.productQuantity = productQuantity;
         this.category = category;
         this.brandName = brandName;
+    }
+
+    public int getProductPopularity() {
+        return productPopularity;
+    }
+
+    public void setProductPopularity(int productPopularity) {
+        this.productPopularity = productPopularity;
     }
 
     public String getCategory() {

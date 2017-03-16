@@ -68,7 +68,7 @@ public class SearchViewRecyclerAdapter extends RecyclerView.Adapter<SearchViewRe
         TextView productOriginalPriceTV;
         TextView productWholeSalePriceTV;
         TextView productName;
-        View itemView;
+
         Context context;
         ArrayList<Product> products;
 

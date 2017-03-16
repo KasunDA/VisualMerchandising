@@ -82,8 +82,9 @@ public class VMHomeFragment extends Fragment {
                            ,Float.parseFloat(map.get("originalPrice").toString())
                            ,Float.parseFloat(map.get("discountPrice").toString())
                            , Integer.parseInt(map.get("productQuantity").toString())
-                           , (String) map.get("category"),
-                           (String) map.get("brandName")));
+                           , (String) map.get("category")
+                           , (String) map.get("brandName")
+                           , Integer.parseInt(map.get("productPopularity").toString())));
                 }
 
                 RecyclerView.LayoutManager manager=new LinearLayoutManager(getActivity(),LinearLayoutManager.HORIZONTAL,false);
