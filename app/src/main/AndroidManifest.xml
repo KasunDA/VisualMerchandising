@@ -43,6 +43,10 @@
                 <category android:name="android.intent.category.DEFAULT" />
             </intent-filter>
         </activity>
+        <activity
+            android:name=".Modules.StockManagement.UpdateProductList"
+            android:label="@string/title_activity_update_product_list"
+            android:theme="@style/AppTheme"></activity>
     </application>
 
 </manifest>
