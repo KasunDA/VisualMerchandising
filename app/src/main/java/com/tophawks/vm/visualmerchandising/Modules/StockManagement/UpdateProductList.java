@@ -2,8 +2,6 @@ package com.tophawks.vm.visualmerchandising.Modules.StockManagement;
 
 import android.content.Context;
 import android.os.Bundle;
-import android.support.design.widget.FloatingActionButton;
-import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -40,7 +38,7 @@ public class UpdateProductList extends AppCompatActivity {
         mProductUpdateListDatabase = FirebaseDatabase.getInstance().getReference().child("Product");
 
         //ASSIGN RECYCLERVIEW ID
-        mUpdateListRecyclerView = (RecyclerView) findViewById(R.id.recyclerView_For_Product_Edit_List);
+        mUpdateListRecyclerView = (RecyclerView) findViewById(R.id.update_product_rv);
         mUpdateListRecyclerView.setHasFixedSize(true);
         mUpdateListRecyclerView.setLayoutManager(new LinearLayoutManager(this));
 

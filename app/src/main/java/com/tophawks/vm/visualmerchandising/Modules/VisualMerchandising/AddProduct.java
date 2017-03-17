@@ -6,6 +6,7 @@ import android.content.ComponentName;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.content.pm.ResolveInfo;
+import android.graphics.Bitmap;
 import android.graphics.Color;
 import android.net.Uri;
 import android.os.Bundle;
@@ -39,7 +40,10 @@ import com.theartofdev.edmodo.cropper.CropImageView;
 import com.tophawks.vm.visualmerchandising.R;
 import com.tophawks.vm.visualmerchandising.model.Product;
 
+import java.io.ByteArrayOutputStream;
 import java.io.File;
+import java.io.FileOutputStream;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -67,6 +71,7 @@ public class AddProduct extends AppCompatActivity {
     //PROGRESS DIALOG
     ProgressDialog mProgress;
 
+
     //CUSTOM TOOLBAR
     private Toolbar customToolbar;
     private Uri outputFileUri;
@@ -81,7 +86,6 @@ public class AddProduct extends AppCompatActivity {
         customToolbar.setTitle("Add Product");
         customToolbar.setTitleTextColor(Color.WHITE);
         setSupportActionBar(customToolbar);
-
 
         mProgress = new ProgressDialog(this);
 
@@ -138,10 +142,6 @@ public class AddProduct extends AppCompatActivity {
                 permissionRequest();
                 imageChooser();
 
-//
-//                Intent imagePickIntent = new Intent(Intent.ACTION_PICK);
-//                imagePickIntent.setType("image/*");
-//                startActivityForResult(imagePickIntent, GALLERY_REQUEST_CODE);
             }
         });
 
@@ -275,7 +275,7 @@ public class AddProduct extends AppCompatActivity {
     //IMAGE PICKER WHEN CHOOSE IMAGE BUTTON IS CLICKED
     private void imageChooser() {
 
-        final File root = new File(Environment.getExternalStorageDirectory() + File.separator + "Field Attendance" + File.separator);
+        File root = new File(Environment.getExternalStorageDirectory() + File.separator + "Field Attendance" + File.separator);
         root.mkdirs();
         final String fname = "profpic" + System.currentTimeMillis() + ".jpg";
         final File sdImageMainDirectory = new File(root, fname);
@@ -331,6 +331,7 @@ public class AddProduct extends AppCompatActivity {
 
                 Uri selectedImageUri;
                 if (isCamera) {
+
                     selectedImageUri = outputFileUri;
                 } else {
                     selectedImageUri = data == null ? null : data.getData();
@@ -346,6 +347,22 @@ public class AddProduct extends AppCompatActivity {
                 CropImage.ActivityResult result = CropImage.getActivityResult(data);
                 if (resultCode == RESULT_OK) {
                     imageHold = result.getUri();
+                    try {
+                        Bitmap bitmap = MediaStore.Images.Media.getBitmap(this.getContentResolver(), imageHold);
+                        ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
+                        bitmap.compress(Bitmap.CompressFormat.JPEG, 50, byteArrayOutputStream);
+                        byte[] bytesBitmap = byteArrayOutputStream.toByteArray();
+//                        bitmap=BitmapFactory.decodeByteArray(bytesBitmap,0,bytesBitmap.length);
+                        File temp = File.createTempFile("product", "pic");
+                        FileOutputStream fileOutputStream = new FileOutputStream(temp);
+                        fileOutputStream.write(bytesBitmap);
+                        fileOutputStream.flush();
+                        fileOutputStream.close();
+                        imageHold = Uri.fromFile(temp);
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    }
+
                     productImage.setImageURI(imageHold);
                 } else if (resultCode == CropImage.CROP_IMAGE_ACTIVITY_RESULT_ERROR_CODE) {
                     Exception error = result.getError();
