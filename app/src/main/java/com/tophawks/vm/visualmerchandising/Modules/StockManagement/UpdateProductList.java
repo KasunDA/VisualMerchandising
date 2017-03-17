@@ -81,6 +81,9 @@ public class UpdateProductList extends AppCompatActivity {
                     }
                 };
 
+        //SET ADAPTER
+        mUpdateListRecyclerView.setAdapter(updateProductAdapter);
+
     }
 
     //VIEWHOLDER CLASS FOR HOLDING THE VIEW OF EACH CARD
