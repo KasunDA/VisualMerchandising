@@ -1,4 +1,4 @@
-package com.tophawks.vm.visualmerchandising;
+package com.tophawks.vm.visualmerchandising.Modules.VisualMerchandising;
 
 import android.app.ProgressDialog;
 import android.content.Intent;
@@ -27,6 +27,7 @@ import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.UploadTask;
 import com.theartofdev.edmodo.cropper.CropImage;
 import com.theartofdev.edmodo.cropper.CropImageView;
+import com.tophawks.vm.visualmerchandising.R;
 import com.tophawks.vm.visualmerchandising.model.Product;
 
 public class AddProduct extends AppCompatActivity {

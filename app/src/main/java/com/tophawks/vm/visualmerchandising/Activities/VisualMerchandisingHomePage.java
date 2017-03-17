@@ -1,22 +1,23 @@
-package com.tophawks.vm.visualmerchandising;
+package com.tophawks.vm.visualmerchandising.Activities;
 
 
 import android.content.Intent;
+import android.os.Bundle;
 import android.support.v4.app.FragmentManager;
 import android.support.v7.app.AppCompatActivity;
-import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
-import android.util.Log;
-import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.view.View;
 import android.widget.FrameLayout;
 import android.widget.Toast;
 
 import com.daimajia.slider.library.SliderTypes.BaseSliderView;
+import com.tophawks.vm.visualmerchandising.Modules.VisualMerchandising.AddProduct;
+import com.tophawks.vm.visualmerchandising.Modules.VisualMerchandising.AllProducts;
+import com.tophawks.vm.visualmerchandising.R;
+import com.tophawks.vm.visualmerchandising.fragment.VMHomeFragment;
 
-public class HomePage extends AppCompatActivity implements BaseSliderView.OnSliderClickListener{
+public class VisualMerchandisingHomePage extends AppCompatActivity implements BaseSliderView.OnSliderClickListener {
 
     FrameLayout frameLayout;
     VMHomeFragment fragment;
@@ -54,11 +55,11 @@ public class HomePage extends AppCompatActivity implements BaseSliderView.OnSlid
 
         if(item.getItemId()==R.id.main_add_product)
         {
-            startActivity(new Intent(HomePage.this,AddProduct.class));
+            startActivity(new Intent(VisualMerchandisingHomePage.this, AddProduct.class));
         }
         if(item.getItemId()==R.id.main_all_products)
         {
-            startActivity(new Intent(HomePage.this,AllProducts.class));
+            startActivity(new Intent(VisualMerchandisingHomePage.this, AllProducts.class));
         }
         return true;
     }

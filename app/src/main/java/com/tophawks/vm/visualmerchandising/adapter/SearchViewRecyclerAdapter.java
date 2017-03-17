@@ -10,7 +10,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.squareup.picasso.Picasso;
-import com.tophawks.vm.visualmerchandising.ProductDescription;
+import com.tophawks.vm.visualmerchandising.Modules.VisualMerchandising.ProductDescription;
 import com.tophawks.vm.visualmerchandising.R;
 import com.tophawks.vm.visualmerchandising.model.Product;
 

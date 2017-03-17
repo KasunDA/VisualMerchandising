@@ -1,4 +1,4 @@
-package com.tophawks.vm.visualmerchandising;
+package com.tophawks.vm.visualmerchandising.Modules.VisualMerchandising;
 
 import android.content.Intent;
 import android.os.Bundle;
@@ -18,6 +18,7 @@ import com.firebase.ui.database.FirebaseRecyclerAdapter;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.squareup.picasso.Picasso;
+import com.tophawks.vm.visualmerchandising.R;
 import com.tophawks.vm.visualmerchandising.adapter.SearchViewRecyclerAdapter;
 import com.tophawks.vm.visualmerchandising.model.Product;
 

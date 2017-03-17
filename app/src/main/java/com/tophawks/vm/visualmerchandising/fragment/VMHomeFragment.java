@@ -1,4 +1,4 @@
-package com.tophawks.vm.visualmerchandising;
+package com.tophawks.vm.visualmerchandising.fragment;
 
 
 import android.net.Uri;
@@ -23,6 +23,7 @@ import com.google.firebase.database.Query;
 import com.google.firebase.database.ValueEventListener;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
+import com.tophawks.vm.visualmerchandising.R;
 import com.tophawks.vm.visualmerchandising.adapter.SearchViewRecyclerAdapter;
 import com.tophawks.vm.visualmerchandising.model.Product;
 
