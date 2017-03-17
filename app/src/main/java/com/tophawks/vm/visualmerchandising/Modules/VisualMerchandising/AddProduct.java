@@ -1,10 +1,19 @@
 package com.tophawks.vm.visualmerchandising.Modules.VisualMerchandising;
 
+import android.Manifest;
 import android.app.ProgressDialog;
+import android.content.ComponentName;
 import android.content.Intent;
+import android.content.pm.PackageManager;
+import android.content.pm.ResolveInfo;
 import android.graphics.Color;
 import android.net.Uri;
 import android.os.Bundle;
+import android.os.Environment;
+import android.os.Parcelable;
+import android.provider.MediaStore;
+import android.support.v4.app.ActivityCompat;
+import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.text.TextUtils;
@@ -30,9 +39,15 @@ import com.theartofdev.edmodo.cropper.CropImageView;
 import com.tophawks.vm.visualmerchandising.R;
 import com.tophawks.vm.visualmerchandising.model.Product;
 
+import java.io.File;
+import java.util.ArrayList;
+import java.util.List;
+
 public class AddProduct extends AppCompatActivity {
 
     private static final int GALLERY_REQUEST_CODE = 299;
+    private static final int MY_PERMISSIONS_REQUEST_EXTERNAL_STORAGE = 123;
+    private static final int PICK_IMAGE_REQUEST_CODE = 213;
     //DECLARE THE REFERENCES FOR VIEWS AND WIDGETS
     ImageButton productImage;
     EditText productName, originalPrice, discountPrice, wholeSalePrice, retailPrice, proQuantity, proColor, proSpec;
@@ -54,6 +69,7 @@ public class AddProduct extends AppCompatActivity {
 
     //CUSTOM TOOLBAR
     private Toolbar customToolbar;
+    private Uri outputFileUri;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -119,10 +135,13 @@ public class AddProduct extends AppCompatActivity {
         productImage.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                permissionRequest();
+                imageChooser();
 
-                Intent imagePickIntent = new Intent(Intent.ACTION_PICK);
-                imagePickIntent.setType("image/*");
-                startActivityForResult(imagePickIntent, GALLERY_REQUEST_CODE);
+//
+//                Intent imagePickIntent = new Intent(Intent.ACTION_PICK);
+//                imagePickIntent.setType("image/*");
+//                startActivityForResult(imagePickIntent, GALLERY_REQUEST_CODE);
             }
         });
 
@@ -199,33 +218,7 @@ public class AddProduct extends AppCompatActivity {
 
     }
 
-    @Override
-    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-        super.onActivityResult(requestCode, resultCode, data);
 
-        if (requestCode == GALLERY_REQUEST_CODE && resultCode == RESULT_OK) {
-
-            Uri imageUri = data.getData();
-
-            CropImage.activity(imageUri)
-                    .setGuidelines(CropImageView.Guidelines.ON)
-                    .setAspectRatio(2, 1)
-                    .start(this);
-
-
-        }
-        if (requestCode == CropImage.CROP_IMAGE_ACTIVITY_REQUEST_CODE) {
-            CropImage.ActivityResult result = CropImage.getActivityResult(data);
-            if (resultCode == RESULT_OK) {
-                imageHold = result.getUri();
-
-                productImage.setImageURI(imageHold);
-            } else if (resultCode == CropImage.CROP_IMAGE_ACTIVITY_RESULT_ERROR_CODE) {
-                Exception error = result.getError();
-            }
-        }
-
-    }
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
@@ -243,5 +236,122 @@ public class AddProduct extends AppCompatActivity {
         }
 
         return super.onOptionsItemSelected(item);
+    }
+
+    //PERMISSIONS REQUIRED FOR ACCESSING EXTERNAL STORAGE
+
+    private void permissionRequest() {
+
+        if (ContextCompat.checkSelfPermission(this,
+                Manifest.permission.READ_EXTERNAL_STORAGE)
+                != PackageManager.PERMISSION_GRANTED) {
+
+            if (ActivityCompat.shouldShowRequestPermissionRationale(this,
+                    Manifest.permission.READ_EXTERNAL_STORAGE)) {
+
+            } else {
+
+                ActivityCompat.requestPermissions(this,
+                        new String[]{Manifest.permission.READ_EXTERNAL_STORAGE},
+                        MY_PERMISSIONS_REQUEST_EXTERNAL_STORAGE);
+            }
+        }
+        if (ContextCompat.checkSelfPermission(this,
+                Manifest.permission.WRITE_EXTERNAL_STORAGE)
+                != PackageManager.PERMISSION_GRANTED) {
+
+            if (ActivityCompat.shouldShowRequestPermissionRationale(this,
+                    Manifest.permission.WRITE_EXTERNAL_STORAGE)) {
+
+            } else {
+
+                ActivityCompat.requestPermissions(this,
+                        new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE},
+                        MY_PERMISSIONS_REQUEST_EXTERNAL_STORAGE);
+            }
+        }
+    }
+
+    //IMAGE PICKER WHEN CHOOSE IMAGE BUTTON IS CLICKED
+    private void imageChooser() {
+
+        final File root = new File(Environment.getExternalStorageDirectory() + File.separator + "Field Attendance" + File.separator);
+        root.mkdirs();
+        final String fname = "profpic" + System.currentTimeMillis() + ".jpg";
+        final File sdImageMainDirectory = new File(root, fname);
+        outputFileUri = Uri.fromFile(sdImageMainDirectory);
+
+        //Camera
+        final List<Intent> cameraIntents = new ArrayList<Intent>();
+        final Intent captureIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+        final PackageManager packageManager = getPackageManager();
+        final List<ResolveInfo> listCam = packageManager.queryIntentActivities(captureIntent, 0);
+        for (ResolveInfo res : listCam) {
+            final String packageName = res.activityInfo.packageName;
+            final String localPackageName = res.activityInfo.loadLabel(packageManager).toString();
+            if (localPackageName.toLowerCase().equals("camera")) {
+                final Intent intent = new Intent(captureIntent);
+                intent.setComponent(new ComponentName(res.activityInfo.packageName, res.activityInfo.name));
+                intent.setPackage(packageName);
+                intent.putExtra(MediaStore.EXTRA_OUTPUT, outputFileUri);
+                cameraIntents.add(intent);
+            }
+        }
+        // Filesystem.
+        final Intent galleryIntent = new Intent();
+        galleryIntent.setType("image/*");
+        galleryIntent.setAction(Intent.ACTION_GET_CONTENT);
+
+        // Chooser of filesystem options.
+        final Intent chooserIntent = Intent.createChooser(galleryIntent, "Select Source");
+
+        // Add the camera options.
+        chooserIntent.putExtra(Intent.EXTRA_INITIAL_INTENTS, cameraIntents.toArray(new Parcelable[cameraIntents.size()]));
+        startActivityForResult(chooserIntent, PICK_IMAGE_REQUEST_CODE);
+
+
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (resultCode == RESULT_OK) {
+            if (requestCode == PICK_IMAGE_REQUEST_CODE) {
+                final boolean isCamera;
+                if (data == null) {
+                    isCamera = true;
+                } else {
+                    final String action = data.getAction();
+                    if (action == null) {
+                        isCamera = false;
+                    } else {
+                        isCamera = action.equals(android.provider.MediaStore.ACTION_IMAGE_CAPTURE);
+                    }
+                }
+
+                Uri selectedImageUri;
+                if (isCamera) {
+                    selectedImageUri = outputFileUri;
+                } else {
+                    selectedImageUri = data == null ? null : data.getData();
+                }
+
+                CropImage.activity(selectedImageUri)
+                        .setGuidelines(CropImageView.Guidelines.ON)
+                        .start(this);
+
+            }
+
+            if (requestCode == CropImage.CROP_IMAGE_ACTIVITY_REQUEST_CODE) {
+                CropImage.ActivityResult result = CropImage.getActivityResult(data);
+                if (resultCode == RESULT_OK) {
+                    imageHold = result.getUri();
+                    productImage.setImageURI(imageHold);
+                } else if (resultCode == CropImage.CROP_IMAGE_ACTIVITY_RESULT_ERROR_CODE) {
+                    Exception error = result.getError();
+                }
+            }
+        }
+
     }
 }
