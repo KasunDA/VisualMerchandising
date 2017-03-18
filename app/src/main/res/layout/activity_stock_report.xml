@@ -55,7 +55,7 @@
             android:gravity="center">
 
             <Button
-                android:id="@+id/stock_report_select_store"
+                android:id="@+id/stock_report_select_store_b"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="Select store
@@ -83,7 +83,7 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="0dp"
-        android:layout_weight=".65"
+        android:layout_weight=".35"
         android:orientation="horizontal"
         android:paddingTop="20sp">
 
@@ -108,4 +108,11 @@
             android:layout_weight="0.5" />
 
     </LinearLayout>
+
+    <TextView
+        android:id="@+id/store_selected_tv"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight=".3"
+        android:textSize="20sp" />
 </LinearLayout>

@@ -125,7 +125,12 @@ public class AllProducts extends AppCompatActivity implements SearchView.OnQuery
                 Collections.sort(newList, new Comparator<Product>() {
                     @Override
                     public int compare(Product o1, Product o2) {
-                        return o1.getProductName().compareTo(o2.getProductName());
+                        if (o1.getProductPopularity() == o2.getProductPopularity())
+                            return 0;
+                        else if (o1.getProductPopularity() > o2.getProductPopularity())
+                            return 1;
+                        else
+                            return -1;
                     }
                 });
                 adapter.sortProduct(newList);
