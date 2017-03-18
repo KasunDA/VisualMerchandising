@@ -37,6 +37,7 @@ dependencies {
     compile 'com.android.support:support-v4:25.3.0'
     compile 'com.daimajia.slider:library:1.1.5@aar'
     compile 'com.nineoldandroids:library:2.4.0'
+    compile 'joda-time:joda-time:2.9.7'
     testCompile 'junit:junit:4.12'
 }
 
