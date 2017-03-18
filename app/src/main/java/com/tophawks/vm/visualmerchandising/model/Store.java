@@ -8,6 +8,7 @@ import java.io.Serializable;
 
 public class Store implements Serializable {
 
+    private String storeId;
     private String name;
     private String owner;
     private String shopAddress;
@@ -21,7 +22,8 @@ public class Store implements Serializable {
     public Store() {
     }
 
-    public Store(String name, String owner, String shopAddress, String godownAddress, long capacity, long spaceAvailable, String storePic, String stateAddress, String cityAddress) {
+    public Store(String storeId, String name, String owner, String shopAddress, String godownAddress, long capacity, long spaceAvailable, String storePic, String stateAddress, String cityAddress) {
+        this.storeId = storeId;
         this.name = name;
         this.owner = owner;
         this.shopAddress = shopAddress;
@@ -31,6 +33,14 @@ public class Store implements Serializable {
         this.storePic = storePic;
         this.stateAddress = stateAddress;
         this.cityAddress = cityAddress;
+    }
+
+    public String getStoreId() {
+        return storeId;
+    }
+
+    public void setStoreId(String storeId) {
+        this.storeId = storeId;
     }
 
     public String getName() {
