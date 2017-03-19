@@ -1,4 +1,4 @@
-package com.tophawks.vm.visualmerchandising.Modules.VisualMerchandising;
+package com.tophawks.vm.visualmerchandising.Modules.StockManagement;
 
 import android.Manifest;
 import android.app.ProgressDialog;
@@ -7,19 +7,19 @@ import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.content.pm.ResolveInfo;
 import android.graphics.Bitmap;
-import android.graphics.Color;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Environment;
 import android.os.Parcelable;
 import android.provider.MediaStore;
+import android.support.design.widget.FloatingActionButton;
+import android.support.design.widget.Snackbar;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.text.TextUtils;
-import android.view.Menu;
-import android.view.MenuItem;
+import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
@@ -30,11 +30,17 @@ import android.widget.Spinner;
 import android.widget.Toast;
 
 import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.firebase.database.ChildEventListener;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
+import com.google.firebase.storage.StreamDownloadTask;
 import com.google.firebase.storage.UploadTask;
+import com.squareup.picasso.Picasso;
 import com.theartofdev.edmodo.cropper.CropImage;
 import com.theartofdev.edmodo.cropper.CropImageView;
 import com.tophawks.vm.visualmerchandising.R;
@@ -45,23 +51,36 @@ import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.Iterator;
 import java.util.List;
+import java.util.Map;
+import java.util.Objects;
+import java.util.Set;
 
-public class AddProduct extends AppCompatActivity {
+public class EditProductActivity extends AppCompatActivity {
 
+    //REQUEST CODES
     private static final int GALLERY_REQUEST_CODE = 299;
     private static final int MY_PERMISSIONS_REQUEST_EXTERNAL_STORAGE = 123;
     private static final int PICK_IMAGE_REQUEST_CODE = 213;
+
+    //PRODUCT KEY FROM LIST INTENT
+    private String product_key = "";
+
     //DECLARE THE REFERENCES FOR VIEWS AND WIDGETS
     ImageButton productImage;
     EditText productName, originalPrice, discountPrice, wholeSalePrice, retailPrice, proQuantity, proColor, proSpec;
     Spinner categoryS, brandNameS;
-    LinearLayout addProduct;
-    //IMAGE HOLDING URI
-    Uri imageHold = null;
+    LinearLayout saveEditProduct;
 
     //STRING FIELDS
-    String whoPrice, orgPrice, disPrice, retPrice, proName, quantity, proColorName, proSpecification, category, brandName;
+    String whoPrice, orgPrice, disPrice, retPrice, proName, quantity, proColorName, proSpecification, category, brandName, imageUrlIfNotChanged;
+
+    //IMAGE HOLDING URI
+    Uri imageHold = null;
+    private Uri outputFileUri;
 
     //DATABASE AND STORAGE REFERENCES
     StorageReference mStorageReference;
@@ -71,23 +90,12 @@ public class AddProduct extends AppCompatActivity {
     //PROGRESS DIALOG
     ProgressDialog mProgress;
 
-
-    //CUSTOM TOOLBAR
-    private Toolbar customToolbar;
-    private Uri outputFileUri;
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_add_product);
-
-        //CREATE THE CUSTOM TOOLBAR
-        customToolbar = (Toolbar) findViewById(R.id.app_bar);
-        customToolbar.setTitle("Add Product");
-        customToolbar.setTitleTextColor(Color.WHITE);
-        setSupportActionBar(customToolbar);
-
-        mProgress = new ProgressDialog(this);
+        setContentView(R.layout.activity_edit_product);
+        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
+        setSupportActionBar(toolbar);
 
         //ASSIGN ID'S TO OUR FIELDS
         productImage = (ImageButton) findViewById(R.id.productImageButton);
@@ -99,10 +107,18 @@ public class AddProduct extends AppCompatActivity {
         proQuantity = (EditText) findViewById(R.id.quantity);
         proColor = (EditText) findViewById(R.id.product_color);
         proSpec = (EditText) findViewById(R.id.product_specification);
-        addProduct = (LinearLayout) findViewById(R.id.addProductButton);
+        saveEditProduct = (LinearLayout) findViewById(R.id.saveEditProductButton);
 
         categoryS = (Spinner) findViewById(R.id.detail_category_s);
         brandNameS = (Spinner) findViewById(R.id.detail_brand_name_s);
+
+        //GET PRODUCT KEY
+        product_key = getIntent().getStringExtra("product_key_edit").toString();
+
+        mProgress = new ProgressDialog(this);
+
+
+        //SET SPINNER ITEMS
         brandNameAdapter = ArrayAdapter.createFromResource(this, R.array.product_brand_name, android.R.layout.simple_spinner_item);
         categoryAdapter = ArrayAdapter.createFromResource(this, R.array.product_category, android.R.layout.simple_spinner_item);
         brandNameAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
@@ -133,9 +149,14 @@ public class AddProduct extends AppCompatActivity {
             }
         });
 
+
         //ASSIGN REFERENCES
-        mDatabaseReference = FirebaseDatabase.getInstance().getReference();
+        mDatabaseReference = FirebaseDatabase.getInstance().getReference().child("Product").child(product_key);
         mStorageReference = FirebaseStorage.getInstance().getReference();
+
+
+        //SET CURRENT PRODUCT DETAILS
+        setCurrentProductDetails();
 
         productImage.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -146,7 +167,7 @@ public class AddProduct extends AppCompatActivity {
             }
         });
 
-        addProduct.setOnClickListener(new View.OnClickListener() {
+        saveEditProduct.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
 
@@ -155,7 +176,39 @@ public class AddProduct extends AppCompatActivity {
 
 
         });
+
     }
+
+    private void setCurrentProductDetails() {
+
+        mDatabaseReference.addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+
+                Product productItem = ((Product)dataSnapshot.getValue(Product.class));
+
+
+                wholeSalePrice.setText(String.valueOf(productItem.getWholeSalePrice()));
+                retailPrice.setText(String.valueOf(productItem.getRetailPrice()));
+                discountPrice.setText(String.valueOf(productItem.getDiscountPrice()));
+                originalPrice.setText(String.valueOf(productItem.getOriginalPrice()));
+                productName.setText(String.valueOf(productItem.getProductName()));
+                proQuantity.setText(String.valueOf(productItem.getProductQuantity()));
+                proColor.setText(productItem.getProductColor());
+                proSpec.setText(productItem.getProductSpecification());
+                Picasso.with(getApplicationContext()).load(productItem.getImageUrl()).into(productImage);
+
+                imageUrlIfNotChanged = productItem.getImageUrl();
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+
+            }
+        });
+
+    }
+
     private void productPost() {
 
         whoPrice = wholeSalePrice.getText().toString().trim();
@@ -192,9 +245,9 @@ public class AddProduct extends AppCompatActivity {
                         //GET THE DOWNLOAD URL FROM THE TASK SUCCESS
                         //noinspection VisibleForTests
                         Uri downloadUri =taskSnapshot.getDownloadUrl();
-                        DatabaseReference mChildDatabase = mDatabaseReference.child("Product").push();
+
                         //ENTER ALL THE PRODUCTS WITH KEYS IN THE DATASBSE
-                        Product productRef = new Product(mChildDatabase.getKey()
+                        Product productRef = new Product(product_key
                                 , proName, proColorName
                                 , proSpecification
                                 , downloadUri.toString()
@@ -204,10 +257,31 @@ public class AddProduct extends AppCompatActivity {
                                 , Float.valueOf(disPrice)
                                 , Integer.valueOf(quantity)
                                 , category, brandName, 0);
-                        mChildDatabase.setValue(productRef);
+                        mDatabaseReference.setValue(productRef);
+                        finish();
+                        startActivity(new Intent(EditProductActivity.this, UpdateProductList.class));
                         mProgress.dismiss();
                     }
                 });
+            }else
+
+            {
+                //ENTER ALL THE PRODUCTS WITH KEYS IN THE DATASBSE
+                Product productRef = new Product(product_key
+                        , proName, proColorName
+                        , proSpecification
+                        , imageUrlIfNotChanged
+                        , Float.valueOf(whoPrice)
+                        , Float.valueOf(retPrice)
+                        , Float.valueOf(orgPrice)
+                        , Float.valueOf(disPrice)
+                        , Integer.valueOf(quantity)
+                        , category, brandName, 0);
+                mDatabaseReference.setValue(productRef);
+                finish();
+                startActivity(new Intent(EditProductActivity.this, UpdateProductList.class));
+                mProgress.dismiss();
+
             }
 
         } else {
@@ -218,28 +292,6 @@ public class AddProduct extends AppCompatActivity {
         }
 
     }
-
-
-
-    @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        // Inflate the menu; this adds items to the action bar if it is present.
-        getMenuInflater().inflate(R.menu.main_menu, menu);
-        return true;
-    }
-
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-
-        if (item.getItemId() == R.id.main_all_products) {
-            startActivity(new Intent(AddProduct.this, AllProducts.class));
-
-        }
-
-        return super.onOptionsItemSelected(item);
-    }
-
-    //PERMISSIONS REQUIRED FOR ACCESSING EXTERNAL STORAGE
 
     private void permissionRequest() {
 
@@ -372,4 +424,5 @@ public class AddProduct extends AppCompatActivity {
         }
 
     }
+
 }

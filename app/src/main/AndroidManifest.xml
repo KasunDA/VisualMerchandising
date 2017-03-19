@@ -54,8 +54,12 @@
             android:name=".Modules.StockManagement.UpdateProductList"
             android:label="@string/title_activity_update_product_list"
             android:theme="@style/AppTheme" />
-        <activity android:name=".Modules.StockManagement.AddStore"></activity>
-        <activity android:name=".Modules.StockManagement.StockReport"></activity>
+        <activity android:name=".Modules.StockManagement.AddStore" />
+        <activity android:name=".Modules.StockManagement.StockReport" />
+        <activity
+            android:name=".Modules.StockManagement.EditProductActivity"
+            android:label="@string/title_activity_edit_product"
+            android:theme="@style/AppTheme"></activity>
     </application>
 
 </manifest>
