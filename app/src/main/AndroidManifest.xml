@@ -59,7 +59,16 @@
         <activity
             android:name=".Modules.StockManagement.EditProductActivity"
             android:label="@string/title_activity_edit_product"
-            android:theme="@style/AppTheme"></activity>
+            android:theme="@style/AppTheme" />
+
+        <supports-screens
+            android:anyDensity="true"
+            android:largeScreens="true"
+            android:normalScreens="true"
+            android:smallScreens="true"
+            android:xlargeScreens="true" />
+
+        <activity android:name=".Modules.StockManagement.AvailableProductActivity"></activity>
     </application>
 
 </manifest>

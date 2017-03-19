@@ -259,6 +259,7 @@ public class EditProductActivity extends AppCompatActivity {
                                 , category, brandName, 0);
                         mDatabaseReference.setValue(productRef);
                         finish();
+                        Toast.makeText(EditProductActivity.this, "Product edited", Toast.LENGTH_LONG).show();
                         startActivity(new Intent(EditProductActivity.this, UpdateProductList.class));
                         mProgress.dismiss();
                     }
@@ -279,6 +280,7 @@ public class EditProductActivity extends AppCompatActivity {
                         , category, brandName, 0);
                 mDatabaseReference.setValue(productRef);
                 finish();
+                Toast.makeText(EditProductActivity.this, "Product edited", Toast.LENGTH_LONG).show();
                 startActivity(new Intent(EditProductActivity.this, UpdateProductList.class));
                 mProgress.dismiss();
 

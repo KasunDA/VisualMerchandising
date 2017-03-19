@@ -2,7 +2,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="#7f7fff"
+    android:background="#F78B6E"
     android:orientation="vertical"
     android:weightSum="3"
     tools:context="com.tophawks.vm.visualmerchandising.fragment.StockMHomeFragment">
@@ -15,7 +15,12 @@
         <ImageView
             android:id="@+id/stock_home_add_store_iv"
             android:layout_width="0dp"
-        android:layout_height="match_parent"
+            android:layout_height="match_parent"
+            android:layout_marginEnd="25dp"
+            android:layout_marginLeft="25dp"
+            android:layout_marginRight="25dp"
+            android:layout_marginStart="25dp"
+            android:layout_marginTop="25dp"
             android:layout_weight="1"
             android:src="@drawable/add_store" />
 
@@ -23,6 +28,11 @@
             android:id="@+id/stock_home_update_store_iv"
             android:layout_width="0dp"
             android:layout_height="match_parent"
+            android:layout_marginEnd="25dp"
+            android:layout_marginLeft="25dp"
+            android:layout_marginRight="25dp"
+            android:layout_marginStart="25dp"
+            android:layout_marginTop="25dp"
             android:layout_weight="1"
             android:padding="5dp"
             android:src="@drawable/update_store" />
@@ -31,6 +41,7 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="0dp"
+        android:layout_marginLeft="10dp"
         android:layout_weight="0.2">
 
         <TextView
@@ -63,6 +74,11 @@
             android:id="@+id/stock_home_check_product_iv"
             android:layout_width="0dp"
             android:layout_height="match_parent"
+            android:layout_marginEnd="25dp"
+            android:layout_marginLeft="25dp"
+            android:layout_marginRight="25dp"
+            android:layout_marginStart="25dp"
+            android:layout_marginTop="25dp"
             android:layout_weight="1"
             android:padding="5dp"
             android:src="@drawable/available_product" />
@@ -71,6 +87,11 @@
             android:id="@+id/stock_home_update_product_iv"
             android:layout_width="0dp"
             android:layout_height="match_parent"
+            android:layout_marginEnd="25dp"
+            android:layout_marginLeft="25dp"
+            android:layout_marginRight="25dp"
+            android:layout_marginStart="25dp"
+            android:layout_marginTop="25dp"
             android:layout_weight="1"
             android:src="@drawable/update_product" />
     </LinearLayout>
@@ -78,6 +99,7 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="0dp"
+        android:layout_marginLeft="10dp"
         android:layout_weight="0.2">
 
         <TextView
@@ -91,6 +113,7 @@
             android:textStyle="bold" />
 
         <TextView
+            android:id="@+id/textView13"
             android:layout_width="0dp"
             android:layout_height="match_parent"
             android:layout_weight="1"
@@ -110,14 +133,14 @@
             android:id="@+id/stock_home_stock_report_iv"
             android:layout_width="0dp"
             android:layout_height="match_parent"
+            android:layout_marginEnd="25dp"
+            android:layout_marginLeft="25dp"
+            android:layout_marginRight="25dp"
+            android:layout_marginStart="25dp"
+            android:layout_marginTop="25dp"
             android:layout_weight="1"
             android:src="@drawable/stock_report" />
 
-        <ImageView
-            android:id="@+id/imageView"
-            android:layout_width="0dp"
-            android:layout_height="match_parent"
-            android:layout_weight="1" />
     </LinearLayout>
 
     <LinearLayout
@@ -126,8 +149,10 @@
         android:layout_weight="0.2">
 
         <TextView
+            android:id="@+id/textView12"
             android:layout_width="0dp"
             android:layout_height="match_parent"
+            android:layout_marginLeft="2dp"
             android:layout_weight="1"
             android:gravity="center"
             android:padding="7dp"
@@ -135,14 +160,5 @@
             android:textSize="20sp"
             android:textStyle="bold" />
 
-        <TextView
-            android:layout_width="0dp"
-            android:layout_height="match_parent"
-            android:layout_weight="1"
-            android:gravity="center"
-            android:padding="7dp"
-            android:text=""
-            android:textSize="20sp"
-            android:textStyle="bold" />
     </LinearLayout>
 </LinearLayout>
