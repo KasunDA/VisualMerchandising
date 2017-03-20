@@ -13,4 +13,5 @@
         <item>sony</item>
     </string-array>
     <string name="title_activity_update_product_list">UpdateProductList</string>
+    <string name="title_activity_edit_product">EditProductActivity</string>
 </resources>

@@ -1,6 +1,7 @@
 package com.tophawks.vm.visualmerchandising.Modules.StockManagement;
 
 import android.content.Context;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
@@ -62,6 +63,8 @@ public class UpdateProductList extends AppCompatActivity {
                     @Override
                     protected void populateViewHolder(UpdateViewHolder viewHolder, Product model, int position) {
 
+                        final String product_key = model.getItemId();
+
                         viewHolder.setProductImage(getApplicationContext(), model.getImageUrl());
                         viewHolder.setProductNameTextView(model.getProductName());
                         viewHolder.setProductQuantityTextView(String.valueOf(model.getProductQuantity()));
@@ -71,7 +74,9 @@ public class UpdateProductList extends AppCompatActivity {
                             @Override
                             public void onClick(View v) {
 
-
+                               Intent moveToEditActivity = new Intent(UpdateProductList.this, EditProductActivity.class);
+                               moveToEditActivity.putExtra("product_key_edit", product_key);
+                                startActivity(moveToEditActivity);
 
                             }
                         });
