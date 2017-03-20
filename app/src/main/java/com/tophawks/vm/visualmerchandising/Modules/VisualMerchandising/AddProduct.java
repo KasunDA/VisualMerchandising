@@ -18,6 +18,7 @@ import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.SearchView;
 import android.support.v7.widget.Toolbar;
 import android.text.TextUtils;
 import android.view.Menu;
@@ -55,7 +56,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
-public class AddProduct extends AppCompatActivity {
+public class AddProduct extends AppCompatActivity implements SearchView.OnQueryTextListener {
 
     private static final int MY_PERMISSIONS_REQUEST_EXTERNAL_STORAGE = 123;
     private static final int PICK_IMAGE_REQUEST_CODE = 213;
@@ -66,17 +67,18 @@ public class AddProduct extends AppCompatActivity {
     Spinner categoryS, brandNameS;
     LinearLayout addProduct;
     EditText productStoreNameET;
+    SearchView storeNameSearchView;
     //IMAGE HOLDING URI
     Uri imageHold = null;
 
     //STRING FIELDS
     String whoPrice, orgPrice, disPrice, retPrice, proName, quantity, proColorName, proSpecification, category, brandName, productStoreName, productStoreId;
-
+    ArrayList<String> storeNames;
     //DATABASE AND STORAGE REFERENCES
     StorageReference mStorageReference;
     DatabaseReference mDatabaseReference;
-    ArrayAdapter brandNameAdapter, categoryAdapter;
-
+    ArrayAdapter brandNameAdapter, categoryAdapter, storeNameAdapter;
+    ListView storeNamesListView;
     //PROGRESS DIALOG
     ProgressDialog mProgress;
 
@@ -146,7 +148,7 @@ public class AddProduct extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 AlertDialog alertDialog = null;
-                final ArrayList<String> storeNames = new ArrayList<>();
+                storeNames = new ArrayList<>();
                 storeNames.add("Other");
                 final DatabaseReference databaseReference = FirebaseDatabase.getInstance().getReference().child("StoreNames");
                 databaseReference.addValueEventListener(new ValueEventListener() {
@@ -154,9 +156,12 @@ public class AddProduct extends AppCompatActivity {
                     public void onDataChange(DataSnapshot dataSnapshot) {
 
                         HashMap<String, String> nameMap = (HashMap<String, String>) dataSnapshot.getValue();
-                        for (String key : nameMap.keySet()) {
-                            storeNames.add(nameMap.get(key));
+                        if (nameMap != null) {
+                            for (String key : nameMap.keySet()) {
+                                storeNames.add(nameMap.get(key));
+                            }
                         }
+
                     }
 
                     @Override
@@ -166,22 +171,27 @@ public class AddProduct extends AppCompatActivity {
                 });
                 final AlertDialog.Builder builder = new AlertDialog.Builder(AddProduct.this);
                 View dialogView = getLayoutInflater().inflate(R.layout.store_name_dialog_view, null);
-                ListView storeNamesListView = (ListView) dialogView.findViewById(R.id.dialog_stores_name_lv);
-                storeNamesListView.setAdapter(new ArrayAdapter<String>(AddProduct.this, android.R.layout.simple_list_item_1, storeNames));
+                storeNamesListView = (ListView) dialogView.findViewById(R.id.dialog_stores_name_lv);
+                storeNameSearchView = (SearchView) dialogView.findViewById(R.id.store_name_dialog_choose_store_sv);
+                storeNameSearchView.setIconified(false);
+                storeNameSearchView.clearFocus();
+                storeNameSearchView.setOnQueryTextListener(AddProduct.this);
+                storeNameAdapter = new ArrayAdapter<String>(AddProduct.this, android.R.layout.simple_list_item_1, storeNames);
+                storeNamesListView.setAdapter(storeNameAdapter);
                 storeNamesListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-                    //TODO LEARN THIS STEP (Dhoom hi macha di)
-                    View previousViewofLV = null;
+                    //NICE
+                    View previousViewOfLV = null;
 
                     @Override
                     public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
 
 
                         productStoreNameET.setText(storeNames.get(position));
-                        if (previousViewofLV != null) {
-                            previousViewofLV.setBackground(null);
+                        if (previousViewOfLV != null) {
+                            previousViewOfLV.setBackground(null);
                         }
                         view.setBackground(getResources().getDrawable(R.drawable.blue));
-                        previousViewofLV = view;
+                        previousViewOfLV = view;
                     }
 
                 });
@@ -447,4 +457,24 @@ public class AddProduct extends AppCompatActivity {
         super.onActivityResult(requestCode, resultCode, data);
     }
 
+    @Override
+    public boolean onQueryTextSubmit(String query) {
+        return false;
+    }
+
+    @Override
+    public boolean onQueryTextChange(String newText) {
+
+        newText = newText.toLowerCase();
+        ArrayList<String> newList = new ArrayList<>();
+        for (String storeNameSearch : storeNames) {
+            if (storeNameSearch.toLowerCase().contains(newText)) {
+                newList.add(storeNameSearch);
+            }
+
+        }
+
+        storeNamesListView.setAdapter(new ArrayAdapter<String>(AddProduct.this, android.R.layout.simple_list_item_1, newList));
+        return true;
+    }
 }

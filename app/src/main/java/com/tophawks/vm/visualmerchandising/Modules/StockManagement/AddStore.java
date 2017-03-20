@@ -61,7 +61,9 @@ public class AddStore extends AppCompatActivity {
     //DATABASE AND STORAGE REFERENCES
     StorageReference mStorageReference;
     DatabaseReference mDatabaseReference;
-
+    DatabaseReference mChildDatabase;
+    StorageReference mChildStorage;
+    Store storeRef;
     //PROGRESS DIALOG
     ProgressDialog mProgress;
 
@@ -147,43 +149,47 @@ public class AddStore extends AppCompatActivity {
                 && imageHold != null) {
 
 
+            mChildStorage = mStorageReference.child("Store_Images").child(imageHold.getLastPathSegment());
+            mChildDatabase = mDatabaseReference.child("Store").push();
+            storeId = mChildDatabase.getKey();
 
-                StorageReference mChildStorage = mStorageReference.child("Store_Images").child(imageHold.getLastPathSegment());
+            mChildStorage.putFile(imageHold).addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
 
-                mChildStorage.putFile(imageHold).addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
-                    @Override
-                    public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
+                @Override
+                public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
 
-                        //GET THE DOWNLOAD URL FROM THE TASK SUCCESS
-                        //noinspection VisibleForTests
-                        Uri downloadUri = taskSnapshot.getDownloadUrl();
-                        DatabaseReference mChildDatabase = mDatabaseReference.child("Store").push();
-                        storeId = mChildDatabase.getKey();
+                    //GET THE DOWNLOAD URL FROM THE TASK SUCCESS
+                    //noinspection VisibleForTests
+                    Uri downloadUri = taskSnapshot.getDownloadUrl();
 
 
-                        //ENTER ALL THE PRODUCTS WITH KEYS IN THE DATASBSE
-                        Store storeRef = new Store(storeId
-                                , storeName
-                                , ownerName
-                                , shopAddress
-                                , godownAddress
-                                , Long.valueOf(capacity)
-                                , Long.valueOf(spaceAvailable)
-                                , downloadUri.toString()
-                                , city
-                                , state);
+                    //ENTER ALL THE PRODUCTS WITH KEYS IN THE DATASBSE
+                    storeRef = new Store(storeId
+                            , storeName
+                            , ownerName
+                            , shopAddress
+                            , godownAddress
+                            , Long.valueOf(capacity)
+                            , Long.valueOf(spaceAvailable)
+                            , downloadUri.toString()
+                            , city
+                            , state);
+                    mChildDatabase.setValue(storeRef);
 
-                        mChildDatabase.setValue(storeRef);
-                    }
-                });
+                }
+            });
 
             mProgress.dismiss();
+
         } else {
 
             mProgress.dismiss();
             Toast.makeText(this, "Please make sure you enter all fields", Toast.LENGTH_LONG).show();
 
         }
+
+        DatabaseReference mChildDatabase1 = mDatabaseReference.child("StoreNames");
+        mChildDatabase1.child(storeId).setValue(storeName);
 
         if (callFromAddProduct != null && callFromAddProduct.equals("true")) {
             Intent returnStoreNameToAddProduct = new Intent();
