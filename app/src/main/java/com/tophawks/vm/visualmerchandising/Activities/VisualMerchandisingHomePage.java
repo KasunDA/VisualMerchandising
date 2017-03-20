@@ -12,7 +12,6 @@ import android.widget.FrameLayout;
 import android.widget.Toast;
 
 import com.daimajia.slider.library.SliderTypes.BaseSliderView;
-import com.tophawks.vm.visualmerchandising.Modules.StockManagement.UpdateProductList;
 import com.tophawks.vm.visualmerchandising.Modules.VisualMerchandising.AddProduct;
 import com.tophawks.vm.visualmerchandising.Modules.VisualMerchandising.AllProducts;
 import com.tophawks.vm.visualmerchandising.R;
@@ -64,4 +63,5 @@ public class VisualMerchandisingHomePage extends AppCompatActivity implements Ba
         }
         return true;
     }
+
 }

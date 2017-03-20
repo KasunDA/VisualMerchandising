@@ -3,6 +3,7 @@ package com.tophawks.vm.visualmerchandising.Modules.VisualMerchandising;
 import android.Manifest;
 import android.app.ProgressDialog;
 import android.content.ComponentName;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.content.pm.ResolveInfo;
@@ -15,6 +16,7 @@ import android.os.Parcelable;
 import android.provider.MediaStore;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.text.TextUtils;
@@ -26,17 +28,22 @@ import android.widget.ArrayAdapter;
 import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.LinearLayout;
+import android.widget.ListView;
 import android.widget.Spinner;
 import android.widget.Toast;
 
 import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.UploadTask;
 import com.theartofdev.edmodo.cropper.CropImage;
 import com.theartofdev.edmodo.cropper.CropImageView;
+import com.tophawks.vm.visualmerchandising.Modules.StockManagement.AddStore;
 import com.tophawks.vm.visualmerchandising.R;
 import com.tophawks.vm.visualmerchandising.model.Product;
 
@@ -45,23 +52,25 @@ import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 
 public class AddProduct extends AppCompatActivity {
 
-    private static final int GALLERY_REQUEST_CODE = 299;
     private static final int MY_PERMISSIONS_REQUEST_EXTERNAL_STORAGE = 123;
     private static final int PICK_IMAGE_REQUEST_CODE = 213;
+    private static final int ADD_NEW_STORE = 145;
     //DECLARE THE REFERENCES FOR VIEWS AND WIDGETS
     ImageButton productImage;
     EditText productName, originalPrice, discountPrice, wholeSalePrice, retailPrice, proQuantity, proColor, proSpec;
     Spinner categoryS, brandNameS;
     LinearLayout addProduct;
+    EditText productStoreNameET;
     //IMAGE HOLDING URI
     Uri imageHold = null;
 
     //STRING FIELDS
-    String whoPrice, orgPrice, disPrice, retPrice, proName, quantity, proColorName, proSpecification, category, brandName;
+    String whoPrice, orgPrice, disPrice, retPrice, proName, quantity, proColorName, proSpecification, category, brandName, productStoreName, productStoreId;
 
     //DATABASE AND STORAGE REFERENCES
     StorageReference mStorageReference;
@@ -100,6 +109,7 @@ public class AddProduct extends AppCompatActivity {
         proColor = (EditText) findViewById(R.id.product_color);
         proSpec = (EditText) findViewById(R.id.product_specification);
         addProduct = (LinearLayout) findViewById(R.id.addProductButton);
+        productStoreNameET = (EditText) findViewById(R.id.product_store_name_edittext);
 
         categoryS = (Spinner) findViewById(R.id.detail_category_s);
         brandNameS = (Spinner) findViewById(R.id.detail_brand_name_s);
@@ -132,8 +142,67 @@ public class AddProduct extends AppCompatActivity {
 
             }
         });
+        productStoreNameET.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                AlertDialog alertDialog = null;
+                final ArrayList<String> storeNames = new ArrayList<>();
+                storeNames.add("Other");
+                final DatabaseReference databaseReference = FirebaseDatabase.getInstance().getReference().child("StoreNames");
+                databaseReference.addValueEventListener(new ValueEventListener() {
+                    @Override
+                    public void onDataChange(DataSnapshot dataSnapshot) {
+
+                        HashMap<String, String> nameMap = (HashMap<String, String>) dataSnapshot.getValue();
+                        for (String key : nameMap.keySet()) {
+                            storeNames.add(nameMap.get(key));
+                        }
+                    }
+
+                    @Override
+                    public void onCancelled(DatabaseError databaseError) {
+
+                    }
+                });
+                final AlertDialog.Builder builder = new AlertDialog.Builder(AddProduct.this);
+                View dialogView = getLayoutInflater().inflate(R.layout.store_name_dialog_view, null);
+                ListView storeNamesListView = (ListView) dialogView.findViewById(R.id.dialog_stores_name_lv);
+                storeNamesListView.setAdapter(new ArrayAdapter<String>(AddProduct.this, android.R.layout.simple_list_item_1, storeNames));
+                storeNamesListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+                    //TODO LEARN THIS STEP (Dhoom hi macha di)
+                    View previousViewofLV = null;
+
+                    @Override
+                    public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+
+
+                        productStoreNameET.setText(storeNames.get(position));
+                        if (previousViewofLV != null) {
+                            previousViewofLV.setBackground(null);
+                        }
+                        view.setBackground(getResources().getDrawable(R.drawable.blue));
+                        previousViewofLV = view;
+                    }
+
+                });
+                builder.setTitle("Choose Store");
+                builder.setView(dialogView);
+                builder.setPositiveButton("OK", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        if (productStoreNameET.getText().toString().equals("Other")) {
+                            startActivityForResult(new Intent(AddProduct.this, AddStore.class).putExtra("callFromAddProduct", "true"), ADD_NEW_STORE);
+                            dialog.dismiss();
+                        }
+                    }
+                });
+                alertDialog = builder.create();
+                alertDialog.show();
+
+            }
+        });
         //ASSIGN REFERENCES
-        mDatabaseReference = FirebaseDatabase.getInstance().getReference();
+
         mStorageReference = FirebaseStorage.getInstance().getReference();
 
         productImage.setOnClickListener(new View.OnClickListener() {
@@ -155,6 +224,7 @@ public class AddProduct extends AppCompatActivity {
 
         });
     }
+
     private void productPost() {
 
         whoPrice = wholeSalePrice.getText().toString().trim();
@@ -165,6 +235,8 @@ public class AddProduct extends AppCompatActivity {
         quantity = proQuantity.getText().toString().trim();
         proColorName = proColor.getText().toString().trim();
         proSpecification = proSpec.getText().toString().trim();
+        productStoreName = productStoreNameET.getText().toString().trim();
+
 
         mProgress.setMessage("Uploading Image..");
         mProgress.show();
@@ -178,7 +250,8 @@ public class AddProduct extends AppCompatActivity {
                 && !TextUtils.isEmpty(proColorName)
                 && !TextUtils.isEmpty(proSpecification)
                 && !TextUtils.isEmpty(category)
-                && !TextUtils.isEmpty(brandName)) {
+                && !TextUtils.isEmpty(brandName)
+                && !TextUtils.isEmpty(productStoreName)) {
 
             if (imageHold != null) {
 
@@ -190,8 +263,9 @@ public class AddProduct extends AppCompatActivity {
 
                         //GET THE DOWNLOAD URL FROM THE TASK SUCCESS
                         //noinspection VisibleForTests
-                        Uri downloadUri =taskSnapshot.getDownloadUrl();
-                        DatabaseReference mChildDatabase = mDatabaseReference.child("Product").push();
+                        Uri downloadUri = taskSnapshot.getDownloadUrl();
+                        mDatabaseReference = FirebaseDatabase.getInstance().getReference();
+                        DatabaseReference mChildDatabase = mDatabaseReference.child("Store").child(productStoreId).child("Products").push();
                         //ENTER ALL THE PRODUCTS WITH KEYS IN THE DATASBSE
                         Product productRef = new Product(mChildDatabase.getKey()
                                 , proName, proColorName
@@ -204,6 +278,7 @@ public class AddProduct extends AppCompatActivity {
                                 , Integer.valueOf(quantity)
                                 , category, brandName, 0);
                         mChildDatabase.setValue(productRef);
+
                         mProgress.dismiss();
                     }
                 });
@@ -215,9 +290,8 @@ public class AddProduct extends AppCompatActivity {
             Toast.makeText(this, "Please make sure you enter all fields", Toast.LENGTH_LONG).show();
 
         }
-
+        mProgress.dismiss();
     }
-
 
 
     @Override
@@ -314,7 +388,7 @@ public class AddProduct extends AppCompatActivity {
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-        super.onActivityResult(requestCode, resultCode, data);
+
         if (resultCode == RESULT_OK) {
             if (requestCode == PICK_IMAGE_REQUEST_CODE) {
                 final boolean isCamera;
@@ -341,9 +415,7 @@ public class AddProduct extends AppCompatActivity {
                         .setGuidelines(CropImageView.Guidelines.ON)
                         .start(this);
 
-            }
-
-            if (requestCode == CropImage.CROP_IMAGE_ACTIVITY_REQUEST_CODE) {
+            } else if (requestCode == CropImage.CROP_IMAGE_ACTIVITY_REQUEST_CODE) {
                 CropImage.ActivityResult result = CropImage.getActivityResult(data);
                 if (resultCode == RESULT_OK) {
                     imageHold = result.getUri();
@@ -352,7 +424,6 @@ public class AddProduct extends AppCompatActivity {
                         ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
                         bitmap.compress(Bitmap.CompressFormat.JPEG, 50, byteArrayOutputStream);
                         byte[] bytesBitmap = byteArrayOutputStream.toByteArray();
-//                        bitmap=BitmapFactory.decodeByteArray(bytesBitmap,0,bytesBitmap.length);
                         File temp = File.createTempFile("product", "pic");
                         FileOutputStream fileOutputStream = new FileOutputStream(temp);
                         fileOutputStream.write(bytesBitmap);
@@ -367,8 +438,13 @@ public class AddProduct extends AppCompatActivity {
                 } else if (resultCode == CropImage.CROP_IMAGE_ACTIVITY_RESULT_ERROR_CODE) {
                     Exception error = result.getError();
                 }
+            } else if (requestCode == ADD_NEW_STORE) {
+                productStoreName = data.getStringExtra("storeNameForProduct");
+                productStoreId = data.getStringExtra("storeIdForProduct");
+                productStoreNameET.setText(productStoreName);
             }
         }
-
+        super.onActivityResult(requestCode, resultCode, data);
     }
+
 }

@@ -54,9 +54,9 @@ public class AddStore extends AppCompatActivity {
     LinearLayout addProduct;
     //IMAGE HOLDING URI
     Uri imageHold = null;
-
+    String callFromAddProduct;
     //STRING FIELDS
-    String spaceAvailable, ownerName, capacity, shopAddress, storeName, godownAddress, city, state;
+    String storeId, spaceAvailable, ownerName, capacity, shopAddress, storeName, godownAddress, city, state;
 
     //DATABASE AND STORAGE REFERENCES
     StorageReference mStorageReference;
@@ -77,11 +77,13 @@ public class AddStore extends AppCompatActivity {
 
         //CREATE THE CUSTOM TOOLBAR
         customToolbar = (Toolbar) findViewById(R.id.app_bar);
-        customToolbar.setTitle("Add Product");
+        customToolbar.setTitle("Add Store");
         customToolbar.setTitleTextColor(Color.WHITE);
         setSupportActionBar(customToolbar);
 
-        mProgress = new ProgressDialog(this);
+        callFromAddProduct = getIntent().getStringExtra("callFromAddProduct");
+
+        mProgress = new ProgressDialog(AddStore.this);
 
         //ASSIGN ID'S TO OUR FIELDS
         storePictureIB = (ImageButton) findViewById(R.id.store_picture_ib);
@@ -141,9 +143,10 @@ public class AddStore extends AppCompatActivity {
                 && !TextUtils.isEmpty(capacity)
                 && !TextUtils.isEmpty(godownAddress)
                 && !TextUtils.isEmpty(city)
-                && !TextUtils.isEmpty(state)) {
+                && !TextUtils.isEmpty(state)
+                && imageHold != null) {
 
-            if (imageHold != null) {
+
 
                 StorageReference mChildStorage = mStorageReference.child("Store_Images").child(imageHold.getLastPathSegment());
 
@@ -155,8 +158,11 @@ public class AddStore extends AppCompatActivity {
                         //noinspection VisibleForTests
                         Uri downloadUri = taskSnapshot.getDownloadUrl();
                         DatabaseReference mChildDatabase = mDatabaseReference.child("Store").push();
+                        storeId = mChildDatabase.getKey();
+
+
                         //ENTER ALL THE PRODUCTS WITH KEYS IN THE DATASBSE
-                        Store storeRef = new Store(mChildDatabase.getKey()
+                        Store storeRef = new Store(storeId
                                 , storeName
                                 , ownerName
                                 , shopAddress
@@ -166,16 +172,26 @@ public class AddStore extends AppCompatActivity {
                                 , downloadUri.toString()
                                 , city
                                 , state);
+
                         mChildDatabase.setValue(storeRef);
-                        mProgress.dismiss();
                     }
                 });
-            }
 
+            mProgress.dismiss();
         } else {
 
             mProgress.dismiss();
             Toast.makeText(this, "Please make sure you enter all fields", Toast.LENGTH_LONG).show();
+
+        }
+
+        if (callFromAddProduct != null && callFromAddProduct.equals("true") && storeId != null) {
+            Intent returnStoreNameToAddProduct = new Intent();
+            returnStoreNameToAddProduct.putExtra("storeNameForProduct", storeName);
+            returnStoreNameToAddProduct.putExtra("storeIdForProduct", storeId);
+            setResult(RESULT_OK, returnStoreNameToAddProduct);
+            mProgress.dismiss();
+            finish();
 
         }
 
@@ -186,7 +202,7 @@ public class AddStore extends AppCompatActivity {
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
 
-        return true;
+        return false;
     }
 
     @Override
@@ -288,18 +304,14 @@ public class AddStore extends AppCompatActivity {
 
                 Uri selectedImageUri;
                 if (isCamera) {
-
                     selectedImageUri = outputFileUri;
                 } else {
                     selectedImageUri = data == null ? null : data.getData();
                 }
-
                 CropImage.activity(selectedImageUri)
                         .setGuidelines(CropImageView.Guidelines.ON)
                         .start(this);
-
             }
-
             if (requestCode == CropImage.CROP_IMAGE_ACTIVITY_REQUEST_CODE) {
                 CropImage.ActivityResult result = CropImage.getActivityResult(data);
                 if (resultCode == RESULT_OK) {
@@ -309,7 +321,6 @@ public class AddStore extends AppCompatActivity {
                         ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
                         bitmap.compress(Bitmap.CompressFormat.JPEG, 50, byteArrayOutputStream);
                         byte[] bytesBitmap = byteArrayOutputStream.toByteArray();
-//                        bitmap=BitmapFactory.decodeByteArray(bytesBitmap,0,bytesBitmap.length);
                         File temp = File.createTempFile("store", "pic.jpg");
                         FileOutputStream fileOutputStream = new FileOutputStream(temp);
                         fileOutputStream.write(bytesBitmap);
@@ -326,6 +337,6 @@ public class AddStore extends AppCompatActivity {
                 }
             }
         }
-
     }
+
 }

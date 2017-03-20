@@ -18,6 +18,7 @@ public class Store implements Serializable {
     private String storePic;
     private String stateAddress;
     private String cityAddress;
+    private Product[] storeProducts;
 
     public Store() {
     }
@@ -33,6 +34,14 @@ public class Store implements Serializable {
         this.storePic = storePic;
         this.stateAddress = stateAddress;
         this.cityAddress = cityAddress;
+    }
+
+    public Product[] getStoreProducts() {
+        return storeProducts;
+    }
+
+    public void setStoreProducts(Product[] storeProducts) {
+        this.storeProducts = storeProducts;
     }
 
     public String getStoreId() {

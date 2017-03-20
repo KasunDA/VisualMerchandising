@@ -8,6 +8,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.widget.Button;
 import android.widget.DatePicker;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.google.firebase.database.DataSnapshot;
@@ -31,6 +32,7 @@ public class StockReport extends AppCompatActivity implements View.OnClickListen
     ArrayList<Integer> checkedItemsPositions;
     ArrayList<String> checkedStoreNames;
     DatePickerDialog datePickerDialog;
+    LinearLayout reportLinearLayout;
 
 
     @Override
@@ -41,6 +43,7 @@ public class StockReport extends AppCompatActivity implements View.OnClickListen
         endDateTV = (TextView) findViewById(R.id.stock_report_end_date_tv);
         selectStoreB = (Button) findViewById(R.id.stock_report_select_store_b);
         generateReport = (Button) findViewById(R.id.stock_report_generate_report_b);
+        reportLinearLayout = (LinearLayout) findViewById(R.id.report_linear_layout);
 
         startDateTV.setOnClickListener(this);
         endDateTV.setOnClickListener(this);
@@ -75,6 +78,7 @@ public class StockReport extends AppCompatActivity implements View.OnClickListen
                 dialogBoxBuild();
                 break;
             case R.id.stock_report_generate_report_b:
+                reportLinearLayout.setVisibility(View.VISIBLE);
                 break;
         }
     }
@@ -123,8 +127,6 @@ public class StockReport extends AppCompatActivity implements View.OnClickListen
                                     checkedStoreNames.add(storeNames.get(i));
                                 }
 
-                                TextView selectedStores = (TextView) findViewById(R.id.store_selected_tv);
-                                selectedStores.setText(checkedStoreNames.toString());
                             }
                         })
                         .setNegativeButton("Cancel", null)
@@ -149,4 +151,5 @@ public class StockReport extends AppCompatActivity implements View.OnClickListen
             }
         });
     }
+
 }
