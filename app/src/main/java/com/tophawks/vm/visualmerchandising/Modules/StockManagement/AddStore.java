@@ -185,7 +185,7 @@ public class AddStore extends AppCompatActivity {
 
         }
 
-        if (callFromAddProduct != null && callFromAddProduct.equals("true") && storeId != null) {
+        if (callFromAddProduct != null && callFromAddProduct.equals("true")) {
             Intent returnStoreNameToAddProduct = new Intent();
             returnStoreNameToAddProduct.putExtra("storeNameForProduct", storeName);
             returnStoreNameToAddProduct.putExtra("storeIdForProduct", storeId);
