@@ -63,8 +63,8 @@ public class AddProduct extends AppCompatActivity implements SearchView.OnQueryT
     private static final int ADD_NEW_STORE = 145;
     //DECLARE THE REFERENCES FOR VIEWS AND WIDGETS
     ImageButton productImage;
-    EditText productName, originalPrice, discountPrice, wholeSalePrice, retailPrice, proQuantity, proColor, proSpec;
-    Spinner categoryS, brandNameS;
+    EditText productName, originalPrice, discountPrice, wholeSalePrice, retailPrice, proQuantity, proColor, proSpec, brandNameET;
+    Spinner categoryS;
     LinearLayout addProduct;
     EditText productStoreNameET;
     SearchView storeNameSearchView;
@@ -115,9 +115,9 @@ public class AddProduct extends AppCompatActivity implements SearchView.OnQueryT
         proSpec = (EditText) findViewById(R.id.product_specification);
         addProduct = (LinearLayout) findViewById(R.id.addProductButton);
         productStoreNameET = (EditText) findViewById(R.id.product_store_name_edittext);
+        brandNameET = (EditText) findViewById(R.id.detail_brand_name_et);
 
         categoryS = (Spinner) findViewById(R.id.detail_category_s);
-        brandNameS = (Spinner) findViewById(R.id.detail_brand_name_s);
         categoryNames = new ArrayList<>();
 
         final DatabaseReference databaseReference = FirebaseDatabase.getInstance().getReference().child("CategoryNames");
@@ -140,12 +140,8 @@ public class AddProduct extends AppCompatActivity implements SearchView.OnQueryT
             public void onCancelled(DatabaseError databaseError) {
             }
         });
-
-        brandNameAdapter = ArrayAdapter.createFromResource(this, R.array.product_brand_name, android.R.layout.simple_spinner_item);
         categoryAdapter = new ArrayAdapter<>(AddProduct.this, android.R.layout.simple_spinner_item, categoryNames);
-        brandNameAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         categoryAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-        brandNameS.setAdapter(brandNameAdapter);
         categoryS.setAdapter(categoryAdapter);
 
         categoryS.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
@@ -179,17 +175,7 @@ public class AddProduct extends AppCompatActivity implements SearchView.OnQueryT
 
             }
         });
-        brandNameS.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
-            @Override
-            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-                brandName = parent.getItemAtPosition(position).toString();
-            }
 
-            @Override
-            public void onNothingSelected(AdapterView<?> parent) {
-
-            }
-        });
         productStoreNameET.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -230,7 +216,6 @@ public class AddProduct extends AppCompatActivity implements SearchView.OnQueryT
                 storeNamesListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
                     //NICE
                     View previousViewOfLV = null;
-
                     @Override
                     public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
 
@@ -296,6 +281,7 @@ public class AddProduct extends AppCompatActivity implements SearchView.OnQueryT
         proColorName = proColor.getText().toString().trim();
         proSpecification = proSpec.getText().toString().trim();
         productStoreName = productStoreNameET.getText().toString().trim();
+        brandName = brandNameET.getText().toString().trim();
 
 
         mProgress.setMessage("Uploading Image..");

@@ -12,14 +12,11 @@ import android.os.Bundle;
 import android.os.Environment;
 import android.os.Parcelable;
 import android.provider.MediaStore;
-import android.support.design.widget.FloatingActionButton;
-import android.support.design.widget.Snackbar;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.text.TextUtils;
-import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
@@ -30,7 +27,6 @@ import android.widget.Spinner;
 import android.widget.Toast;
 
 import com.google.android.gms.tasks.OnSuccessListener;
-import com.google.firebase.database.ChildEventListener;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -38,7 +34,6 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
-import com.google.firebase.storage.StreamDownloadTask;
 import com.google.firebase.storage.UploadTask;
 import com.squareup.picasso.Picasso;
 import com.theartofdev.edmodo.cropper.CropImage;
@@ -51,13 +46,7 @@ import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.Iterator;
 import java.util.List;
-import java.util.Map;
-import java.util.Objects;
-import java.util.Set;
 
 public class EditProductActivity extends AppCompatActivity {
 
@@ -65,30 +54,24 @@ public class EditProductActivity extends AppCompatActivity {
     private static final int GALLERY_REQUEST_CODE = 299;
     private static final int MY_PERMISSIONS_REQUEST_EXTERNAL_STORAGE = 123;
     private static final int PICK_IMAGE_REQUEST_CODE = 213;
-
-    //PRODUCT KEY FROM LIST INTENT
-    private String product_key = "";
-
     //DECLARE THE REFERENCES FOR VIEWS AND WIDGETS
     ImageButton productImage;
     EditText productName, originalPrice, discountPrice, wholeSalePrice, retailPrice, proQuantity, proColor, proSpec;
     Spinner categoryS, brandNameS;
     LinearLayout saveEditProduct;
-
     //STRING FIELDS
     String whoPrice, orgPrice, disPrice, retPrice, proName, quantity, proColorName, proSpecification, category, brandName, imageUrlIfNotChanged;
-
     //IMAGE HOLDING URI
     Uri imageHold = null;
-    private Uri outputFileUri;
-
     //DATABASE AND STORAGE REFERENCES
     StorageReference mStorageReference;
     DatabaseReference mDatabaseReference;
     ArrayAdapter brandNameAdapter, categoryAdapter;
-
     //PROGRESS DIALOG
     ProgressDialog mProgress;
+    //PRODUCT KEY FROM LIST INTENT
+    private String product_key = "";
+    private Uri outputFileUri;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -110,7 +93,7 @@ public class EditProductActivity extends AppCompatActivity {
         saveEditProduct = (LinearLayout) findViewById(R.id.saveEditProductButton);
 
         categoryS = (Spinner) findViewById(R.id.detail_category_s);
-        brandNameS = (Spinner) findViewById(R.id.detail_brand_name_s);
+        brandNameS = (Spinner) findViewById(R.id.detail_brand_name_et);
 
         //GET PRODUCT KEY
         product_key = getIntent().getStringExtra("product_key_edit").toString();
@@ -185,7 +168,7 @@ public class EditProductActivity extends AppCompatActivity {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
 
-                Product productItem = ((Product)dataSnapshot.getValue(Product.class));
+                Product productItem = dataSnapshot.getValue(Product.class);
 
 
                 wholeSalePrice.setText(String.valueOf(productItem.getWholeSalePrice()));

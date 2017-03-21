@@ -48,6 +48,16 @@
                 android:textSize="18sp" />
 
             <TextView
+                android:id="@+id/textView10"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_weight=".59"
+                android:paddingTop="15dp"
+                android:text="Category"
+                android:textColor="@android:color/black"
+                android:textSize="18sp" />
+
+            <TextView
                 android:id="@+id/textView4"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -88,6 +98,16 @@
                 android:textSize="18sp" />
 
             <TextView
+                android:id="@+id/textView11"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_weight=".59"
+                android:paddingTop="15dp"
+                android:text="Brand Name"
+                android:textColor="@android:color/black"
+                android:textSize="18sp" />
+
+            <TextView
                 android:id="@+id/textView8"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -107,26 +127,6 @@
                 android:textColor="@android:color/black"
                 android:textSize="18sp" />
 
-            <TextView
-                android:id="@+id/textView10"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_weight=".59"
-                android:paddingTop="15dp"
-                android:text="Category"
-                android:textColor="@android:color/black"
-                android:textSize="18sp" />
-
-            <TextView
-                android:id="@+id/textView11"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_weight=".59"
-                android:paddingTop="15dp"
-                android:text="Brand Name"
-                android:textColor="@android:color/black"
-                android:textSize="18sp" />
-
 
         </LinearLayout>
 
@@ -140,7 +140,7 @@
             <EditText
                 android:id="@+id/product_name_edittext"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
+                android:layout_height="0dp"
                 android:layout_weight="1"
                 android:ems="10"
                 android:hint="Enter product name"
@@ -149,7 +149,7 @@
             <EditText
                 android:id="@+id/product_store_name_edittext"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
+                android:layout_height="0dp"
                 android:layout_weight="1"
                 android:clickable="true"
                 android:ems="10"
@@ -160,16 +160,23 @@
             <EditText
                 android:id="@+id/original_price_edittext"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
+                android:layout_height="0dp"
                 android:layout_weight="1"
                 android:ems="10"
                 android:hint="Enter Original Price"
                 android:inputType="numberDecimal" />
 
+            <Spinner
+                android:id="@+id/detail_category_s"
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
+                android:layout_weight="1"></Spinner>
+
+
             <EditText
                 android:id="@+id/discount_price_edittext"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
+                android:layout_height="0dp"
                 android:layout_weight="1"
                 android:ems="10"
                 android:hint="Enter Discount Price"
@@ -178,7 +185,7 @@
             <EditText
                 android:id="@+id/wholesale_price_edittext"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
+                android:layout_height="0dp"
                 android:layout_weight="1"
                 android:ems="10"
                 android:hint="Enter Wholesale Price"
@@ -187,7 +194,7 @@
             <EditText
                 android:id="@+id/retail_price_edittext"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
+                android:layout_height="0dp"
                 android:layout_weight="1"
                 android:ems="10"
                 android:hint="Enter Retail Price"
@@ -196,16 +203,25 @@
             <EditText
                 android:id="@+id/quantity"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
+                android:layout_height="0dp"
                 android:layout_weight="1"
                 android:ems="10"
                 android:hint="Enter Quantity of product"
                 android:inputType="number" />
 
             <EditText
+                android:id="@+id/detail_brand_name_et"
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
+                android:layout_weight="1"
+                android:ems="10"
+                android:hint="Enter Product Brand"
+                android:inputType="textPersonName"></EditText>
+
+            <EditText
                 android:id="@+id/product_color"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
+                android:layout_height="0dp"
                 android:layout_weight="1"
                 android:ems="10"
                 android:hint="Enter Product Color"
@@ -214,31 +230,11 @@
             <EditText
                 android:id="@+id/product_specification"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
+                android:layout_height="0dp"
                 android:layout_weight="1"
                 android:ems="10"
                 android:hint="Enter product specification"
                 android:inputType="textPersonName" />
-
-            <Spinner
-                android:id="@+id/detail_category_s"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginBottom="19dp"
-
-                android:layout_weight="1">
-
-            </Spinner>
-
-            <Spinner
-                android:id="@+id/detail_brand_name_s"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-
-                android:layout_marginBottom="19dp"
-                android:layout_weight="1">
-
-            </Spinner>
 
 
         </LinearLayout>
