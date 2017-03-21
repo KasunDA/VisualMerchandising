@@ -136,6 +136,7 @@ public class AllProducts extends AppCompatActivity implements SearchView.OnQuery
                 adapter.sortProduct(newList);
                 break;
             case R.id.sort_date_item:
+                //TODO Sort on basis of time
                 if (newList == null)
                     newList = new ArrayList<>(productArrayList);
                 Collections.sort(newList, new Comparator<Product>() {

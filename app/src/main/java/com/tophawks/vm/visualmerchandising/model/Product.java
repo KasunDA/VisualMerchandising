@@ -2,9 +2,6 @@ package com.tophawks.vm.visualmerchandising.model;
 
 import java.io.Serializable;
 
-/**
- * Created by Tofiq Quadri on 14-03-2017.
- */
 
 public class Product implements Serializable{
 

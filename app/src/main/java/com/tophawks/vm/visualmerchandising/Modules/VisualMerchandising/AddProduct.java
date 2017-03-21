@@ -73,11 +73,13 @@ public class AddProduct extends AppCompatActivity implements SearchView.OnQueryT
 
     //STRING FIELDS
     String whoPrice, orgPrice, disPrice, retPrice, proName, quantity, proColorName, proSpecification, category, brandName, productStoreName, productStoreId;
-    ArrayList<String> storeNames;
+    ArrayList<String> storeNames, storeKeys, categoryNames;
     //DATABASE AND STORAGE REFERENCES
     StorageReference mStorageReference;
     DatabaseReference mDatabaseReference;
-    ArrayAdapter brandNameAdapter, categoryAdapter, storeNameAdapter;
+    ArrayAdapter<CharSequence> brandNameAdapter;
+    ArrayAdapter<String> categoryAdapter;
+    ArrayAdapter<String> storeNameAdapter;
     ListView storeNamesListView;
     //PROGRESS DIALOG
     ProgressDialog mProgress;
@@ -103,6 +105,7 @@ public class AddProduct extends AppCompatActivity implements SearchView.OnQueryT
         //ASSIGN ID'S TO OUR FIELDS
         productImage = (ImageButton) findViewById(R.id.productImageButton);
         productName = (EditText) findViewById(R.id.product_name_edittext);
+        productName.clearFocus();
         originalPrice = (EditText) findViewById(R.id.original_price_edittext);
         retailPrice = (EditText) findViewById(R.id.retail_price_edittext);
         wholeSalePrice = (EditText) findViewById(R.id.wholesale_price_edittext);
@@ -115,8 +118,31 @@ public class AddProduct extends AppCompatActivity implements SearchView.OnQueryT
 
         categoryS = (Spinner) findViewById(R.id.detail_category_s);
         brandNameS = (Spinner) findViewById(R.id.detail_brand_name_s);
+        categoryNames = new ArrayList<>();
+
+        final DatabaseReference databaseReference = FirebaseDatabase.getInstance().getReference().child("CategoryNames");
+        databaseReference.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                HashMap<String, String> nameMap = (HashMap<String, String>) dataSnapshot.getValue();
+                if (nameMap != null) {
+                    for (String key : nameMap.keySet()) {
+                        categoryNames.add(nameMap.get(key));
+                    }
+                }
+                if (!categoryNames.contains("Other")) {
+                    categoryNames.add("Other");
+                }
+                categoryAdapter.notifyDataSetChanged();
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+            }
+        });
+
         brandNameAdapter = ArrayAdapter.createFromResource(this, R.array.product_brand_name, android.R.layout.simple_spinner_item);
-        categoryAdapter = ArrayAdapter.createFromResource(this, R.array.product_category, android.R.layout.simple_spinner_item);
+        categoryAdapter = new ArrayAdapter<>(AddProduct.this, android.R.layout.simple_spinner_item, categoryNames);
         brandNameAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         categoryAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         brandNameS.setAdapter(brandNameAdapter);
@@ -126,6 +152,26 @@ public class AddProduct extends AppCompatActivity implements SearchView.OnQueryT
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
                 category = parent.getItemAtPosition(position).toString();
+                if (category.equals("Other")) {
+                    AlertDialog.Builder newCategoryBuilder = new AlertDialog.Builder(AddProduct.this);
+                    newCategoryBuilder.setTitle("Add Category");
+                    View addCategoryView = getLayoutInflater().inflate(R.layout.add_category_dialog, null);
+                    final EditText adCategoryET = (EditText) addCategoryView.findViewById(R.id.add_category_dialog_category_et);
+                    newCategoryBuilder.setPositiveButton("OK", new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int which) {
+                            String newCategory = adCategoryET.getText().toString();
+                            if (!TextUtils.isEmpty(newCategory)) {
+                                category = newCategory;
+                                dialog.dismiss();
+
+                            }
+                        }
+                    })
+                            .setView(addCategoryView)
+                            .create().show();
+
+                }
             }
 
             @Override
@@ -149,7 +195,9 @@ public class AddProduct extends AppCompatActivity implements SearchView.OnQueryT
             public void onClick(View v) {
                 AlertDialog alertDialog = null;
                 storeNames = new ArrayList<>();
+                storeKeys = new ArrayList<String>();
                 storeNames.add("Other");
+                storeKeys.add("OTHER KEY");
                 final DatabaseReference databaseReference = FirebaseDatabase.getInstance().getReference().child("StoreNames");
                 databaseReference.addValueEventListener(new ValueEventListener() {
                     @Override
@@ -159,6 +207,7 @@ public class AddProduct extends AppCompatActivity implements SearchView.OnQueryT
                         if (nameMap != null) {
                             for (String key : nameMap.keySet()) {
                                 storeNames.add(nameMap.get(key));
+                                storeKeys.add(key);
                             }
                         }
 
@@ -187,6 +236,7 @@ public class AddProduct extends AppCompatActivity implements SearchView.OnQueryT
 
 
                         productStoreNameET.setText(storeNames.get(position));
+                        productStoreId = storeKeys.get(position);
                         if (previousViewOfLV != null) {
                             previousViewOfLV.setBackground(null);
                         }
@@ -301,6 +351,10 @@ public class AddProduct extends AppCompatActivity implements SearchView.OnQueryT
 
         }
         mProgress.dismiss();
+
+        final DatabaseReference databaseReferenceCategory = FirebaseDatabase.getInstance().getReference().child("CategoryNames");
+        int randNo = (int) (Math.random() * 100);
+        databaseReferenceCategory.child("newCategory" + randNo).setValue(category);
     }
 
 

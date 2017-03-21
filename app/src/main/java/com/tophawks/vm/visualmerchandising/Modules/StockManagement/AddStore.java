@@ -117,14 +117,14 @@ public class AddStore extends AppCompatActivity {
             @Override
             public void onClick(View v) {
 
-                productPost();
+                StorePost();
             }
 
 
         });
     }
 
-    private void productPost() {
+    private void StorePost() {
 
         spaceAvailable = spaceAvailableET.getText().toString().trim();
         shopAddress = shopAddressET.getText().toString().trim();
