@@ -25,8 +25,6 @@ public class StockManagementHomePage extends AppCompatActivity implements StockM
         if (fragment != null) {
             fragmentManager.beginTransaction().add(container.getId(), fragment).commit();
         }
-
-
     }
 
     @Override

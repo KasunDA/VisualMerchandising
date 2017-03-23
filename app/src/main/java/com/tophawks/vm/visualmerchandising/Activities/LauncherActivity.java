@@ -18,6 +18,7 @@ public class LauncherActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_launcher);
+
         VMIV = (GifImageView) findViewById(R.id.launcher_vm_iv);
         VMIV.setOnClickListener(new View.OnClickListener() {
             @Override

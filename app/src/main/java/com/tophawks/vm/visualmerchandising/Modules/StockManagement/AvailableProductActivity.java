@@ -92,7 +92,7 @@ public class AvailableProductActivity extends AppCompatActivity implements Searc
 
                         productArrayList.add(model);
 
-                        final String product_key = model.getItemId();
+                        final String product_key = model.getProductId();
 
                         Log.d("datalog", model.getProductColor());
 
