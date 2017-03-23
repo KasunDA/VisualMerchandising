@@ -40,8 +40,10 @@ public class AllProducts extends AppCompatActivity implements SearchView.OnQuery
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_home);
+
         searchToolbar = (Toolbar) findViewById(R.id.search_toolbar);
         setSupportActionBar(searchToolbar);
+
         searchResultsRV = (RecyclerView) findViewById(R.id.home_search_results_rv);
         databaseReference = FirebaseDatabase.getInstance().getReference().child("Product");
         databaseReference.keepSynced(true);

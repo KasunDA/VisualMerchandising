@@ -36,7 +36,7 @@ public class UpdateProductList extends AppCompatActivity {
         setSupportActionBar(toolbar);
 
         //ASSIGN FIREBASE INSTANCE
-        mProductUpdateListDatabase = FirebaseDatabase.getInstance().getReference().child("Product");
+        mProductUpdateListDatabase = FirebaseDatabase.getInstance().getReference().child("Products");
 
         //ASSIGN RECYCLERVIEW ID
         mUpdateListRecyclerView = (RecyclerView) findViewById(R.id.update_product_rv);

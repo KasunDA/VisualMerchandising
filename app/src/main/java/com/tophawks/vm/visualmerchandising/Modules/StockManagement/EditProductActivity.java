@@ -54,21 +54,29 @@ public class EditProductActivity extends AppCompatActivity {
     private static final int GALLERY_REQUEST_CODE = 299;
     private static final int MY_PERMISSIONS_REQUEST_EXTERNAL_STORAGE = 123;
     private static final int PICK_IMAGE_REQUEST_CODE = 213;
+
+
     //DECLARE THE REFERENCES FOR VIEWS AND WIDGETS
     ImageButton productImage;
     EditText productName, originalPrice, discountPrice, wholeSalePrice, retailPrice, proQuantity, proColor, proSpec;
     Spinner categoryS, brandNameS;
     LinearLayout saveEditProduct;
+
+
     //STRING FIELDS
     String whoPrice, orgPrice, disPrice, retPrice, proName, quantity, proColorName, proSpecification, category, brandName, imageUrlIfNotChanged;
+
     //IMAGE HOLDING URI
     Uri imageHold = null;
+
     //DATABASE AND STORAGE REFERENCES
     StorageReference mStorageReference;
     DatabaseReference mDatabaseReference;
     ArrayAdapter brandNameAdapter, categoryAdapter;
+
     //PROGRESS DIALOG
     ProgressDialog mProgress;
+    
     //PRODUCT KEY FROM LIST INTENT
     private String product_key = "";
     private Uri outputFileUri;
