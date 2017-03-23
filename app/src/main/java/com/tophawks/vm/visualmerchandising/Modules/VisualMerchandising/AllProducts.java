@@ -43,7 +43,7 @@ public class AllProducts extends AppCompatActivity implements SearchView.OnQuery
         searchToolbar = (Toolbar) findViewById(R.id.search_toolbar);
         setSupportActionBar(searchToolbar);
         searchResultsRV = (RecyclerView) findViewById(R.id.home_search_results_rv);
-        databaseReference = FirebaseDatabase.getInstance().getReference().child("Product");
+        databaseReference = FirebaseDatabase.getInstance().getReference().child("Products");
         databaseReference.keepSynced(true);
         productArrayList = new ArrayList<>();
 
@@ -62,7 +62,7 @@ public class AllProducts extends AppCompatActivity implements SearchView.OnQuery
                     @Override
                     public void onClick(View v) {
                         Intent blogDetail = new Intent(AllProducts.this, ProductDescription.class);
-                        String itemIdForIntent = model.getItemId().toString();
+                        String itemIdForIntent = model.getProductId().toString();
                         blogDetail.putExtra("product_id", itemIdForIntent);
                         startActivity(blogDetail);
                     }

@@ -63,7 +63,7 @@ public class AddProduct extends AppCompatActivity implements SearchView.OnQueryT
     private static final int ADD_NEW_STORE = 145;
     //DECLARE THE REFERENCES FOR VIEWS AND WIDGETS
     ImageButton productImage;
-    EditText productName, originalPrice, discountPrice, wholeSalePrice, retailPrice, proQuantity, proColor, proSpec, brandNameET;
+    EditText productNameET, originalPriceET, discountPriceET, wholeSalePriceET, retailPriceET, productQuantityET, productColorET, productSpecificatonEt, brandNameET;
     Spinner categoryS;
     LinearLayout addProduct;
     EditText productStoreNameET;
@@ -104,15 +104,15 @@ public class AddProduct extends AppCompatActivity implements SearchView.OnQueryT
 
         //ASSIGN ID'S TO OUR FIELDS
         productImage = (ImageButton) findViewById(R.id.productImageButton);
-        productName = (EditText) findViewById(R.id.product_name_edittext);
-        productName.clearFocus();
-        originalPrice = (EditText) findViewById(R.id.original_price_edittext);
-        retailPrice = (EditText) findViewById(R.id.retail_price_edittext);
-        wholeSalePrice = (EditText) findViewById(R.id.wholesale_price_edittext);
-        discountPrice = (EditText) findViewById(R.id.discount_price_edittext);
-        proQuantity = (EditText) findViewById(R.id.quantity);
-        proColor = (EditText) findViewById(R.id.product_color);
-        proSpec = (EditText) findViewById(R.id.product_specification);
+        productNameET = (EditText) findViewById(R.id.product_name_edittext);
+        productNameET.clearFocus();
+        originalPriceET = (EditText) findViewById(R.id.original_price_edittext);
+        retailPriceET = (EditText) findViewById(R.id.retail_price_edittext);
+        wholeSalePriceET = (EditText) findViewById(R.id.wholesale_price_edittext);
+        discountPriceET = (EditText) findViewById(R.id.discount_price_edittext);
+        productQuantityET = (EditText) findViewById(R.id.quantity);
+        productColorET = (EditText) findViewById(R.id.product_color);
+        productSpecificatonEt = (EditText) findViewById(R.id.product_specification);
         addProduct = (LinearLayout) findViewById(R.id.addProductButton);
         productStoreNameET = (EditText) findViewById(R.id.product_store_name_edittext);
         brandNameET = (EditText) findViewById(R.id.detail_brand_name_et);
@@ -216,6 +216,7 @@ public class AddProduct extends AppCompatActivity implements SearchView.OnQueryT
                 storeNamesListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
                     //NICE
                     View previousViewOfLV = null;
+
                     @Override
                     public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
 
@@ -272,17 +273,16 @@ public class AddProduct extends AppCompatActivity implements SearchView.OnQueryT
 
     private void productPost() {
 
-        whoPrice = wholeSalePrice.getText().toString().trim();
-        retPrice = retailPrice.getText().toString().trim();
-        disPrice = discountPrice.getText().toString().trim();
-        orgPrice = originalPrice.getText().toString().trim();
-        proName = productName.getText().toString().trim();
-        quantity = proQuantity.getText().toString().trim();
-        proColorName = proColor.getText().toString().trim();
-        proSpecification = proSpec.getText().toString().trim();
+        whoPrice = wholeSalePriceET.getText().toString().trim();
+        retPrice = retailPriceET.getText().toString().trim();
+        disPrice = discountPriceET.getText().toString().trim();
+        orgPrice = originalPriceET.getText().toString().trim();
+        proName = productNameET.getText().toString().trim();
+        quantity = productQuantityET.getText().toString().trim();
+        proColorName = productColorET.getText().toString().trim();
+        proSpecification = productSpecificatonEt.getText().toString().trim();
         productStoreName = productStoreNameET.getText().toString().trim();
         brandName = brandNameET.getText().toString().trim();
-
 
         mProgress.setMessage("Uploading Image..");
         mProgress.show();
@@ -311,10 +311,13 @@ public class AddProduct extends AppCompatActivity implements SearchView.OnQueryT
                         //noinspection VisibleForTests
                         Uri downloadUri = taskSnapshot.getDownloadUrl();
                         mDatabaseReference = FirebaseDatabase.getInstance().getReference();
-                        DatabaseReference mChildDatabase = mDatabaseReference.child("Store").child(productStoreId).child("Products").push();
-                        //ENTER ALL THE PRODUCTS WITH KEYS IN THE DATASBSE
+                        DatabaseReference mChildDatabase = mDatabaseReference.child("Products").push();
+                        //ENTER ALL THE PRODUCTS WITH KEYS IN THE DATABASE
                         Product productRef = new Product(mChildDatabase.getKey()
-                                , proName, proColorName
+                                , productStoreId
+                                , proName
+                                , productStoreName
+                                , proColorName
                                 , proSpecification
                                 , downloadUri.toString()
                                 , Float.valueOf(whoPrice)
@@ -325,9 +328,13 @@ public class AddProduct extends AppCompatActivity implements SearchView.OnQueryT
                                 , category, brandName, 0);
                         mChildDatabase.setValue(productRef);
 
+
+                        DatabaseReference storeReference = mDatabaseReference.child("Store").child(productStoreId).child("Products").child(mChildDatabase.getKey());
+                        storeReference.setValue(proName);
                         mProgress.dismiss();
                     }
                 });
+
             }
 
         } else {

@@ -1,6 +1,7 @@
 package com.tophawks.vm.visualmerchandising.Modules.StockManagement;
 
 import android.app.DatePickerDialog;
+import android.app.ProgressDialog;
 import android.content.DialogInterface;
 import android.os.Bundle;
 import android.support.v7.app.AlertDialog;
@@ -10,6 +11,7 @@ import android.widget.Button;
 import android.widget.DatePicker;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
@@ -20,6 +22,7 @@ import com.tophawks.vm.visualmerchandising.R;
 
 import org.joda.time.LocalDate;
 
+import java.text.NumberFormat;
 import java.util.ArrayList;
 import java.util.HashMap;
 
@@ -33,6 +36,7 @@ public class StockReport extends AppCompatActivity implements View.OnClickListen
     ArrayList<String> checkedStoreNames;
     DatePickerDialog datePickerDialog;
     LinearLayout reportLinearLayout;
+    ProgressDialog storeSelectProgressDialog;
 
 
     @Override
@@ -44,6 +48,7 @@ public class StockReport extends AppCompatActivity implements View.OnClickListen
         selectStoreB = (Button) findViewById(R.id.stock_report_select_store_b);
         generateReport = (Button) findViewById(R.id.stock_report_generate_report_b);
         reportLinearLayout = (LinearLayout) findViewById(R.id.report_linear_layout);
+        storeSelectProgressDialog = new ProgressDialog(StockReport.this);
 
         startDateTV.setOnClickListener(this);
         endDateTV.setOnClickListener(this);
@@ -75,7 +80,11 @@ public class StockReport extends AppCompatActivity implements View.OnClickListen
                 datePickerDialog.show();
                 break;
             case R.id.stock_report_select_store_b:
+                storeSelectProgressDialog.setMessage("Getting all stores!!");
+                storeSelectProgressDialog.setProgressPercentFormat(NumberFormat.getPercentInstance());
+                storeSelectProgressDialog.show();
                 dialogBoxBuild();
+
                 break;
             case R.id.stock_report_generate_report_b:
                 reportLinearLayout.setVisibility(View.VISIBLE);
@@ -117,7 +126,7 @@ public class StockReport extends AppCompatActivity implements View.OnClickListen
                                         checkedItemsPositions.remove((Integer) which);
                                     }
                                 }
-                            }
+                                }
                         })
                         .setPositiveButton("OK", new DialogInterface.OnClickListener() {
                             @Override
@@ -143,10 +152,13 @@ public class StockReport extends AppCompatActivity implements View.OnClickListen
                         })
                         .create()
                         .show();
+                storeSelectProgressDialog.dismiss();
             }
 
             @Override
             public void onCancelled(DatabaseError databaseError) {
+                Toast.makeText(StockReport.this, "DataBase Error:  " +
+                        databaseError, Toast.LENGTH_SHORT).show();
 
             }
         });

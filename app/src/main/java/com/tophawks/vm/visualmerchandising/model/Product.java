@@ -5,22 +5,22 @@ import java.io.Serializable;
 
 public class Product implements Serializable{
 
-    private String itemId;
-    private String productName, productColor, productSpecification, imageUrl;
+    private String productId;
+    private String storeId;
+    private String productName, productColor, productSpecification, imageUrl, storeName;
     private float wholeSalePrice, retailPrice, originalPrice, discountPrice;
     private int productQuantity;
     private int productPopularity;
-
-
     private String category, brandName;
-
     public Product() {
     }
 
-    public Product(String itemId, String productName, String productColor, String productSpecification, String imageUrl, float wholeSalePrice, float retailPrice, float originalPrice, float discountPrice, int productQuantity, String category, String brandName, int productPopularity) {
-        this.itemId = itemId;
+    public Product(String productId, String storeId, String productName, String storeName, String productColor, String productSpecification, String imageUrl, float wholeSalePrice, float retailPrice, float originalPrice, float discountPrice, int productQuantity, String category, String brandName, int productPopularity) {
+        this.productId = productId;
+        this.storeId = storeId;
         this.productPopularity = productPopularity;
         this.productName = productName;
+        this.storeName = storeName;
         this.productColor = productColor;
         this.productSpecification = productSpecification;
         this.imageUrl = imageUrl;
@@ -31,6 +31,22 @@ public class Product implements Serializable{
         this.productQuantity = productQuantity;
         this.category = category;
         this.brandName = brandName;
+    }
+
+    public String getStoreId() {
+        return storeId;
+    }
+
+    public void setStoreId(String storeId) {
+        this.storeId = storeId;
+    }
+
+    public String getStoreName() {
+        return storeName;
+    }
+
+    public void setStoreName(String storeName) {
+        this.storeName = storeName;
     }
 
     public int getProductPopularity() {
@@ -57,12 +73,12 @@ public class Product implements Serializable{
         this.brandName = brandName;
     }
 
-    public String getItemId() {
-        return itemId;
+    public String getProductId() {
+        return productId;
     }
 
-    public void setItemId(String itemId) {
-        this.itemId = itemId;
+    public void setProductId(String productId) {
+        this.productId = productId;
     }
 
     public String getProductName() {

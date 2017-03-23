@@ -76,11 +76,11 @@ public class ProductDescription extends AppCompatActivity implements View.OnClic
             public void onDataChange(DataSnapshot dataSnapshot) {
 
 
-                productName.setText(String.valueOf(dataSnapshot.child("productName").getValue()));
-                retailPrice.setText(String.valueOf(dataSnapshot.child("retailPrice").getValue()));
-                wholeSalePrice.setText(String.valueOf(dataSnapshot.child("wholeSalePrice").getValue()));
-                originalPrice.setText(String.valueOf(dataSnapshot.child("originalPrice").getValue()));
-                discountPrice.setText(String.valueOf(dataSnapshot.child("discountPrice").getValue()));
+                productName.setText(String.valueOf(dataSnapshot.child("productNameET").getValue()));
+                retailPrice.setText(String.valueOf(dataSnapshot.child("retailPriceET").getValue()));
+                wholeSalePrice.setText(String.valueOf(dataSnapshot.child("wholeSalePriceET").getValue()));
+                originalPrice.setText(String.valueOf(dataSnapshot.child("originalPriceET").getValue()));
+                discountPrice.setText(String.valueOf(dataSnapshot.child("discountPriceET").getValue()));
                 specification.setText(dataSnapshot.child("productSpecification").getValue().toString());
                 color.setText(dataSnapshot.child("productColor").getValue().toString());
                 quantity.setText(String.valueOf(dataSnapshot.child("productQuantity").getValue()));

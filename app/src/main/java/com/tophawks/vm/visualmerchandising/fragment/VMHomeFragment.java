@@ -65,7 +65,7 @@ public class VMHomeFragment extends Fragment {
     private void popularProductsDownload() {
         databaseReference=FirebaseDatabase.getInstance().getReference();
 
-        Query query=databaseReference.child("Product").orderByChild("originalPrice").limitToFirst(3);
+        Query query = databaseReference.child("Products").orderByChild("originalPrice").limitToFirst(3);
         query.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
@@ -74,7 +74,9 @@ public class VMHomeFragment extends Fragment {
 
                    productArrayList.add(new Product(
                            products.getKey()
+                           , (String) map.get("storeId")
                            ,(String)map.get("productName")
+                           , (String) map.get("storeName")
                            ,(String)map.get("productColor")
                            ,(String)map.get("productSpecification")
                            ,(String)map.get("imageUrl")
