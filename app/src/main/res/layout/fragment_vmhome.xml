@@ -21,8 +21,12 @@
         app:pager_animation="Fade"
         app:pager_animation_span="1100"
         />
-<android.support.v7.widget.RecyclerView
-    android:id="@+id/vm_home_rv"
-    android:layout_width="match_parent"
-    android:layout_height="200sp"></android.support.v7.widget.RecyclerView>
+
+    <android.support.v7.widget.RecyclerView
+        android:id="@+id/vm_home_rv"
+        android:layout_width="match_parent"
+        android:layout_height="200sp">
+
+    </android.support.v7.widget.RecyclerView>
+
 </LinearLayout>

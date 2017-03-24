@@ -32,7 +32,6 @@ public class SearchViewRecyclerAdapter extends RecyclerView.Adapter<SearchViewRe
 
     @Override
     public ProductViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-
         View view= LayoutInflater.from(context).inflate(R.layout.search_result_row,parent,false);
         return (new ProductViewHolder(view, context, productArrayList));
     }
@@ -92,5 +91,7 @@ public class SearchViewRecyclerAdapter extends RecyclerView.Adapter<SearchViewRe
             context.startActivity(descriptionIntent);
 
         }
+
     }
+
 }
