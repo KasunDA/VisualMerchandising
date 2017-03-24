@@ -17,7 +17,16 @@ public class Product implements Serializable{
 
     }
 
-    public Product(String productId, String storeId, String productName, String storeName, String productColor, String productSpecification, String imageUrl, float wholeSalePrice, float retailPrice, float originalPrice, float discountPrice, int productQuantity, String category, String brandName, int productPopularity) {
+    public Product(String productId, String storeId, String productName, String storeName,
+
+                   String productColor, String productSpecification, String imageUrl,
+
+                   float wholeSalePrice, float retailPrice, float originalPrice,
+
+                   float discountPrice, int productQuantity, String category,
+
+                   String brandName, int productPopularity                  ) {
+
         this.productId = productId;
         this.storeId = storeId;
         this.productPopularity = productPopularity;
