@@ -2,6 +2,7 @@ package com.tophawks.vm.visualmerchandising.adapter;
 
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.Paint;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -39,9 +40,15 @@ public class SearchViewRecyclerAdapter extends RecyclerView.Adapter<SearchViewRe
     @Override
     public void onBindViewHolder(ProductViewHolder holder, int position) {
         Picasso.with(context).load(productArrayList.get(position).getImageUrl()).into(holder.productThumbIV);
-        holder.productOriginalPriceTV.setText(""+productArrayList.get(position).getOriginalPrice());
-        holder.productWholeSalePriceTV.setText(""+productArrayList.get(position).getWholeSalePrice());
+        int originalPrice = (int) productArrayList.get(position).getOriginalPrice();
+        int discountPrice = (int) productArrayList.get(position).getDiscountPrice();
+        int discountPercentage = (int) (100 - ((float) discountPrice / originalPrice) * 100);
+        holder.productOriginalPriceTV.setText("₹ " + originalPrice);
+        holder.productDiscountPriceTV.setText("₹ " + discountPrice);
+        holder.productOriginalPriceTV.setPaintFlags(holder.productOriginalPriceTV.getPaintFlags() | Paint.STRIKE_THRU_TEXT_FLAG | Paint.ANTI_ALIAS_FLAG);
         holder.productName.setText(productArrayList.get(position).getProductName());
+
+        holder.productDiscountPersentageTV.setText("" + discountPercentage + "% OFF!!");
     }
 
     @Override
@@ -65,8 +72,9 @@ public class SearchViewRecyclerAdapter extends RecyclerView.Adapter<SearchViewRe
 
         ImageView productThumbIV;
         TextView productOriginalPriceTV;
-        TextView productWholeSalePriceTV;
+        TextView productDiscountPriceTV;
         TextView productName;
+        TextView productDiscountPersentageTV;
 
         Context context;
         ArrayList<Product> products;
@@ -78,8 +86,9 @@ public class SearchViewRecyclerAdapter extends RecyclerView.Adapter<SearchViewRe
             this.products = products;
             this.productThumbIV=(ImageView)itemView.findViewById(R.id.row_item_thum_iv);
             this.productOriginalPriceTV=(TextView)itemView.findViewById(R.id.row_item_original_price_tv);
-            this.productWholeSalePriceTV=(TextView)itemView.findViewById(R.id.row_item_wholesale_price_tv);
+            this.productDiscountPriceTV = (TextView) itemView.findViewById(R.id.row_item_discount_price_tv);
             this.productName=(TextView)itemView.findViewById(R.id.row_item_name_tv);
+            productDiscountPersentageTV = (TextView) itemView.findViewById(R.id.row_item_discount_percent_tv);
         }
 
         @Override

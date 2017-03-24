@@ -1,54 +1,83 @@
 <?xml version="1.0" encoding="utf-8"?>
 
 <android.support.v7.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="match_parent"
-    android:layout_height="wrap_content"
-    android:elevation="3sp"
-    android:layout_margin="3sp">
+    android:layout_width="200sp"
+    android:layout_height="200sp"
+    android:layout_margin="3sp"
+    android:elevation="10sp">
+
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="vertical"
-        >
-        <ImageView
-        android:layout_width="match_parent"
-        android:layout_height="100dp"
-        android:src="@android:drawable/btn_star"
-        android:id="@+id/row_item_thum_iv"/>
-        <LinearLayout
+        android:layout_height="match_parent"
+        android:orientation="vertical">
+
+        <RelativeLayout
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:orientation="horizontal">
+            android:layout_height="0dp"
+            android:layout_weight="0.75">
+
+            <ImageView
+                android:id="@+id/row_item_thum_iv"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:src="@android:drawable/btn_star" />
 
             <TextView
+                android:id="@+id/row_item_discount_percent_tv"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:layout_alignEnd="@+id/row_item_thum_iv"
+                android:layout_centerVertical="true"
+                android:alpha="0.55"
+                android:background="#CFCFCF"
+                android:padding="10dp"
+                android:text="0% OFF!!"
+                android:textColor="#000000"
+                android:textStyle="bold" />
+        </RelativeLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="0.25"
+            android:orientation="vertical">
+
+            <TextView
                 android:id="@+id/row_item_name_tv"
-                android:layout_marginTop="3sp"
-                android:layout_marginLeft="10sp"
+                android:layout_width="wrap_content"
+                android:layout_height="0dp"
+                android:layout_gravity="center"
+                android:layout_weight="2"
+                android:gravity="center"
+                android:padding="1dp"
                 android:text="Name"
-                android:textSize="20sp"
-                android:layout_gravity="center"/>
+                android:textColor="#000000"
+                android:textSize="20sp" />
+
             <LinearLayout
                 android:layout_width="match_parent"
-                android:orientation="vertical"
-                android:layout_height="wrap_content">
+                android:layout_height="0dp"
+                android:layout_weight="1.5"
+                android:orientation="horizontal">
+
                 <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
                     android:id="@+id/row_item_original_price_tv"
-                    android:layout_marginTop="3sp"
-                    android:text="Original Price"
-                    android:textSize="20sp"
-                    android:layout_gravity="center"/>
-                <TextView
-                    android:layout_width="wrap_content"
+                    android:layout_width="0dp"
                     android:layout_height="wrap_content"
-                    android:id="@+id/row_item_wholesale_price_tv"
-                    android:text="Wholesale Price"
-                    android:layout_marginTop="3sp"
-                    android:textSize="20sp"
-                    android:layout_gravity="center"/>
+                    android:layout_weight="1"
+                    android:gravity="center"
+                    android:text="Original"
+                    android:textSize="17sp" />
+
+                <TextView
+                    android:id="@+id/row_item_discount_price_tv"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:gravity="center"
+                    android:text="Discount"
+                    android:textColor="#000000"
+                    android:textSize="17sp" />
             </LinearLayout>
         </LinearLayout>
     </LinearLayout>

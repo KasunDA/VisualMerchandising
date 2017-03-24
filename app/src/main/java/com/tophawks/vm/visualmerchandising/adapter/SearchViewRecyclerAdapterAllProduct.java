@@ -92,6 +92,7 @@ public class SearchViewRecyclerAdapterAllProduct extends RecyclerView.Adapter<Se
             productQuantityTextView = (TextView) itemView.findViewById(R.id.product_Quantity_Card_Edit);
 
 
+
         }
 
         @Override

@@ -1,4 +1,4 @@
-//package com.tophawks.vm.visualmerchandising.Modules.StockManagement;
+package com.tophawks.vm.visualmerchandising.Modules.StockManagement;
 //
 //import android.Manifest;
 //import android.app.ProgressDialog;
@@ -12,9 +12,8 @@
 //import android.os.Environment;
 //import android.os.Parcelable;
 //import android.provider.MediaStore;
-//import android.support.v4.app.ActivityCompat;
-//import android.support.v4.content.ContextCompat;
-//import android.support.v7.app.AppCompatActivity;
+
+import android.support.v7.app.AppCompatActivity;
 //import android.support.v7.widget.Toolbar;
 //import android.text.TextUtils;
 //import android.view.View;
@@ -48,7 +47,7 @@
 //import java.util.ArrayList;
 //import java.util.List;
 //
-//public class EditProductActivity extends AppCompatActivity {
+public class EditProductActivity extends AppCompatActivity {
 //
 //    //REQUEST CODES
 //    private static final int GALLERY_REQUEST_CODE = 299;
@@ -403,4 +402,4 @@
 //
 //    }
 //
-//}
+}
