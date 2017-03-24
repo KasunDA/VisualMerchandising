@@ -61,9 +61,10 @@ public class AddProduct extends AppCompatActivity implements SearchView.OnQueryT
     private static final int MY_PERMISSIONS_REQUEST_EXTERNAL_STORAGE = 123;
     private static final int PICK_IMAGE_REQUEST_CODE = 213;
     private static final int ADD_NEW_STORE = 145;
+    int newCategoryFlag = 0;
     //DECLARE THE REFERENCES FOR VIEWS AND WIDGETS
     ImageButton productImage;
-    EditText productNameET, originalPriceET, discountPriceET, wholeSalePriceET, retailPriceET, productQuantityET, productColorET, productSpecificatonEt, brandNameET;
+    EditText productNameET, originalPriceET, discountPriceET, wholeSalePriceET, retailPriceET, productQuantityET, productColorET, productSpecificationET, brandNameET;
     Spinner categoryS;
     LinearLayout addProduct;
     EditText productStoreNameET;
@@ -112,7 +113,7 @@ public class AddProduct extends AppCompatActivity implements SearchView.OnQueryT
         discountPriceET = (EditText) findViewById(R.id.discount_price_edittext);
         productQuantityET = (EditText) findViewById(R.id.quantity);
         productColorET = (EditText) findViewById(R.id.product_color);
-        productSpecificatonEt = (EditText) findViewById(R.id.product_specification);
+        productSpecificationET = (EditText) findViewById(R.id.product_specification);
         addProduct = (LinearLayout) findViewById(R.id.addProductButton);
         productStoreNameET = (EditText) findViewById(R.id.product_store_name_edittext);
         brandNameET = (EditText) findViewById(R.id.detail_brand_name_et);
@@ -149,6 +150,7 @@ public class AddProduct extends AppCompatActivity implements SearchView.OnQueryT
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
                 category = parent.getItemAtPosition(position).toString();
                 if (category.equals("Other")) {
+                    newCategoryFlag = 1;
                     AlertDialog.Builder newCategoryBuilder = new AlertDialog.Builder(AddProduct.this);
                     newCategoryBuilder.setTitle("Add Category");
                     View addCategoryView = getLayoutInflater().inflate(R.layout.add_category_dialog, null);
@@ -280,7 +282,7 @@ public class AddProduct extends AppCompatActivity implements SearchView.OnQueryT
         proName = productNameET.getText().toString().trim();
         quantity = productQuantityET.getText().toString().trim();
         proColorName = productColorET.getText().toString().trim();
-        proSpecification = productSpecificatonEt.getText().toString().trim();
+        proSpecification = productSpecificationET.getText().toString().trim();
         productStoreName = productStoreNameET.getText().toString().trim();
         brandName = brandNameET.getText().toString().trim();
 
@@ -344,10 +346,11 @@ public class AddProduct extends AppCompatActivity implements SearchView.OnQueryT
 
         }
         mProgress.dismiss();
-
-        final DatabaseReference databaseReferenceCategory = FirebaseDatabase.getInstance().getReference().child("CategoryNames");
-        int randNo = (int) (Math.random() * 100);
-        databaseReferenceCategory.child("newCategory" + randNo).setValue(category);
+        if (newCategoryFlag == 1) {
+            final DatabaseReference databaseReferenceCategory = FirebaseDatabase.getInstance().getReference().child("CategoryNames");
+            int randNo = (int) (Math.random() * 100);
+            databaseReferenceCategory.child("newCategory" + randNo).setValue(category);
+        }
     }
 
 
@@ -479,7 +482,7 @@ public class AddProduct extends AppCompatActivity implements SearchView.OnQueryT
                     try {
                         Bitmap bitmap = MediaStore.Images.Media.getBitmap(this.getContentResolver(), imageHold);
                         ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
-                        bitmap.compress(Bitmap.CompressFormat.JPEG, 50, byteArrayOutputStream);
+                        bitmap.compress(Bitmap.CompressFormat.JPEG, 30, byteArrayOutputStream);
                         byte[] bytesBitmap = byteArrayOutputStream.toByteArray();
                         File temp = File.createTempFile("product", "pic");
                         FileOutputStream fileOutputStream = new FileOutputStream(temp);

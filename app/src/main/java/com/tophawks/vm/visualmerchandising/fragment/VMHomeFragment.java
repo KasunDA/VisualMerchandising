@@ -66,7 +66,7 @@ public class VMHomeFragment extends Fragment {
         databaseReference=FirebaseDatabase.getInstance().getReference();
 
         Query query = databaseReference.child("Products").orderByChild("originalPrice").limitToFirst(3);
-        query.addValueEventListener(new ValueEventListener() {
+        query.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
                 for (DataSnapshot products : dataSnapshot.getChildren()) {

@@ -1,25 +1,18 @@
 package com.tophawks.vm.visualmerchandising.Modules.StockManagement;
 
 import android.content.Context;
-import android.content.Intent;
-import android.graphics.Color;
+import android.os.Bundle;
 import android.support.v4.view.MenuItemCompat;
 import android.support.v7.app.AppCompatActivity;
-import android.os.Bundle;
-import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.SearchView;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
-import android.view.Gravity;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import android.widget.GridLayout;
 import android.widget.ImageView;
-import android.widget.TableLayout;
-import android.widget.TableRow;
 import android.widget.TextView;
 
 import com.firebase.ui.database.FirebaseRecyclerAdapter;
@@ -27,7 +20,6 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.squareup.picasso.Picasso;
 import com.tophawks.vm.visualmerchandising.R;
-import com.tophawks.vm.visualmerchandising.adapter.SearchViewRecyclerAdapter;
 import com.tophawks.vm.visualmerchandising.adapter.SearchViewRecyclerAdapterAllProduct;
 import com.tophawks.vm.visualmerchandising.model.Product;
 
@@ -92,7 +84,7 @@ public class AvailableProductActivity extends AppCompatActivity implements Searc
 
                         productArrayList.add(model);
 
-                        final String product_key = model.getItemId();
+                        final String product_key = model.getProductId();
 
                         Log.d("datalog", model.getProductColor());
 

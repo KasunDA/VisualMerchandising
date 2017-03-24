@@ -1,6 +1,7 @@
 package com.tophawks.vm.visualmerchandising.Modules.VisualMerchandising;
 
 import android.content.Intent;
+import android.graphics.Paint;
 import android.os.Bundle;
 import android.support.v4.view.MenuItemCompat;
 import android.support.v7.app.AppCompatActivity;
@@ -57,9 +58,14 @@ public class AllProducts extends AppCompatActivity implements SearchView.OnQuery
 
                 productArrayList.add(model);
                 Picasso.with(getApplicationContext()).load(model.getImageUrl()).into(holder.productThumbIV);
-                holder.productOriginalPriceTV.setText("" + productArrayList.get(position).getOriginalPrice());
-                holder.productWholeSalePriceTV.setText("" + productArrayList.get(position).getWholeSalePrice());
-                holder.productName.setText(productArrayList.get(position).getProductName());
+                int originalPrice = (int) productArrayList.get(position).getOriginalPrice();
+                int discountPrice = (int) productArrayList.get(position).getDiscountPrice();
+                int discountPercentage = (int) (100 - ((float) discountPrice / originalPrice) * 100);
+                holder.productOriginalPriceTV.setText("₹ " + originalPrice);
+                holder.productDiscountPriceTV.setText("₹ " + discountPrice);
+                holder.productOriginalPriceTV.setPaintFlags(holder.productOriginalPriceTV.getPaintFlags() | Paint.STRIKE_THRU_TEXT_FLAG | Paint.ANTI_ALIAS_FLAG);
+                holder.productDiscountPercentageTV.setText("" + discountPercentage + "% OFF!!");
+                holder.productNameTV.setText(productArrayList.get(position).getProductName());
                 holder.mView.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
@@ -181,16 +187,18 @@ public class AllProducts extends AppCompatActivity implements SearchView.OnQuery
         View mView;
         ImageView productThumbIV;
         TextView productOriginalPriceTV;
-        TextView productWholeSalePriceTV;
-        TextView productName;
+        TextView productDiscountPriceTV;
+        TextView productNameTV;
+        TextView productDiscountPercentageTV;
 
         public ProductViewHolder(View itemView) {
             super(itemView);
             mView = itemView;
             this.productThumbIV = (ImageView) itemView.findViewById(R.id.row_item_thum_iv);
             this.productOriginalPriceTV = (TextView) itemView.findViewById(R.id.row_item_original_price_tv);
-            this.productWholeSalePriceTV = (TextView) itemView.findViewById(R.id.row_item_wholesale_price_tv);
-            this.productName = (TextView) itemView.findViewById(R.id.row_item_name_tv);
+            this.productDiscountPriceTV = (TextView) itemView.findViewById(R.id.row_item_discount_price_tv);
+            this.productNameTV = (TextView) itemView.findViewById(R.id.row_item_name_tv);
+            this.productDiscountPercentageTV = (TextView) itemView.findViewById(R.id.row_item_discount_percent_tv);
 
 
         }

@@ -25,7 +25,7 @@ public class ProductDescription extends AppCompatActivity implements View.OnClic
 
 
     //FIREBASE DATABASE FIELDS
-    DatabaseReference mFirebaseDtabase;
+    DatabaseReference mFirebaseDatabase;
     int productPopularity;
     //FIELDS FOR VIEWS AND STRINGS
     private String product_key_id = null;
@@ -56,14 +56,14 @@ public class ProductDescription extends AppCompatActivity implements View.OnClic
         like.setOnClickListener(this);
         dislike.setOnClickListener(this);
         //GET INTENT EXTRA
-        product_key_id = getIntent().getStringExtra("product_id").toString();
+        product_key_id = getIntent().getStringExtra("product_id");
 
         if (!TextUtils.isEmpty(product_key_id)) {
 
             Log.d("halwa", product_key_id);
 
             //ASSIGN FIREBASE DATABASE INSTANCE
-            mFirebaseDtabase = FirebaseDatabase.getInstance().getReference().child("Product");
+            mFirebaseDatabase = FirebaseDatabase.getInstance().getReference().child("Products");
         } else {
 
             Toast.makeText(ProductDescription.this, "Unable to retrieve the product info", Toast.LENGTH_LONG).show();
@@ -71,23 +71,24 @@ public class ProductDescription extends AppCompatActivity implements View.OnClic
 
         }
 
-        mFirebaseDtabase.child(product_key_id).addValueEventListener(new ValueEventListener() {
+        mFirebaseDatabase.child(product_key_id).addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
 
 
-                productName.setText(String.valueOf(dataSnapshot.child("productNameET").getValue()));
-                retailPrice.setText(String.valueOf(dataSnapshot.child("retailPriceET").getValue()));
-                wholeSalePrice.setText(String.valueOf(dataSnapshot.child("wholeSalePriceET").getValue()));
-                originalPrice.setText(String.valueOf(dataSnapshot.child("originalPriceET").getValue()));
-                discountPrice.setText(String.valueOf(dataSnapshot.child("discountPriceET").getValue()));
+                productName.setText(String.valueOf(dataSnapshot.child("productNameTV").getValue()));
+                retailPrice.setText(String.valueOf(dataSnapshot.child("retailPrice").getValue()));
+                wholeSalePrice.setText(String.valueOf(dataSnapshot.child("wholeSalePrice").getValue()));
+                originalPrice.setText(String.valueOf(dataSnapshot.child("originalPrice").getValue()));
+                discountPrice.setText(String.valueOf(dataSnapshot.child("discountPrice").getValue()));
                 specification.setText(dataSnapshot.child("productSpecification").getValue().toString());
                 color.setText(dataSnapshot.child("productColor").getValue().toString());
                 quantity.setText(String.valueOf(dataSnapshot.child("productQuantity").getValue()));
                 category.setText(dataSnapshot.child("category").getValue().toString());
                 brandName.setText(dataSnapshot.child("brandName").getValue().toString());
                 productPopularity = Integer.parseInt(dataSnapshot.child("productPopularity").getValue().toString());
-                Picasso.with(getApplicationContext()).load(dataSnapshot.child("imageUrl").getValue().toString()).into(productDisplay);
+                String imgUrl = dataSnapshot.child("imageUrl").getValue().toString().trim();
+                Picasso.with(ProductDescription.this).load(imgUrl).into(productDisplay);
 
             }
 
@@ -123,7 +124,7 @@ public class ProductDescription extends AppCompatActivity implements View.OnClic
                 }
                 map.clear();
                 map.put("productPopularity", productPopularity);
-                mFirebaseDtabase.child(product_key_id).updateChildren(map);
+                mFirebaseDatabase.child(product_key_id).updateChildren(map);
                 break;
             case R.id.description_dislike_ib:
                 if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
@@ -138,11 +139,12 @@ public class ProductDescription extends AppCompatActivity implements View.OnClic
                         dislike.setBackground(getDrawable(R.drawable.blue));
                         productPopularity -= 1;
                     }
-                    map.clear();
-                    map.put("productPopularity", productPopularity);
-                    mFirebaseDtabase.child(product_key_id).updateChildren(map);
-                    break;
+
                 }
+                map.clear();
+                map.put("productPopularity", productPopularity);
+                mFirebaseDatabase.child(product_key_id).updateChildren(map);
+                break;
         }
     }
 }

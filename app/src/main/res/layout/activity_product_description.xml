@@ -21,10 +21,13 @@
             <ImageView
                 android:id="@+id/productDisplayOnClickImage"
                 android:layout_width="match_parent"
-                android:layout_height="match_parent"
+                android:layout_height="220sp"
                 android:layout_weight="1"
                 android:adjustViewBounds="true"
-                android:scaleType="centerCrop"
+                android:clickable="false"
+                android:focusable="false"
+                android:padding="10sp"
+                android:scaleType="fitCenter"
                 app:srcCompat="@mipmap/add_btn" />
 
             <ImageButton
