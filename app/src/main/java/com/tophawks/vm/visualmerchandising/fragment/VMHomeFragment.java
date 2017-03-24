@@ -48,8 +48,7 @@ public class VMHomeFragment extends Fragment {
 
 
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
-                             Bundle savedInstanceState) {
+    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View v=inflater.inflate(R.layout.fragment_vmhome, container, false);
         sliderLayout=(SliderLayout)v.findViewById(R.id.vm_home_image_slider);
         popularRV=(RecyclerView)v.findViewById(R.id.vm_home_rv);
