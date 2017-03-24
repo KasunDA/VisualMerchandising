@@ -73,5 +73,4 @@ public class StockMHomeFragment extends Fragment implements View.OnClickListener
         void onClickInActivityListener(View v);
     }
 
-
 }

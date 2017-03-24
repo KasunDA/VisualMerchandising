@@ -56,7 +56,6 @@ public class Product implements Serializable{
     public void setProductPopularity(int productPopularity) {
         this.productPopularity = productPopularity;
     }
-
     public String getCategory() {
         return category;
     }

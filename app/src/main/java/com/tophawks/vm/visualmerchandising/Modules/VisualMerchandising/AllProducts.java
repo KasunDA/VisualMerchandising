@@ -28,7 +28,6 @@ import java.util.Collections;
 import java.util.Comparator;
 
 public class AllProducts extends AppCompatActivity implements SearchView.OnQueryTextListener {
-
     RecyclerView searchResultsRV;
     Toolbar searchToolbar;
     ArrayList<Product> productArrayList;
@@ -49,7 +48,6 @@ public class AllProducts extends AppCompatActivity implements SearchView.OnQuery
         databaseReference = FirebaseDatabase.getInstance().getReference().child("Products");
         databaseReference.keepSynced(true);
         productArrayList = new ArrayList<>();
-
         firebaseRecyclerAdapter = new FirebaseRecyclerAdapter<Product, ProductViewHolder>(
                 Product.class, R.layout.search_result_row, ProductViewHolder.class, databaseReference
         ) {
@@ -180,8 +178,6 @@ public class AllProducts extends AppCompatActivity implements SearchView.OnQuery
         return true;
     }
 
-
-
     public static class ProductViewHolder extends RecyclerView.ViewHolder {
 
         View mView;
@@ -199,8 +195,6 @@ public class AllProducts extends AppCompatActivity implements SearchView.OnQuery
             this.productDiscountPriceTV = (TextView) itemView.findViewById(R.id.row_item_discount_price_tv);
             this.productNameTV = (TextView) itemView.findViewById(R.id.row_item_name_tv);
             this.productDiscountPercentageTV = (TextView) itemView.findViewById(R.id.row_item_discount_percent_tv);
-
-
         }
     }
 }

@@ -3,12 +3,19 @@
     xmlns:app="http://schemas.android.com/apk/res-auto">
 
     <item
-        android:title="search"
         android:id="@+id/search_item"
         android:icon="@drawable/ic_action_search_it"
-        app:showAsAction="always|collapseActionView"
+        android:title="search"
         app:actionViewClass="android.support.v7.widget.SearchView"
+        app:showAsAction="always|collapseActionView"
         >
+
+    </item>
+    <item
+        android:id="@+id/filter_item"
+        android:icon="@drawable/ic_filter_list_white_24dp"
+        android:title="filter"
+        app:showAsAction="always|collapseActionView">
 
     </item>
 
@@ -19,20 +26,20 @@
         app:showAsAction="always">
         <menu>
             <item
+                android:id="@+id/sort_name_item"
                 android:title="By Name"
-                app:showAsAction="never"
-                android:id="@+id/sort_name_item"/>
+                app:showAsAction="never" />
             <item
-                android:title="By Price"
                 android:id="@+id/sort_price_item"
+                android:title="By Price"
                 app:showAsAction="never"/>
             <item
-                android:title="By Popularity"
                 android:id="@+id/sort_popularity_item"
+                android:title="By Popularity"
                 app:showAsAction="never"/>
             <item
-                android:title="By Date"
                 android:id="@+id/sort_date_item"
+                android:title="By Date"
                 app:showAsAction="never"/>
 
         </menu>

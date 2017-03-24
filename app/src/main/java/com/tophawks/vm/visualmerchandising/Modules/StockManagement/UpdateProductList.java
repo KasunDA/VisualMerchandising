@@ -90,7 +90,7 @@ public class UpdateProductList extends AppCompatActivity {
     }
 
     //VIEWHOLDER CLASS FOR HOLDING THE VIEW OF EACH CARD
-    private static class UpdateViewHolder extends RecyclerView.ViewHolder
+    public static class UpdateViewHolder extends RecyclerView.ViewHolder
     {
 
         //VIEWHOLDER FIELDS

@@ -43,9 +43,7 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
-
 public class AddStore extends AppCompatActivity {
-
     private static final int MY_PERMISSIONS_REQUEST_EXTERNAL_STORAGE = 123;
     private static final int PICK_IMAGE_REQUEST_CODE = 213;
     //DECLARE THE REFERENCES FOR VIEWS AND WIDGETS
@@ -57,7 +55,6 @@ public class AddStore extends AppCompatActivity {
     String callFromAddProduct;
     //STRING FIELDS
     String storeId, spaceAvailable, ownerName, capacity, shopAddress, storeName, godownAddress, city, state;
-
     //DATABASE AND STORAGE REFERENCES
     StorageReference mStorageReference;
     DatabaseReference mDatabaseReference;
@@ -66,8 +63,6 @@ public class AddStore extends AppCompatActivity {
     Store storeRef;
     //PROGRESS DIALOG
     ProgressDialog mProgress;
-
-
     //CUSTOM TOOLBAR
     private Toolbar customToolbar;
     private Uri outputFileUri;
@@ -76,17 +71,14 @@ public class AddStore extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_add_store);
-
         //CREATE THE CUSTOM TOOLBAR
         customToolbar = (Toolbar) findViewById(R.id.app_bar);
         customToolbar.setTitle("Add Store");
         customToolbar.setTitleTextColor(Color.WHITE);
         setSupportActionBar(customToolbar);
-
         callFromAddProduct = getIntent().getStringExtra("callFromAddProduct");
 
         mProgress = new ProgressDialog(AddStore.this);
-
         //ASSIGN ID'S TO OUR FIELDS
         storePictureIB = (ImageButton) findViewById(R.id.store_picture_ib);
         storeNameET = (EditText) findViewById(R.id.store_name_et);
@@ -198,7 +190,6 @@ public class AddStore extends AppCompatActivity {
             setResult(RESULT_OK, returnStoreNameToAddProduct);
             mProgress.dismiss();
             finish();
-
         }
 
     }
