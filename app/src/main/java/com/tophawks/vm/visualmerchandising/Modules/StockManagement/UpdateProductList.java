@@ -74,9 +74,9 @@ public class UpdateProductList extends AppCompatActivity {
                             @Override
                             public void onClick(View v) {
 
-                               Intent moveToEditActivity = new Intent(UpdateProductList.this, EditProductActivity.class);
+                               /*Intent moveToEditActivity = new Intent(UpdateProductList.this, EditProductActivity.class);
                                moveToEditActivity.putExtra("product_key_edit", product_key);
-                                startActivity(moveToEditActivity);
+                                startActivity(moveToEditActivity);*/
 
                             }
                         });

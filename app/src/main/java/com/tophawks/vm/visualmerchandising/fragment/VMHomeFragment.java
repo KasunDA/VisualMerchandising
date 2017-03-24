@@ -42,28 +42,24 @@ public class VMHomeFragment extends Fragment {
     RecyclerView popularRV;
     ArrayList<Product> productArrayList;
     SearchViewRecyclerAdapter adapter;
+
     public VMHomeFragment() {
-        // Required empty public constructor
+        //Required empty public constructor
     }
 
-
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
-                             Bundle savedInstanceState) {
+    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View v=inflater.inflate(R.layout.fragment_vmhome, container, false);
         sliderLayout=(SliderLayout)v.findViewById(R.id.vm_home_image_slider);
         popularRV=(RecyclerView)v.findViewById(R.id.vm_home_rv);
         productArrayList=new ArrayList<>();
-        //for slider view
-        popularStoriesDownload();
-        //for recycler view
-        popularProductsDownload();
-
+        popularStoriesDownload();    //for slider view
+        popularProductsDownload();   //for recycler view
         return v;
     }
 
     private void popularProductsDownload() {
-        databaseReference=FirebaseDatabase.getInstance().getReference();
+        databaseReference = FirebaseDatabase.getInstance().getReference();
 
         Query query = databaseReference.child("Products").orderByChild("originalPrice").limitToFirst(3);
         query.addListenerForSingleValueEvent(new ValueEventListener() {
@@ -71,8 +67,7 @@ public class VMHomeFragment extends Fragment {
             public void onDataChange(DataSnapshot dataSnapshot) {
                 for (DataSnapshot products : dataSnapshot.getChildren()) {
                     HashMap<String, Object> map = (HashMap<String, Object>) products.getValue();
-
-                   productArrayList.add(new Product(
+                    productArrayList.add(new Product(
                            products.getKey()
                            , (String) map.get("storeId")
                            ,(String)map.get("productName")
@@ -95,7 +90,6 @@ public class VMHomeFragment extends Fragment {
                 popularRV.hasFixedSize();
                 adapter=new SearchViewRecyclerAdapter(getActivity(),productArrayList);
                 popularRV.setAdapter(adapter);
-
             }
 
             @Override
@@ -103,7 +97,6 @@ public class VMHomeFragment extends Fragment {
 
             }
         });
-
     }
 
     private void popularStoriesDownload() {
@@ -129,9 +122,6 @@ public class VMHomeFragment extends Fragment {
         sliderLayout.setPresetIndicator(SliderLayout.PresetIndicators.Center_Bottom);
         sliderLayout.setCustomAnimation(new DescriptionAnimation());
         sliderLayout.setDuration(2000);
-
-
     }
-
 
 }
