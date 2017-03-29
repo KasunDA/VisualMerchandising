@@ -13,7 +13,6 @@ import android.os.Bundle;
 import android.os.Environment;
 import android.os.Parcelable;
 import android.provider.MediaStore;
-
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AlertDialog;
@@ -44,7 +43,6 @@ import com.google.firebase.storage.UploadTask;
 import com.squareup.picasso.Picasso;
 import com.theartofdev.edmodo.cropper.CropImage;
 import com.theartofdev.edmodo.cropper.CropImageView;
-import com.tophawks.vm.visualmerchandising.Modules.VisualMerchandising.AddProduct;
 import com.tophawks.vm.visualmerchandising.R;
 import com.tophawks.vm.visualmerchandising.model.Product;
 
@@ -58,14 +56,12 @@ import java.util.List;
 
 public class EditProductActivity extends AppCompatActivity implements SearchView.OnQueryTextListener {
 
-    int newCategoryFlag = 0;
-
-
     //REQUEST CODES
     private static final int GALLERY_REQUEST_CODE = 299;
     private static final int MY_PERMISSIONS_REQUEST_EXTERNAL_STORAGE = 123;
     private static final int PICK_IMAGE_REQUEST_CODE = 213;
     private static final int ADD_NEW_STORE = 145;
+    int newCategoryFlag = 0;
     ListView storeNamesListView;
     SearchView storeNameSearchView;
     //DECLARE THE REFERENCES FOR VIEWS AND WIDGETS
@@ -85,12 +81,11 @@ public class EditProductActivity extends AppCompatActivity implements SearchView
     ArrayAdapter brandNameAdapter, categoryAdapter;
     //PROGRESS DIALOG
     ProgressDialog mProgress;
+    ArrayList<String> storeNames, storeKeys, categoryNames;
     //PRODUCT KEY FROM LIST INTENT
     private String product_key = "";
     private Uri outputFileUri;
     private String productStoreId;
-
-    ArrayList<String> storeNames, storeKeys, categoryNames;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -313,8 +308,8 @@ public class EditProductActivity extends AppCompatActivity implements SearchView
                 proColor.setText(productItem.getProductColor());
                 proSpec.setText(productItem.getProductSpecification());
                 brandNameS.setText(productItem.getBrandName());
+                storeName.setText(productItem.getStoreName());
                 Picasso.with(getApplicationContext()).load(productItem.getImageUrl()).into(productImage);
-
                 imageUrlIfNotChanged = productItem.getImageUrl();
             }
 

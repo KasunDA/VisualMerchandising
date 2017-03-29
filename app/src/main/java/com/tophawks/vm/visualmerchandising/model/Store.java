@@ -1,6 +1,7 @@
 package com.tophawks.vm.visualmerchandising.model;
 
 import java.io.Serializable;
+import java.util.ArrayList;
 
 /**
  * Created by Sanidhya on 18-Mar-17.
@@ -11,36 +12,66 @@ public class Store implements Serializable {
     private String name;
     private String owner;
     private String shopAddress;
-    private String godownAddress;
+    private String channel;
+    private String classification;
+    private String category;
     private long capacity;
-    private long spaceAvailable;
+    private long contactNumber;
     private String storePic;
     private String stateAddress;
     private String cityAddress;
-    private Product[] storeProducts;
+    private String emailId;
+    private ArrayList<String> storeProductIds;
 
     public Store() {
     }
 
-    public Store(String storeId, String name, String owner, String shopAddress, String godownAddress, long capacity, long spaceAvailable, String storePic, String stateAddress, String cityAddress) {
+    public Store(String storeId, String name, String owner, String emailId, String shopAddress, String channel, String classification, String category, long capacity, long contactNumber, String storePic, String stateAddress, String cityAddress) {
         this.storeId = storeId;
         this.name = name;
         this.owner = owner;
+        this.emailId = emailId;
         this.shopAddress = shopAddress;
-        this.godownAddress = godownAddress;
+        this.channel = channel;
+        this.classification = classification;
+        this.category = category;
         this.capacity = capacity;
-        this.spaceAvailable = spaceAvailable;
+        this.contactNumber = contactNumber;
         this.storePic = storePic;
         this.stateAddress = stateAddress;
         this.cityAddress = cityAddress;
     }
 
-    public Product[] getStoreProducts() {
-        return storeProducts;
+    public String getClassification() {
+        return classification;
     }
 
-    public void setStoreProducts(Product[] storeProducts) {
-        this.storeProducts = storeProducts;
+    public void setClassification(String classification) {
+        this.classification = classification;
+    }
+
+    public String getCategory() {
+        return category;
+    }
+
+    public void setCategory(String category) {
+        this.category = category;
+    }
+
+    public String getEmailId() {
+        return emailId;
+    }
+
+    public void setEmailId(String emailId) {
+        this.emailId = emailId;
+    }
+
+    public ArrayList<String> getStoreProductIds() {
+        return storeProductIds;
+    }
+
+    public void setStoreProductIds(ArrayList<String> storeProductIds) {
+        this.storeProductIds = storeProductIds;
     }
 
     public String getStoreId() {
@@ -75,12 +106,12 @@ public class Store implements Serializable {
         this.shopAddress = shopAddress;
     }
 
-    public String getGodownAddress() {
-        return godownAddress;
+    public String getChannel() {
+        return channel;
     }
 
-    public void setGodownAddress(String godownAddress) {
-        this.godownAddress = godownAddress;
+    public void setChannel(String channel) {
+        this.channel = channel;
     }
 
     public long getCapacity() {
@@ -91,12 +122,12 @@ public class Store implements Serializable {
         this.capacity = capacity;
     }
 
-    public long getSpaceAvailable() {
-        return spaceAvailable;
+    public long getContactNumber() {
+        return contactNumber;
     }
 
-    public void setSpaceAvailable(long spaceAvailable) {
-        this.spaceAvailable = spaceAvailable;
+    public void setContactNumber(long contactNumber) {
+        this.contactNumber = contactNumber;
     }
 
     public String getStorePic() {

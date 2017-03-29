@@ -12,14 +12,6 @@
 
     </item>
     <item
-        android:id="@+id/filter_item"
-        android:icon="@drawable/ic_filter_list_white_24dp"
-        android:title="filter"
-        app:showAsAction="always|collapseActionView">
-
-    </item>
-
-    <item
         android:id="@+id/sort_item"
         android:icon="@drawable/ic_action_sort"
         android:title="sort"

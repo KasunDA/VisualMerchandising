@@ -21,9 +21,12 @@ import android.text.TextUtils;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
 import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.LinearLayout;
+import android.widget.Spinner;
 import android.widget.Toast;
 
 import com.google.android.gms.tasks.OnSuccessListener;
@@ -43,18 +46,20 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
-public class AddStore extends AppCompatActivity {
+
+public class AddStore extends AppCompatActivity implements AdapterView.OnItemSelectedListener {
     private static final int MY_PERMISSIONS_REQUEST_EXTERNAL_STORAGE = 123;
     private static final int PICK_IMAGE_REQUEST_CODE = 213;
     //DECLARE THE REFERENCES FOR VIEWS AND WIDGETS
     ImageButton storePictureIB;
-    EditText storeNameET, ownerNameET, capacityET, spaceAvailableET, shopAddressET, godownAddressET, cityET, stateET;
+    EditText storeNameET, ownerNameET, emailIdET, capacityET, contactNumberET, shopAddressET, cityET, stateET;
+    Spinner channelS, classificationS, categoryS;
     LinearLayout addProduct;
     //IMAGE HOLDING URI
     Uri imageHold = null;
     String callFromAddProduct;
     //STRING FIELDS
-    String storeId, spaceAvailable, ownerName, capacity, shopAddress, storeName, godownAddress, city, state;
+    String storeId, contactNumber, ownerName, emailId, capacity, shopAddress, storeName, channel, classification, category, city, state;
     //DATABASE AND STORAGE REFERENCES
     StorageReference mStorageReference;
     DatabaseReference mDatabaseReference;
@@ -83,13 +88,25 @@ public class AddStore extends AppCompatActivity {
         storePictureIB = (ImageButton) findViewById(R.id.store_picture_ib);
         storeNameET = (EditText) findViewById(R.id.store_name_et);
         ownerNameET = (EditText) findViewById(R.id.store_owner_name_et);
+        emailIdET = (EditText) findViewById(R.id.store_email_id_et);
         shopAddressET = (EditText) findViewById(R.id.store_shop_Address_et);
-        spaceAvailableET = (EditText) findViewById(R.id.store_space_available_et);
+        contactNumberET = (EditText) findViewById(R.id.store_contact_number_et);
         capacityET = (EditText) findViewById(R.id.store_capacity_et);
-        godownAddressET = (EditText) findViewById(R.id.store_godown_address_et);
         cityET = (EditText) findViewById(R.id.store_city_et);
         stateET = (EditText) findViewById(R.id.store_state_et);
         addProduct = (LinearLayout) findViewById(R.id.add_store_b);
+        channelS = (Spinner) findViewById(R.id.store_channel_s);
+        classificationS = (Spinner) findViewById(R.id.store_classification_s);
+        categoryS = (Spinner) findViewById(R.id.store_category_s);
+        String[] channelList = getResources().getStringArray(R.array.store_channel);
+        String[] categoryList = getResources().getStringArray(R.array.store_category);
+        String[] classificationList = getResources().getStringArray(R.array.store_classification);
+        channelS.setAdapter(new ArrayAdapter<String>(this, android.R.layout.simple_spinner_item, channelList));
+        categoryS.setAdapter(new ArrayAdapter<String>(this, android.R.layout.simple_spinner_item, categoryList));
+        classificationS.setAdapter(new ArrayAdapter<String>(this, android.R.layout.simple_spinner_item, classificationList));
+        channelS.setOnItemSelectedListener(this);
+        classificationS.setOnItemSelectedListener(this);
+        categoryS.setOnItemSelectedListener(this);
 
 
         //ASSIGN REFERENCES
@@ -118,27 +135,31 @@ public class AddStore extends AppCompatActivity {
 
     private void StorePost() {
 
-        spaceAvailable = spaceAvailableET.getText().toString().trim();
-        shopAddress = shopAddressET.getText().toString().trim();
-        capacity = capacityET.getText().toString().trim();
         ownerName = ownerNameET.getText().toString().trim();
         storeName = storeNameET.getText().toString().trim();
-        godownAddress = godownAddressET.getText().toString().trim();
+        emailId = emailIdET.getText().toString().trim();
+        contactNumber = contactNumberET.getText().toString().trim();
+        shopAddress = shopAddressET.getText().toString().trim();
+        capacity = capacityET.getText().toString().trim();
         city = cityET.getText().toString().trim();
         state = stateET.getText().toString().trim();
 
         mProgress.setMessage("Uploading Image..");
         mProgress.show();
 
-        if (!TextUtils.isEmpty(spaceAvailable)
+        if (!TextUtils.isEmpty(contactNumber)
                 && !TextUtils.isEmpty(ownerName)
+                && !TextUtils.isEmpty(emailId)
                 && !TextUtils.isEmpty(shopAddress)
                 && !TextUtils.isEmpty(storeName)
                 && !TextUtils.isEmpty(capacity)
-                && !TextUtils.isEmpty(godownAddress)
+                && !TextUtils.isEmpty(channel)
                 && !TextUtils.isEmpty(city)
                 && !TextUtils.isEmpty(state)
-                && imageHold != null) {
+                && imageHold != null
+                && !TextUtils.isEmpty(category)
+                && !TextUtils.isEmpty(contactNumber)
+                && !TextUtils.isEmpty(classification)) {
 
 
             mChildStorage = mStorageReference.child("Store_Images").child(imageHold.getLastPathSegment());
@@ -159,10 +180,13 @@ public class AddStore extends AppCompatActivity {
                     storeRef = new Store(storeId
                             , storeName
                             , ownerName
+                            , emailId
                             , shopAddress
-                            , godownAddress
+                            , channel
+                            , classification
+                            , category
                             , Long.valueOf(capacity)
-                            , Long.valueOf(spaceAvailable)
+                            , Long.valueOf(contactNumber)
                             , downloadUri.toString()
                             , city
                             , state);
@@ -336,4 +360,25 @@ public class AddStore extends AppCompatActivity {
         }
     }
 
+    @Override
+    public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+        int spinnerId = parent.getId();
+        String selectedItem = parent.getItemAtPosition(position).toString();
+        switch (spinnerId) {
+            case R.id.store_channel_s:
+                channel = selectedItem;
+                break;
+            case R.id.store_classification_s:
+                classification = selectedItem;
+                break;
+            case R.id.store_category_s:
+                category = selectedItem;
+                break;
+        }
+    }
+
+    @Override
+    public void onNothingSelected(AdapterView<?> parent) {
+
+    }
 }

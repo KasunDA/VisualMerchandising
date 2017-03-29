@@ -153,6 +153,7 @@ public class AllProducts extends AppCompatActivity implements SearchView.OnQuery
                 });
                 adapter.sortProduct(newList);
                 break;
+
         }
         searchResultsRV.setAdapter(adapter);
         return true;
