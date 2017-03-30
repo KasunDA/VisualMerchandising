@@ -102,8 +102,8 @@ public class AddStore extends AppCompatActivity implements AdapterView.OnItemSel
         String[] categoryList = getResources().getStringArray(R.array.store_category);
         String[] classificationList = getResources().getStringArray(R.array.store_classification);
         channelS.setAdapter(new ArrayAdapter<String>(this, android.R.layout.simple_spinner_dropdown_item, channelList));
-        categoryS.setAdapter(new ArrayAdapter<String>(this, android.R.layout.simple_dropdown_item_1line, categoryList));
-        classificationS.setAdapter(new ArrayAdapter<String>(this, android.R.layout.simple_spinner_item, classificationList));
+        categoryS.setAdapter(new ArrayAdapter<String>(this, android.R.layout.simple_spinner_dropdown_item, categoryList));
+        classificationS.setAdapter(new ArrayAdapter<String>(this, android.R.layout.simple_spinner_dropdown_item, classificationList));
         channelS.setOnItemSelectedListener(this);
         classificationS.setOnItemSelectedListener(this);
         categoryS.setOnItemSelectedListener(this);
