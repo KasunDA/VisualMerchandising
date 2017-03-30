@@ -7,34 +7,23 @@
         <item>home decoration</item>
         <item>electronics</item>
     </string-array>
-    <string-array name="product_brand_name">
-        <item>philips</item>
-        <item>videocon</item>
-        <item>sony</item>
-    </string-array>
+
     <string-array name="store_channel">
-        <item>channel 1</item>
-        <item>channel 2</item>
-        <item>channel 3</item>
-        <item>channel 4</item>
-        <item>channel 5</item>
-        <item>channel 6</item>
+        <item>Dealer</item>
+        <item>Direct Dealer</item>
+        <item>Distribution</item>
     </string-array>
     <string-array name="store_classification">
-        <item>channel 1</item>
-        <item>channel 2</item>
-        <item>channel 3</item>
-        <item>channel 4</item>
-        <item>channel 5</item>
-        <item>channel 6</item>
+        <item>A</item>
+        <item>B</item>
     </string-array>
     <string-array name="store_category">
-        <item>channel 1</item>
-        <item>channel 2</item>
-        <item>channel 3</item>
-        <item>channel 4</item>
-        <item>channel 5</item>
-        <item>channel 6</item>
+        <item>category 1</item>
+        <item>category 2</item>
+        <item>category 3</item>
+        <item>category 4</item>
+        <item>category 5</item>
+        <item>category 6</item>
     </string-array>
     <string name="title_activity_update_product_list">UpdateProductList</string>
     <string name="title_activity_edit_product">EditProductActivity</string>
