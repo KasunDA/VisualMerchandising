@@ -40,15 +40,7 @@
             android:paddingLeft="5dp"
             android:paddingRight="5dp">
 
-
-            <ScrollView
-                android:id="@+id/scrollLayout1"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent">
-
                 <include layout="@layout/product_details" />
-
-            </ScrollView>
 
 
         </LinearLayout>

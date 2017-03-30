@@ -57,7 +57,7 @@ import java.util.List;
 public class EditProductActivity extends AppCompatActivity implements SearchView.OnQueryTextListener {
 
     //REQUEST CODES
-    private static final int GALLERY_REQUEST_CODE = 299;
+
     private static final int MY_PERMISSIONS_REQUEST_EXTERNAL_STORAGE = 123;
     private static final int PICK_IMAGE_REQUEST_CODE = 213;
     private static final int ADD_NEW_STORE = 145;
