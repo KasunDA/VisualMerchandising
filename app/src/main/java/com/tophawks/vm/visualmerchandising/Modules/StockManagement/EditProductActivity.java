@@ -66,7 +66,7 @@ public class EditProductActivity extends AppCompatActivity implements SearchView
     SearchView storeNameSearchView;
     //DECLARE THE REFERENCES FOR VIEWS AND WIDGETS
     ImageButton productImage;
-    EditText productName, originalPrice, discountPrice, wholeSalePrice, retailPrice, proQuantity, proColor, proSpec, brandNameS;
+    EditText productName, originalPrice, discountPrice, wholeSalePrice, retailPrice, proQuantity, proColor, proSpec, brandNameET;
     EditText storeName;
     Spinner categoryS;
     LinearLayout saveEditProduct;
@@ -108,7 +108,7 @@ public class EditProductActivity extends AppCompatActivity implements SearchView
         storeName = (EditText) findViewById(R.id.product_store_name_edittext);
 
         categoryS = (Spinner) findViewById(R.id.detail_category_s);
-        brandNameS = (EditText) findViewById(R.id.detail_brand_name_et);
+        brandNameET = (EditText) findViewById(R.id.detail_brand_name_et);
 
         //GET PRODUCT KEY
         product_key = getIntent().getStringExtra("product_key_edit").toString();
@@ -140,7 +140,6 @@ public class EditProductActivity extends AppCompatActivity implements SearchView
 
 
         //SET SPINNER ITEMS
-        brandNameAdapter = ArrayAdapter.createFromResource(this, R.array.product_brand_name, android.R.layout.simple_spinner_item);
         categoryAdapter = new ArrayAdapter<>(EditProductActivity.this, android.R.layout.simple_spinner_item, categoryNames);
         categoryAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         categoryS.setAdapter(categoryAdapter);
@@ -307,7 +306,7 @@ public class EditProductActivity extends AppCompatActivity implements SearchView
                 proQuantity.setText(String.valueOf(productItem.getProductQuantity()));
                 proColor.setText(productItem.getProductColor());
                 proSpec.setText(productItem.getProductSpecification());
-                brandNameS.setText(productItem.getBrandName());
+                brandNameET.setText(productItem.getBrandName());
                 storeName.setText(productItem.getStoreName());
                 Picasso.with(getApplicationContext()).load(productItem.getImageUrl()).into(productImage);
                 imageUrlIfNotChanged = productItem.getImageUrl();
@@ -332,7 +331,7 @@ public class EditProductActivity extends AppCompatActivity implements SearchView
         proColorName = proColor.getText().toString().trim();
         proSpecification = proSpec.getText().toString().trim();
         storename = storeName.getText().toString().trim();
-        brandName = brandNameS.getText().toString().trim();
+        brandName = brandNameET.getText().toString().trim();
 
         mProgress.setMessage("Uploading Image..");
         mProgress.show();
