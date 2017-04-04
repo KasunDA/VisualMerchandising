@@ -224,7 +224,6 @@ public class AddStore extends AppCompatActivity implements AdapterView.OnItemSel
                         @Override
                         public void onClick(DialogInterface dialog, int which) {
                             finish();
-//                                        startActivity(new Intent(AddProduct.this,VisualMerchandisingHomePage.class).setFlags(FLA));
                         }
                     });
             doneBuilder.create().show();
