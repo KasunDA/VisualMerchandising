@@ -1,8 +1,8 @@
 package com.tophawks.vm.visualmerchandising.Modules.SalesManagement;
 
 import android.app.DatePickerDialog;
-import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
+import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
 import android.widget.DatePicker;
@@ -13,6 +13,7 @@ import android.widget.TextView;
 
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.tophawks.vm.visualmerchandising.Modules.StockManagement.StockReport;
 import com.tophawks.vm.visualmerchandising.R;
 import com.tophawks.vm.visualmerchandising.model.Deals;
 
@@ -87,7 +88,7 @@ public class AddDealActivity extends AppCompatActivity {
 
     }
 
-    private void CreateDeal() {
+    private void CreateDeal(){
         int selectedId = radioGroup.getCheckedRadioButtonId();
         RadioButton selectedButton = (RadioButton) findViewById(selectedId);
 

@@ -15,10 +15,10 @@ public class Deals {
     private String deadline;
     private String dealStatus;
 
-    public Deals() {
+    public Deals(){
     }
 
-    public Deals(String dealName, String dealStatus, String deadline) {
+    public Deals(String dealName, String dealStatus, String deadline){
         this.dealName = dealName;
         this.dealStatus = dealStatus;
         this.deadline = deadline;

@@ -3,6 +3,8 @@ package com.tophawks.vm.visualmerchandising.Modules.SalesManagement;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
+import android.support.design.widget.Snackbar;
+import android.view.View;
 import android.support.design.widget.NavigationView;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
@@ -11,7 +13,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.view.View;
+import android.widget.AdapterView;
 import android.widget.ListView;
 import android.widget.Toast;
 
@@ -30,8 +32,9 @@ import java.util.List;
 
 public class SalesHomeActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener {
 
-    public static List<Deals> dealsList = new ArrayList<Deals>();
     private ListView listView;
+    public static List<Deals> dealsList = new ArrayList<Deals>();
+
     private DatabaseReference mRef;
     private DatabaseReference dealsRef;
     private StorageReference sRef;
@@ -83,7 +86,7 @@ public class SalesHomeActivity extends AppCompatActivity implements NavigationVi
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
                 dealsList.clear();
-                for (DataSnapshot snapshot : dataSnapshot.getChildren()) {
+                for(DataSnapshot snapshot : dataSnapshot.getChildren()){
                     Deals deal = snapshot.getValue(Deals.class);
                     dealsList.add(deal);
                 }
@@ -116,14 +119,14 @@ public class SalesHomeActivity extends AppCompatActivity implements NavigationVi
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        if (item.getItemId() == R.id.adddeal) {
+        if(item.getItemId() == R.id.adddeal){
             Intent intent = new Intent(this, AddDealActivity.class);
             startActivity(intent);
         }
-        if (item.getItemId() == R.id.updatedeal) {
+        if(item.getItemId() == R.id.updatedeal){
 
         }
-        if (item.getItemId() == R.id.deletedeal) {
+        if(item.getItemId() == R.id.deletedeal){
 
         }
         return super.onOptionsItemSelected(item);

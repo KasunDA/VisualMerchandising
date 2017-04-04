@@ -4,9 +4,9 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:padding="16dp"
     app:layout_behavior="@string/appbar_scrolling_view_behavior"
     tools:context="com.tophawks.vm.visualmerchandising.Modules.SalesManagement.SalesHomeActivity"
+    android:padding="16dp"
     tools:showIn="@layout/app_bar_sales_home">
 
 
@@ -14,11 +14,11 @@
         android:id="@+id/textView18"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_alignParentTop="true"
-        android:layout_centerHorizontal="true"
-        android:text="Deals Dashboard"
+        android:textSize="20dp"
         android:textColor="#000000"
-        android:textSize="20dp" />
+        android:text="Deals Dashboard"
+        android:layout_alignParentTop="true"
+        android:layout_centerHorizontal="true" />
 
     <TextView
         android:id="@+id/textView19"
@@ -34,28 +34,28 @@
         android:id="@+id/textView20"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:text="Status"
         android:layout_alignBaseline="@+id/textView19"
         android:layout_alignBottom="@+id/textView19"
-        android:layout_centerHorizontal="true"
-        android:text="Status" />
+        android:layout_centerHorizontal="true" />
 
     <TextView
         android:id="@+id/textView21"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:text="Deadline"
+        android:layout_marginStart="17dp"
         android:layout_alignBaseline="@+id/textView20"
         android:layout_alignBottom="@+id/textView20"
-        android:layout_marginStart="17dp"
-        android:layout_toEndOf="@+id/textView18"
-        android:text="Deadline" />
+        android:layout_toEndOf="@+id/textView18" />
 
     <ListView
         android:id="@+id/dealslist"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_alignParentEnd="true"
         android:layout_below="@+id/textView19"
-        android:layout_marginTop="30dp" />
+        android:layout_marginTop="30dp"
+        android:layout_alignParentEnd="true" />
 
 
 </RelativeLayout>

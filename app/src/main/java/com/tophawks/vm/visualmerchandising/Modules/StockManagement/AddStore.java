@@ -10,10 +10,12 @@ import android.content.pm.ResolveInfo;
 import android.graphics.Bitmap;
 import android.graphics.Color;
 import android.net.Uri;
+import android.os.Build;
 import android.os.Bundle;
 import android.os.Environment;
 import android.os.Parcelable;
 import android.provider.MediaStore;
+import android.support.annotation.RequiresApi;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AlertDialog;
@@ -74,6 +76,7 @@ public class AddStore extends AppCompatActivity implements AdapterView.OnItemSel
     private Toolbar customToolbar;
     private Uri outputFileUri;
 
+    @RequiresApi(api = Build.VERSION_CODES.GINGERBREAD)
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -280,6 +283,7 @@ public class AddStore extends AppCompatActivity implements AdapterView.OnItemSel
     }
 
     //IMAGE PICKER WHEN CHOOSE IMAGE BUTTON IS CLICKED
+    @RequiresApi(api = Build.VERSION_CODES.DONUT)
     private void imageChooser() {
 
         File root = new File(Environment.getExternalStorageDirectory() + File.separator + "Track'n'Train" + File.separator + "Store Picture" + File.separator);

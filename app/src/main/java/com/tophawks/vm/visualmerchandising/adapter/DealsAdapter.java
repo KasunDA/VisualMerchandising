@@ -19,13 +19,13 @@ import java.util.List;
  * Created by HP on 04-04-2017.
  */
 
-public class DealsAdapter extends BaseAdapter {
+public class DealsAdapter extends BaseAdapter{
 
-    private static LayoutInflater inflater = null;
     private List<Deals> dealsList = new ArrayList<Deals>();
     private Context context;
+    private static LayoutInflater inflater = null;
 
-    public DealsAdapter(Context context) {
+    public DealsAdapter(Context context){
         this.context = context;
         inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
         dealsList = SalesHomeActivity.dealsList;
@@ -59,6 +59,7 @@ public class DealsAdapter extends BaseAdapter {
         dealText.setText(dealsList.get(position).getDealName());
         status.setText(dealsList.get(position).getDealStatus());
         deadLine.setText(dealsList.get(position).getDeadline());
+
 
 
         dropDown.setOnClickListener(new View.OnClickListener() {
