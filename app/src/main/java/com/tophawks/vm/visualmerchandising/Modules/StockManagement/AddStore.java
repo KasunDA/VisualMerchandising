@@ -3,6 +3,7 @@ package com.tophawks.vm.visualmerchandising.Modules.StockManagement;
 import android.Manifest;
 import android.app.ProgressDialog;
 import android.content.ComponentName;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.content.pm.ResolveInfo;
@@ -15,6 +16,7 @@ import android.os.Parcelable;
 import android.provider.MediaStore;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.text.TextUtils;
@@ -214,6 +216,18 @@ public class AddStore extends AppCompatActivity implements AdapterView.OnItemSel
             setResult(RESULT_OK, returnStoreNameToAddProduct);
             mProgress.dismiss();
             finish();
+        } else {
+
+            AlertDialog.Builder doneBuilder = new AlertDialog.Builder(getApplicationContext())
+                    .setMessage("Store is added !!")
+                    .setPositiveButton("OK", new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int which) {
+                            finish();
+//                                        startActivity(new Intent(AddProduct.this,VisualMerchandisingHomePage.class).setFlags(FLA));
+                        }
+                    });
+            doneBuilder.create().show();
         }
 
     }

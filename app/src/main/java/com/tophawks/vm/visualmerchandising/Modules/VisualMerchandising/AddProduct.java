@@ -334,6 +334,7 @@ public class AddProduct extends AppCompatActivity implements SearchView.OnQueryT
                         DatabaseReference storeReference = mDatabaseReference.child("Store").child(productStoreId).child("Products").child(mChildDatabase.getKey());
                         storeReference.setValue(proName);
                         mProgress.dismiss();
+
                     }
                 });
 
@@ -350,7 +351,19 @@ public class AddProduct extends AppCompatActivity implements SearchView.OnQueryT
             final DatabaseReference databaseReferenceCategory = FirebaseDatabase.getInstance().getReference().child("CategoryNames");
             int randNo = (int) (Math.random() * 100);
             databaseReferenceCategory.child("newCategory" + randNo).setValue(category);
+
+
         }
+        AlertDialog.Builder doneBuilder = new AlertDialog.Builder(AddProduct.this);
+        doneBuilder.setMessage("Product is added !!")
+                .setPositiveButton("OK", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        finish();
+//                                        startActivity(new Intent(AddProduct.this,VisualMerchandisingHomePage.class).setFlags(FLA));
+                    }
+                })
+                .create().show();
     }
 
 
