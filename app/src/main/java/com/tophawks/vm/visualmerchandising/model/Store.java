@@ -153,4 +153,5 @@ public class Store implements Serializable {
     public void setCityAddress(String cityAddress) {
         this.cityAddress = cityAddress;
     }
+
 }

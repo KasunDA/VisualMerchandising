@@ -47,7 +47,6 @@ public class SearchViewRecyclerAdapter extends RecyclerView.Adapter<SearchViewRe
         holder.productDiscountPriceTV.setText("₹ " + discountPrice);
         holder.productOriginalPriceTV.setPaintFlags(holder.productOriginalPriceTV.getPaintFlags() | Paint.STRIKE_THRU_TEXT_FLAG | Paint.ANTI_ALIAS_FLAG);
         holder.productName.setText(productArrayList.get(position).getProductName());
-
         holder.productDiscountPersentageTV.setText("" + discountPercentage + "% OFF!!");
     }
 

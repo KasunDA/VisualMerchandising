@@ -32,8 +32,8 @@ public class StockReport extends AppCompatActivity implements View.OnClickListen
     TextView endDateTV;
     Button selectStoreB;
     Button generateReport;
-    ArrayList<Integer> checkedItemsPositions;
-    ArrayList<String> checkedStoreNames;
+    ArrayList<Integer> checkedItemsPositions = new ArrayList<Integer>();
+    ArrayList<String> checkedStoreNames = new ArrayList<String>();
     DatePickerDialog datePickerDialog;
     LinearLayout reportLinearLayout;
     ProgressDialog storeSelectProgressDialog;
@@ -59,7 +59,6 @@ public class StockReport extends AppCompatActivity implements View.OnClickListen
     @Override
     public void onClick(View v) {
         int id = v.getId();
-
         switch (id) {
             case R.id.stock_report_start_date_tv:
                 datePickerDialog = new DatePickerDialog(StockReport.this, new DatePickerDialog.OnDateSetListener() {
@@ -113,7 +112,6 @@ public class StockReport extends AppCompatActivity implements View.OnClickListen
                         .setMultiChoiceItems(stores, checkedStoresBool, new DialogInterface.OnMultiChoiceClickListener() {
                             @Override
                             public void onClick(DialogInterface dialog, int which, boolean isChecked) {
-
                                 if (which == 1) {
 
                                 }
