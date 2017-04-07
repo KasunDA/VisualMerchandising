@@ -92,13 +92,11 @@ public class StockReport extends AppCompatActivity implements View.OnClickListen
     }
 
     private void dialogBoxBuild() {
-
         final ArrayList<String> storeNames = new ArrayList<>();
         final DatabaseReference databaseReference = FirebaseDatabase.getInstance().getReference().child("StoreNames");
         databaseReference.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
-
                 HashMap<String, String> nameMap = (HashMap<String, String>) dataSnapshot.getValue();
                 final boolean checkedStoresBool[] = new boolean[nameMap.keySet().size()];
                 checkedItemsPositions = new ArrayList<Integer>();
@@ -106,7 +104,6 @@ public class StockReport extends AppCompatActivity implements View.OnClickListen
                     storeNames.add(nameMap.get(key));
                 }
                 CharSequence stores[] = storeNames.toArray(new CharSequence[storeNames.size()]);
-
                 AlertDialog.Builder dialogBuilder = new AlertDialog.Builder(StockReport.this);
                 dialogBuilder.setTitle("Stores:")
                         .setMultiChoiceItems(stores, checkedStoresBool, new DialogInterface.OnMultiChoiceClickListener() {
@@ -124,7 +121,7 @@ public class StockReport extends AppCompatActivity implements View.OnClickListen
                                         checkedItemsPositions.remove((Integer) which);
                                     }
                                 }
-                                }
+                            }
                         })
                         .setPositiveButton("OK", new DialogInterface.OnClickListener() {
                             @Override
@@ -140,7 +137,6 @@ public class StockReport extends AppCompatActivity implements View.OnClickListen
                         .setNeutralButton("Clear All", new DialogInterface.OnClickListener() {
                             @Override
                             public void onClick(DialogInterface dialog, int which) {
-
                                 for (int i = 0; i < checkedStoresBool.length; i++) {
                                     checkedStoresBool[i] = false;
                                 }
@@ -152,7 +148,6 @@ public class StockReport extends AppCompatActivity implements View.OnClickListen
                         .show();
                 storeSelectProgressDialog.dismiss();
             }
-
             @Override
             public void onCancelled(DatabaseError databaseError) {
                 Toast.makeText(StockReport.this, "DataBase Error:  " +

@@ -22,6 +22,7 @@ public class VisualMerchandisingHomePage extends AppCompatActivity implements Ba
     FrameLayout frameLayout;
     VMHomeFragment fragment;
     Toolbar toolbar;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -31,16 +32,13 @@ public class VisualMerchandisingHomePage extends AppCompatActivity implements Ba
         frameLayout=(FrameLayout)findViewById(R.id.home_page_frame_layout);
         fragment=new VMHomeFragment();
         FragmentManager fragmentManager=getSupportFragmentManager();
-        if(fragment!=null)
-        {
+        if(fragment != null) {
             fragmentManager.beginTransaction().replace(frameLayout.getId(),fragment).commit();
         }
-
     }
 
     @Override
     public void onSliderClick(BaseSliderView slider) {
-
         Toast.makeText(this, slider.getDescription(), Toast.LENGTH_SHORT).show();
     }
 
@@ -52,13 +50,10 @@ public class VisualMerchandisingHomePage extends AppCompatActivity implements Ba
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-
-        if(item.getItemId()==R.id.main_add_product)
-        {
+        if(item.getItemId()==R.id.main_add_product) {
             startActivity(new Intent(VisualMerchandisingHomePage.this, AddProduct.class));
         }
-        if(item.getItemId()==R.id.main_all_products)
-        {
+        if(item.getItemId()==R.id.main_all_products) {
             startActivity(new Intent(VisualMerchandisingHomePage.this, AllProducts.class));
         }
         return true;

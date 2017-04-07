@@ -29,9 +29,7 @@ public class StockManagementHomePage extends AppCompatActivity implements StockM
 
     @Override
     public void onClickInActivityListener(View view) {
-
         int a = view.getId();
-
         switch (a) {
             case R.id.stock_home_add_store_iv:
                 startActivity(new Intent(StockManagementHomePage.this, AddStore.class));
@@ -48,4 +46,5 @@ public class StockManagementHomePage extends AppCompatActivity implements StockM
                 break;
         }
     }
+
 }

@@ -8,13 +8,18 @@
         app:showAsAction="never" />
 
     <item
-        android:id="@+id/updatedeal"
-        android:title="Update"
+        android:id="@+id/addcontacts"
+        android:title="Add Contacts"
         app:showAsAction="never" />
 
     <item
-        android:id="@+id/deletedeal"
-        android:title="Delete"
+        android:id="@+id/addtasks"
+        android:title="Add Tasks"
+        app:showAsAction="never" />
+
+    <item
+        android:id="@+id/addfeeds"
+        android:title="Add Feeds"
         app:showAsAction="never" />
 
 </menu>

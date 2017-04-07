@@ -2,28 +2,28 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android">
 
     <item
-        android:id="@+id/nav_camera"
-        android:icon="@drawable/ic_menu_camera"
+        android:id="@+id/nav_contacts"
+        android:icon="@drawable/ic_menu_contacts"
         android:title="Contacts" />
     <item
-        android:id="@+id/nav_gallery"
-        android:icon="@drawable/ic_menu_gallery"
+        android:id="@+id/nav_deals"
+        android:icon="@drawable/ic_menu_deal"
         android:title="Deals" />
     <item
-        android:id="@+id/nav_slideshow"
-        android:icon="@drawable/ic_menu_slideshow"
+        android:id="@+id/nav_tasks"
+        android:icon="@drawable/ic_menu_tasks"
         android:title="Tasks" />
     <item
-        android:id="@+id/nav_manage"
-        android:icon="@drawable/ic_menu_manage"
+        android:id="@+id/nav_feeds"
+        android:icon="@drawable/ic_menu_share"
         android:title="Feeds" />
     <item
-        android:id="@+id/nav_share"
-        android:icon="@drawable/ic_menu_share"
-        android:title="Leeds" />
+        android:id="@+id/nav_leads"
+        android:icon="@drawable/ic_menu_leads"
+        android:title="Leads" />
     <item
-        android:id="@+id/nav_send"
-        android:icon="@drawable/ic_menu_send"
+        android:id="@+id/nav_accounts"
+        android:icon="@drawable/ic_menu_people"
         android:title="Accounts" />
 
 </menu>
