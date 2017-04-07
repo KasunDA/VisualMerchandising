@@ -75,7 +75,7 @@
             android:xlargeScreens="true" />
 
         <activity android:name=".Modules.StockManagement.AvailableProductActivity" />
-        <activity android:name=".Activities.LauncherActivity"></activity>
+        <activity android:name=".Activities.LauncherActivity" />
         <activity
             android:name=".Modules.SalesManagement.SalesHomeActivity"
             android:label="@string/title_activity_sales_home"
@@ -86,7 +86,10 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".Modules.SalesManagement.AddDealActivity"></activity>
+        <activity android:name=".Modules.SalesManagement.AddDealActivity" />
+        <activity android:name=".MainHomeActivity" />
+        <activity android:name=".Modules.AttendanceManagement.AttendanceHomeActivity" />
+        <activity android:name=".Modules.AttendanceManagement.EnrollActivity"></activity>
     </application>
 
 </manifest>
