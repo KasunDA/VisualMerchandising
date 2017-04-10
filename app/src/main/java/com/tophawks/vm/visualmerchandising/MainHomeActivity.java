@@ -8,8 +8,9 @@ import android.widget.Button;
 
 import com.tophawks.vm.visualmerchandising.Activities.StockManagementHomePage;
 import com.tophawks.vm.visualmerchandising.Modules.AttendanceManagement.AttendanceHomeActivity;
-import com.tophawks.vm.visualmerchandising.Modules.SalesManagement.SalesHomeActivity;
 import com.tophawks.vm.visualmerchandising.Modules.VisualMerchandising.AddProduct;
+
+//import com.tophawks.vm.visualmerchandising.Modules.SalesManagement.SalesHomeActivity;
 
 public class MainHomeActivity extends AppCompatActivity {
 
@@ -39,8 +40,8 @@ public class MainHomeActivity extends AppCompatActivity {
         salesButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(getApplicationContext(), SalesHomeActivity.class);
-                startActivity(intent);
+//                Intent intent = new Intent(getApplicationContext(), SalesHomeActivity.class);
+//                startActivity(intent);
             }
         });
 

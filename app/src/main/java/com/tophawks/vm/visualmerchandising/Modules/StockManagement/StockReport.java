@@ -6,11 +6,13 @@ import android.content.DialogInterface;
 import android.os.Bundle;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
-import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.View;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.DatePicker;
 import android.widget.LinearLayout;
+import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -34,18 +36,19 @@ public class StockReport extends AppCompatActivity implements View.OnClickListen
     TextView endDateTV;
     Button selectStoreB;
     Button generateReport;
-    RecyclerView storeNameRV, productNameRV, availableRV, dateRV;
+    ListView storeNameLV, productNameLV, availableLV, dateLV;
     ArrayList<Integer> checkedItemsPositions = new ArrayList<Integer>();
     ArrayList<String> checkedStoreNames = new ArrayList<>();
     ArrayList<String> checkedStoreKeys = new ArrayList<>();
-    ArrayList<String> storeNamesListForRV = new ArrayList<>();
-    ArrayList<String> productNamesListForRV = new ArrayList<>();
-    ArrayList<String> availableItemsListForRV = new ArrayList<>();
-    ArrayList<String> dateListForRV = new ArrayList<>();
+    ArrayList<String> storeNamesListForLV = new ArrayList<>();
+    ArrayList<String> productNamesListForLV = new ArrayList<>();
+    ArrayList<String> availableItemsListForLV = new ArrayList<>();
+    ArrayList<String> dateListForLV = new ArrayList<>();
     DatePickerDialog datePickerDialog;
     LinearLayout reportLinearLayout;
     ProgressDialog storeSelectProgressDialog;
     DatabaseReference databaseReference;
+    AlertDialog reportDialog;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -55,10 +58,10 @@ public class StockReport extends AppCompatActivity implements View.OnClickListen
         endDateTV = (TextView) findViewById(R.id.stock_report_end_date_tv);
         selectStoreB = (Button) findViewById(R.id.stock_report_select_store_b);
         generateReport = (Button) findViewById(R.id.stock_report_generate_report_b);
-        storeNameRV = (RecyclerView) findViewById(R.id.stock_report_store_name_rv);
-        productNameRV = (RecyclerView) findViewById(R.id.stock_report_product_name_rv);
-        availableRV = (RecyclerView) findViewById(R.id.stock_report_available_rv);
-        dateRV = (RecyclerView) findViewById(R.id.stock_report_date_rv);
+        storeNameLV = (ListView) findViewById(R.id.stock_report_store_name_lv);
+        productNameLV = (ListView) findViewById(R.id.stock_report_product_name_lv);
+        availableLV = (ListView) findViewById(R.id.stock_report_available_lv);
+        dateLV = (ListView) findViewById(R.id.stock_report_date_lv);
         reportLinearLayout = (LinearLayout) findViewById(R.id.report_linear_layout);
         storeSelectProgressDialog = new ProgressDialog(StockReport.this);
 
@@ -100,6 +103,7 @@ public class StockReport extends AppCompatActivity implements View.OnClickListen
 
                 break;
             case R.id.stock_report_generate_report_b:
+                stockReportGeneration(checkedStoreKeys);
                 reportLinearLayout.setVisibility(View.VISIBLE);
                 break;
         }
@@ -177,10 +181,15 @@ public class StockReport extends AppCompatActivity implements View.OnClickListen
             }
         });
 
-        stockReportGeneration(checkedStoreKeys);
     }
 
     private void stockReportGeneration(ArrayList<String> checkedStoreKeys) {
+
+        reportDialog = new AlertDialog.Builder(getApplicationContext())
+                .setMessage("Generating Report!!")
+                .create();
+        reportDialog.show();
+
 
         for (String storeKey : checkedStoreKeys) {
             final DatabaseReference databaseChildReference = databaseReference.child("Store").child(storeKey).child("Products");
@@ -191,16 +200,22 @@ public class StockReport extends AppCompatActivity implements View.OnClickListen
                     if (products != null) {
                         for (String productKey : products.keySet()) {
                             Product currentProduct = products.get(productKey);
-                            productNamesListForRV.add(currentProduct.getProductName());
-                            storeNamesListForRV.add(currentProduct.getStoreName());
-                            availableItemsListForRV.add("" + currentProduct.getProductQuantity());
+                            productNamesListForLV.add(currentProduct.getProductName());
+                            storeNamesListForLV.add(currentProduct.getStoreName());
+                            availableItemsListForLV.add("" + currentProduct.getProductQuantity());
                         }
                     }
+                    productNameLV.setAdapter(new ArrayAdapter<>(getApplicationContext(), android.R.layout.simple_list_item_1, productNamesListForLV));
+                    storeNameLV.setAdapter(new ArrayAdapter<>(getApplicationContext(), android.R.layout.simple_list_item_1, storeNamesListForLV));
+                    availableLV.setAdapter(new ArrayAdapter<>(getApplicationContext(), android.R.layout.simple_list_item_1, availableItemsListForLV));
+                    reportDialog.dismiss();
                 }
 
                 @Override
                 public void onCancelled(DatabaseError databaseError) {
-
+                    Log.e("stock report error:", databaseError.toString());
+                    Toast.makeText(StockReport.this, "databaseError.toString()", Toast.LENGTH_SHORT).show();
+                    reportDialog.dismiss();
                 }
             });
         }

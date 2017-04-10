@@ -1,11 +1,9 @@
 package com.tophawks.vm.visualmerchandising.Modules.SalesManagement;
 
-import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
-import android.support.v4.app.FragmentManager;
-import android.view.View;
 import android.support.design.widget.NavigationView;
+import android.support.v4.app.FragmentManager;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
@@ -13,24 +11,16 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
-import android.widget.AdapterView;
-import android.widget.ListView;
 import android.widget.Toast;
 
-import com.google.android.gms.tasks.Task;
-import com.google.firebase.database.DataSnapshot;
-import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
-import com.google.firebase.database.FirebaseDatabase;
-import com.google.firebase.database.ValueEventListener;
 import com.google.firebase.storage.StorageReference;
 import com.tophawks.vm.visualmerchandising.R;
-import com.tophawks.vm.visualmerchandising.adapter.DealsAdapter;
 import com.tophawks.vm.visualmerchandising.fragment.SalesAccountsFragment;
 import com.tophawks.vm.visualmerchandising.fragment.SalesContactsFragment;
-import com.tophawks.vm.visualmerchandising.fragment.SalesDealsFragment;
 import com.tophawks.vm.visualmerchandising.fragment.SalesFeedsFragment;
 import com.tophawks.vm.visualmerchandising.fragment.SalesLeadsFragment;
 import com.tophawks.vm.visualmerchandising.fragment.SalesTasksFragment;
@@ -44,13 +34,9 @@ import com.tophawks.vm.visualmerchandising.model.Tasks;
 import java.util.ArrayList;
 import java.util.List;
 
-public class SalesHomeActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener {
+//import com.tophawks.vm.visualmerchandising.adapter.DealsAda
 
-    private Toolbar toolbar;
-    private DrawerLayout drawer;
-    private NavigationView navigationView;
-    private FloatingActionButton callFab;
-    private FloatingActionButton chatFab;
+public class SalesHomeActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener {
 
     public static List<Contacts> contactsList = new ArrayList<>();
     public static List<Deals> dealsList = new ArrayList<>();
@@ -58,11 +44,15 @@ public class SalesHomeActivity extends AppCompatActivity implements NavigationVi
     public static List<Feeds> feedsList = new ArrayList<>();
     public static List<Leads> leadsList = new ArrayList<>();
     public static List<Accounts> accountsList = new ArrayList<>();
-
+    private Toolbar toolbar;
+    private DrawerLayout drawer;
+    private NavigationView navigationView;
+    private FloatingActionButton callFab;
+    private FloatingActionButton chatFab;
     private FragmentManager manager;
     private SalesAccountsFragment accountsFragment;
     private SalesContactsFragment contactsFragment;
-    private SalesDealsFragment dealsFragment;
+    //    private SalesDealsFragment dealsFragment;
     private SalesFeedsFragment feedsFragment;
     private SalesLeadsFragment leadsFragment;
     private SalesTasksFragment tasksFragment;
@@ -109,11 +99,11 @@ public class SalesHomeActivity extends AppCompatActivity implements NavigationVi
         manager = getSupportFragmentManager();
         accountsFragment = new SalesAccountsFragment();
         contactsFragment = new SalesContactsFragment();
-        dealsFragment = new SalesDealsFragment(this);
+//        dealsFragment = new SalesDealsFragment(this);
         feedsFragment = new SalesFeedsFragment();
         leadsFragment = new SalesLeadsFragment();
         tasksFragment = new SalesTasksFragment();
-        manager.beginTransaction().add(R.id.parent, dealsFragment, "Deals").commit();
+//        manager.beginTransaction().add(R.id.parent, dealsFragment, "Deals").commit();
     }
 
     /*private void setupBackend(){
@@ -176,7 +166,7 @@ public class SalesHomeActivity extends AppCompatActivity implements NavigationVi
                 break;
 
             case R.id.nav_deals:
-                manager.beginTransaction().replace(R.id.parent, dealsFragment, "Deals").commit();
+//                manager.beginTransaction().replace(R.id.parent, dealsFragment, "Deals").commit();
                 break;
 
             case R.id.nav_tasks:
@@ -209,8 +199,8 @@ public class SalesHomeActivity extends AppCompatActivity implements NavigationVi
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         if(item.getItemId() == R.id.adddeal){
-            Intent intent = new Intent(this, AddDealActivity.class);
-            startActivity(intent);
+//            Intent intent = new Intent(this, AddDealActivity.class);
+//            startActivity(intent);
         }
         if(item.getItemId() == R.id.addcontacts){
         }

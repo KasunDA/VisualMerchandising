@@ -144,29 +144,29 @@
             android:background="@drawable/border"
             android:orientation="horizontal">
 
-            <android.support.v7.widget.RecyclerView
-                android:id="@+id/stock_report_product_name_rv"
+            <ListView
+                android:id="@+id/stock_report_product_name_lv"
             android:layout_width="0sp"
             android:layout_height="match_parent"
                 android:layout_weight="1"
                 android:background="@drawable/border" />
 
-        <android.support.v7.widget.RecyclerView
-            android:id="@+id/stock_report_store_name_rv"
+            <ListView
+                android:id="@+id/stock_report_store_name_lv"
             android:layout_width="0sp"
             android:layout_height="match_parent"
             android:layout_weight="1"
             android:background="@drawable/border" />
 
-        <android.support.v7.widget.RecyclerView
-            android:id="@+id/stock_report_available_rv"
+            <ListView
+                android:id="@+id/stock_report_available_lv"
             android:layout_width="0sp"
             android:layout_height="match_parent"
             android:layout_weight="0.5"
             android:background="@drawable/border" />
 
-        <android.support.v7.widget.RecyclerView
-            android:id="@+id/stock_report_date_rv"
+            <ListView
+                android:id="@+id/stock_report_date_lv"
             android:layout_width="0sp"
             android:layout_height="match_parent"
             android:layout_weight="0.5"
