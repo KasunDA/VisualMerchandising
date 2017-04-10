@@ -22,7 +22,6 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 import com.tophawks.vm.visualmerchandising.R;
-import com.tophawks.vm.visualmerchandising.model.Product;
 
 import org.joda.time.LocalDate;
 
@@ -48,7 +47,7 @@ public class StockReport extends AppCompatActivity implements View.OnClickListen
     LinearLayout reportLinearLayout;
     ProgressDialog storeSelectProgressDialog;
     DatabaseReference databaseReference;
-    AlertDialog reportDialog;
+    ProgressDialog reportDialog;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -185,9 +184,8 @@ public class StockReport extends AppCompatActivity implements View.OnClickListen
 
     private void stockReportGeneration(ArrayList<String> checkedStoreKeys) {
 
-        reportDialog = new AlertDialog.Builder(getApplicationContext())
-                .setMessage("Generating Report!!")
-                .create();
+        reportDialog = new ProgressDialog(StockReport.this);
+        reportDialog.setMessage("Generating Report!!");
         reportDialog.show();
 
 
@@ -196,18 +194,18 @@ public class StockReport extends AppCompatActivity implements View.OnClickListen
             databaseChildReference.addValueEventListener(new ValueEventListener() {
                 @Override
                 public void onDataChange(DataSnapshot dataSnapshot) {
-                    HashMap<String, Product> products = (HashMap<String, Product>) dataSnapshot.getValue();
+                    HashMap<String, HashMap<String, Object>> products = (HashMap<String, HashMap<String, Object>>) dataSnapshot.getValue();
                     if (products != null) {
                         for (String productKey : products.keySet()) {
-                            Product currentProduct = products.get(productKey);
-                            productNamesListForLV.add(currentProduct.getProductName());
-                            storeNamesListForLV.add(currentProduct.getStoreName());
-                            availableItemsListForLV.add("" + currentProduct.getProductQuantity());
+                            HashMap<String, Object> currentProductMap = products.get(productKey);
+                            productNamesListForLV.add((String) currentProductMap.get("productName"));
+                            storeNamesListForLV.add((String) currentProductMap.get("storeName"));
+                            availableItemsListForLV.add("" + currentProductMap.get("productQuantity"));
                         }
                     }
-                    productNameLV.setAdapter(new ArrayAdapter<>(getApplicationContext(), android.R.layout.simple_list_item_1, productNamesListForLV));
-                    storeNameLV.setAdapter(new ArrayAdapter<>(getApplicationContext(), android.R.layout.simple_list_item_1, storeNamesListForLV));
-                    availableLV.setAdapter(new ArrayAdapter<>(getApplicationContext(), android.R.layout.simple_list_item_1, availableItemsListForLV));
+                    productNameLV.setAdapter(new ArrayAdapter<>(StockReport.this, R.layout.stock_report_list_view_item, productNamesListForLV));
+                    storeNameLV.setAdapter(new ArrayAdapter<>(StockReport.this, R.layout.stock_report_list_view_item, storeNamesListForLV));
+                    availableLV.setAdapter(new ArrayAdapter<>(StockReport.this, R.layout.stock_report_list_view_item, availableItemsListForLV));
                     reportDialog.dismiss();
                 }
 
@@ -219,6 +217,7 @@ public class StockReport extends AppCompatActivity implements View.OnClickListen
                 }
             });
         }
-    }
 
+        reportDialog.dismiss();
+    }
 }

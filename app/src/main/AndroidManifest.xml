@@ -12,6 +12,14 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
+        <activity android:name=".MainHomeActivity">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+
+        </activity>
         <activity android:name=".Modules.VisualMerchandising.AddProduct">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -61,7 +69,13 @@
             </intent-filter>
         </activity>
         <activity android:name=".Modules.StockManagement.AddStore" />
-        <activity android:name=".Modules.StockManagement.StockReport" />
+        <activity android:name=".Modules.StockManagement.StockReport">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+
+                <category android:name="android.intent.category.DEFAULT" />
+            </intent-filter>
+        </activity>
         <activity
             android:name=".Modules.StockManagement.EditProductActivity"
             android:label="@string/title_activity_edit_product"
@@ -87,14 +101,7 @@
             </intent-filter>
         </activity>
         <!--<activity android:name=".Modules.SalesManagement.AddDealActivity" />-->
-        <activity android:name=".MainHomeActivity">
-            <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
 
-                <category android:name="android.intent.category.LAUNCHER" />
-            </intent-filter>
-
-        </activity>
         <activity android:name=".Modules.AttendanceManagement.AttendanceHomeActivity" />
         <activity android:name=".Modules.AttendanceManagement.EnrollActivity"></activity>
     </application>
