@@ -78,7 +78,6 @@ public class AddProduct extends AppCompatActivity implements SearchView.OnQueryT
     //DATABASE AND STORAGE REFERENCES
     StorageReference mStorageReference;
     DatabaseReference mDatabaseReference;
-    ArrayAdapter<CharSequence> brandNameAdapter;
     ArrayAdapter<String> categoryAdapter;
     ArrayAdapter<String> storeNameAdapter;
     ListView storeNamesListView;
@@ -313,7 +312,7 @@ public class AddProduct extends AppCompatActivity implements SearchView.OnQueryT
                         //noinspection VisibleForTests
                         Uri downloadUri = taskSnapshot.getDownloadUrl();
                         mDatabaseReference = FirebaseDatabase.getInstance().getReference();
-                        DatabaseReference mChildDatabase = mDatabaseReference.child("Products").push();
+                        DatabaseReference mChildDatabase = mDatabaseReference.child("Store").child(productStoreId).child("Products").push();
                         //ENTER ALL THE PRODUCTS WITH KEYS IN THE DATABASE
                         Product productRef = new Product(mChildDatabase.getKey()
                                 , productStoreId
@@ -331,7 +330,7 @@ public class AddProduct extends AppCompatActivity implements SearchView.OnQueryT
                         mChildDatabase.setValue(productRef);
 
 
-                        DatabaseReference storeReference = mDatabaseReference.child("Store").child(productStoreId).child("Products").child(mChildDatabase.getKey());
+                        DatabaseReference storeReference = mDatabaseReference.child("Products").child(mChildDatabase.getKey());
                         storeReference.setValue(proName);
                         mProgress.dismiss();
 
@@ -360,7 +359,6 @@ public class AddProduct extends AppCompatActivity implements SearchView.OnQueryT
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
                         finish();
-//                                        startActivity(new Intent(AddProduct.this,VisualMerchandisingHomePage.class).setFlags(FLA));
                     }
                 })
                 .create().show();

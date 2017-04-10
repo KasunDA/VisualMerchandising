@@ -6,6 +6,7 @@ import android.content.DialogInterface;
 import android.os.Bundle;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.RecyclerView;
 import android.view.View;
 import android.widget.Button;
 import android.widget.DatePicker;
@@ -19,6 +20,7 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 import com.tophawks.vm.visualmerchandising.R;
+import com.tophawks.vm.visualmerchandising.model.Product;
 
 import org.joda.time.LocalDate;
 
@@ -32,12 +34,18 @@ public class StockReport extends AppCompatActivity implements View.OnClickListen
     TextView endDateTV;
     Button selectStoreB;
     Button generateReport;
+    RecyclerView storeNameRV, productNameRV, availableRV, dateRV;
     ArrayList<Integer> checkedItemsPositions = new ArrayList<Integer>();
-    ArrayList<String> checkedStoreNames = new ArrayList<String>();
+    ArrayList<String> checkedStoreNames = new ArrayList<>();
+    ArrayList<String> checkedStoreKeys = new ArrayList<>();
+    ArrayList<String> storeNamesListForRV = new ArrayList<>();
+    ArrayList<String> productNamesListForRV = new ArrayList<>();
+    ArrayList<String> availableItemsListForRV = new ArrayList<>();
+    ArrayList<String> dateListForRV = new ArrayList<>();
     DatePickerDialog datePickerDialog;
     LinearLayout reportLinearLayout;
     ProgressDialog storeSelectProgressDialog;
-
+    DatabaseReference databaseReference;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -47,6 +55,10 @@ public class StockReport extends AppCompatActivity implements View.OnClickListen
         endDateTV = (TextView) findViewById(R.id.stock_report_end_date_tv);
         selectStoreB = (Button) findViewById(R.id.stock_report_select_store_b);
         generateReport = (Button) findViewById(R.id.stock_report_generate_report_b);
+        storeNameRV = (RecyclerView) findViewById(R.id.stock_report_store_name_rv);
+        productNameRV = (RecyclerView) findViewById(R.id.stock_report_product_name_rv);
+        availableRV = (RecyclerView) findViewById(R.id.stock_report_available_rv);
+        dateRV = (RecyclerView) findViewById(R.id.stock_report_date_rv);
         reportLinearLayout = (LinearLayout) findViewById(R.id.report_linear_layout);
         storeSelectProgressDialog = new ProgressDialog(StockReport.this);
 
@@ -54,6 +66,8 @@ public class StockReport extends AppCompatActivity implements View.OnClickListen
         endDateTV.setOnClickListener(this);
         selectStoreB.setOnClickListener(this);
         generateReport.setOnClickListener(this);
+
+        databaseReference = FirebaseDatabase.getInstance().getReference();
     }
 
     @Override
@@ -93,15 +107,18 @@ public class StockReport extends AppCompatActivity implements View.OnClickListen
 
     private void dialogBoxBuild() {
         final ArrayList<String> storeNames = new ArrayList<>();
-        final DatabaseReference databaseReference = FirebaseDatabase.getInstance().getReference().child("StoreNames");
-        databaseReference.addValueEventListener(new ValueEventListener() {
+        final ArrayList<String> storeKeys = new ArrayList<>();
+
+        final DatabaseReference databaseChildReference = databaseReference.child("StoreNames");
+        databaseChildReference.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
                 HashMap<String, String> nameMap = (HashMap<String, String>) dataSnapshot.getValue();
                 final boolean checkedStoresBool[] = new boolean[nameMap.keySet().size()];
-                checkedItemsPositions = new ArrayList<Integer>();
+                checkedItemsPositions = new ArrayList<>();
                 for (String key : nameMap.keySet()) {
                     storeNames.add(nameMap.get(key));
+                    storeKeys.add(key);
                 }
                 CharSequence stores[] = storeNames.toArray(new CharSequence[storeNames.size()]);
                 AlertDialog.Builder dialogBuilder = new AlertDialog.Builder(StockReport.this);
@@ -126,9 +143,11 @@ public class StockReport extends AppCompatActivity implements View.OnClickListen
                         .setPositiveButton("OK", new DialogInterface.OnClickListener() {
                             @Override
                             public void onClick(DialogInterface dialog, int which) {
-                                checkedStoreNames = new ArrayList<String>(checkedItemsPositions.size());
+                                checkedStoreNames = new ArrayList<>(checkedItemsPositions.size());
+                                checkedStoreKeys = new ArrayList<>(checkedItemsPositions.size());
                                 for (int i : checkedItemsPositions) {
                                     checkedStoreNames.add(storeNames.get(i));
+                                    checkedStoreKeys.add(storeKeys.get(i));
                                 }
 
                             }
@@ -142,19 +161,49 @@ public class StockReport extends AppCompatActivity implements View.OnClickListen
                                 }
                                 checkedItemsPositions.clear();
                                 checkedStoreNames.clear();
+                                checkedStoreKeys.clear();
                             }
                         })
                         .create()
                         .show();
                 storeSelectProgressDialog.dismiss();
             }
+
             @Override
             public void onCancelled(DatabaseError databaseError) {
                 Toast.makeText(StockReport.this, "DataBase Error:  " +
-                        databaseError, Toast.LENGTH_SHORT).show();
+                        databaseError, Toast.LENGTH_LONG).show();
 
             }
         });
+
+        stockReportGeneration(checkedStoreKeys);
+    }
+
+    private void stockReportGeneration(ArrayList<String> checkedStoreKeys) {
+
+        for (String storeKey : checkedStoreKeys) {
+            final DatabaseReference databaseChildReference = databaseReference.child("Store").child(storeKey).child("Products");
+            databaseChildReference.addValueEventListener(new ValueEventListener() {
+                @Override
+                public void onDataChange(DataSnapshot dataSnapshot) {
+                    HashMap<String, Product> products = (HashMap<String, Product>) dataSnapshot.getValue();
+                    if (products != null) {
+                        for (String productKey : products.keySet()) {
+                            Product currentProduct = products.get(productKey);
+                            productNamesListForRV.add(currentProduct.getProductName());
+                            storeNamesListForRV.add(currentProduct.getStoreName());
+                            availableItemsListForRV.add("" + currentProduct.getProductQuantity());
+                        }
+                    }
+                }
+
+                @Override
+                public void onCancelled(DatabaseError databaseError) {
+
+                }
+            });
+        }
     }
 
 }
