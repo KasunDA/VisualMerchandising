@@ -420,7 +420,8 @@ public class AddProduct extends AppCompatActivity implements SearchView.OnQueryT
     //IMAGE PICKER WHEN CHOOSE IMAGE BUTTON IS CLICKED
     private void imageChooser() {
 
-        File root = new File(Environment.getExternalStorageDirectory() + File.separator + "Field Attendance" + File.separator);
+        File root = new File(Environment.getExternalStorageDirectory() + File.separator +
+                "Track'n'Train" + File.separator + "Product Picture" + File.separator);
         root.mkdirs();
         final String fname = "profpic" + System.currentTimeMillis() + ".jpg";
         final File sdImageMainDirectory = new File(root, fname);

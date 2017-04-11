@@ -3,7 +3,10 @@ package com.tophawks.vm.visualmerchandising.Modules.StockManagement;
 import android.app.DatePickerDialog;
 import android.app.ProgressDialog;
 import android.content.DialogInterface;
+import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
+
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
@@ -22,9 +25,9 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 import com.tophawks.vm.visualmerchandising.R;
+import com.tophawks.vm.visualmerchandising.ReadWriteExcelFile;
 
 import org.joda.time.LocalDate;
-
 import java.text.NumberFormat;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -43,11 +46,14 @@ public class StockReport extends AppCompatActivity implements View.OnClickListen
     ArrayList<String> productNamesListForLV = new ArrayList<>();
     ArrayList<String> availableItemsListForLV = new ArrayList<>();
     ArrayList<String> dateListForLV = new ArrayList<>();
+    ArrayList<String> stockReportHeadings=new ArrayList<>();
+    ArrayList<ArrayList<String >> reportDataLOL=new ArrayList<>();
     DatePickerDialog datePickerDialog;
     LinearLayout reportLinearLayout;
     ProgressDialog storeSelectProgressDialog;
     DatabaseReference databaseReference;
     ProgressDialog reportDialog;
+    int i=1;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -184,29 +190,50 @@ public class StockReport extends AppCompatActivity implements View.OnClickListen
 
     private void stockReportGeneration(ArrayList<String> checkedStoreKeys) {
 
+        clearArrayLists();
+        i=1;
         reportDialog = new ProgressDialog(StockReport.this);
         reportDialog.setMessage("Generating Report!!");
         reportDialog.show();
 
+        stockReportHeadings.add("Product");
+        stockReportHeadings.add("Store");
+        stockReportHeadings.add("Product Quantity");
+        reportDataLOL.add(stockReportHeadings);
 
         for (String storeKey : checkedStoreKeys) {
             final DatabaseReference databaseChildReference = databaseReference.child("Store").child(storeKey).child("Products");
             databaseChildReference.addValueEventListener(new ValueEventListener() {
+
                 @Override
                 public void onDataChange(DataSnapshot dataSnapshot) {
                     HashMap<String, HashMap<String, Object>> products = (HashMap<String, HashMap<String, Object>>) dataSnapshot.getValue();
                     if (products != null) {
+
                         for (String productKey : products.keySet()) {
                             HashMap<String, Object> currentProductMap = products.get(productKey);
                             productNamesListForLV.add((String) currentProductMap.get("productName"));
                             storeNamesListForLV.add((String) currentProductMap.get("storeName"));
                             availableItemsListForLV.add("" + currentProductMap.get("productQuantity"));
+                            reportDataLOL.add(new ArrayList<String>());
+                            reportDataLOL.get(i).add((String) currentProductMap.get("productName"));
+                            reportDataLOL.get(i).add((String) currentProductMap.get("storeName"));
+                            reportDataLOL.get(i).add("" + currentProductMap.get("productQuantity"));
+                            i++;
                         }
                     }
+
                     productNameLV.setAdapter(new ArrayAdapter<>(StockReport.this, R.layout.stock_report_list_view_item, productNamesListForLV));
                     storeNameLV.setAdapter(new ArrayAdapter<>(StockReport.this, R.layout.stock_report_list_view_item, storeNamesListForLV));
                     availableLV.setAdapter(new ArrayAdapter<>(StockReport.this, R.layout.stock_report_list_view_item, availableItemsListForLV));
-                    reportDialog.dismiss();
+
+                    String xlsFilename="stock report "+LocalDate.now().toString()+".xls";
+                    ReadWriteExcelFile readWriteExcelFile=new ReadWriteExcelFile(StockReport.this);
+                    Uri fileUri=readWriteExcelFile.saveExcelFile(xlsFilename,reportDataLOL,"Stock Management");
+
+                    Intent openStockReport=new Intent(Intent.ACTION_VIEW,fileUri);
+                    startActivity(openStockReport);
+
                 }
 
                 @Override
@@ -216,8 +243,20 @@ public class StockReport extends AppCompatActivity implements View.OnClickListen
                     reportDialog.dismiss();
                 }
             });
+
+
         }
 
         reportDialog.dismiss();
+    }
+
+    private void clearArrayLists() {
+
+        productNamesListForLV.clear();
+        storeNamesListForLV.clear();
+        availableItemsListForLV.clear();
+        stockReportHeadings.clear();
+        dateListForLV.clear();
+        reportDataLOL.clear();
     }
 }
