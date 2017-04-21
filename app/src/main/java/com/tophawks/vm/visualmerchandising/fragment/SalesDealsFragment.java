@@ -26,7 +26,7 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 import com.google.firebase.storage.StorageReference;
-import com.tophawks.vm.visualmerchandising.Modules.SalesManagement.AddDealActivity;
+
 import com.tophawks.vm.visualmerchandising.Modules.SalesManagement.SalesHomeActivity;
 import com.tophawks.vm.visualmerchandising.R;
 import com.tophawks.vm.visualmerchandising.adapter.DealsAdapter;

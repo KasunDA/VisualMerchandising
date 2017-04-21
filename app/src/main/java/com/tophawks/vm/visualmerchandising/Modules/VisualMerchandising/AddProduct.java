@@ -16,6 +16,7 @@ import android.os.Parcelable;
 import android.provider.MediaStore;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
+import android.support.v4.content.res.ResourcesCompat;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.SearchView;
@@ -227,7 +228,7 @@ public class AddProduct extends AppCompatActivity implements SearchView.OnQueryT
                         if (previousViewOfLV != null) {
                             previousViewOfLV.setBackground(null);
                         }
-                        view.setBackground(getResources().getDrawable(R.drawable.blue));
+                        view.setBackground(ResourcesCompat.getDrawable(getResources(),R.drawable.blue,null));
                         previousViewOfLV = view;
                     }
 
