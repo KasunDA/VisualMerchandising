@@ -7,6 +7,7 @@ import android.view.View;
 import android.widget.Button;
 
 import com.tophawks.vm.visualmerchandising.Activities.StockManagementHomePage;
+import com.tophawks.vm.visualmerchandising.Activities.VisualMerchandisingHomePage;
 import com.tophawks.vm.visualmerchandising.Modules.AttendanceManagement.AttendanceHomeActivity;
 import com.tophawks.vm.visualmerchandising.Modules.VisualMerchandising.AddProduct;
 
@@ -56,7 +57,7 @@ public class MainHomeActivity extends AppCompatActivity {
         vmButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(getApplicationContext(), AddProduct.class);
+                Intent intent = new Intent(getApplicationContext(), VisualMerchandisingHomePage.class);
                 startActivity(intent);
             }
         });
