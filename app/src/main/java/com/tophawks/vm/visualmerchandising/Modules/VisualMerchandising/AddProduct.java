@@ -7,6 +7,7 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.content.pm.ResolveInfo;
+import android.content.res.Resources;
 import android.graphics.Bitmap;
 import android.graphics.Color;
 import android.net.Uri;
@@ -69,7 +70,7 @@ public class AddProduct extends AppCompatActivity implements SearchView.OnQueryT
     Spinner categoryS;
     LinearLayout addProduct;
     EditText productStoreNameET;
-    SearchView storeNameSearchView;
+
     //IMAGE HOLDING URI
     Uri imageHold = null;
 
@@ -81,6 +82,7 @@ public class AddProduct extends AppCompatActivity implements SearchView.OnQueryT
     DatabaseReference mDatabaseReference;
     ArrayAdapter<String> categoryAdapter;
     ArrayAdapter<String> storeNameAdapter;
+    SearchView storeNameSearchView;
     ListView storeNamesListView;
     //PROGRESS DIALOG
     ProgressDialog mProgress;
@@ -181,7 +183,13 @@ public class AddProduct extends AppCompatActivity implements SearchView.OnQueryT
         productStoreNameET.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                AlertDialog alertDialog = null;
+
+                fetchStoreNames();
+
+
+            }
+
+            private void fetchStoreNames() {
                 storeNames = new ArrayList<>();
                 storeKeys = new ArrayList<String>();
                 storeNames.add("Other");
@@ -197,6 +205,51 @@ public class AddProduct extends AppCompatActivity implements SearchView.OnQueryT
                                 storeNames.add(nameMap.get(key));
                                 storeKeys.add(key);
                             }
+                            final AlertDialog alertDialog;
+                            final AlertDialog.Builder builder = new AlertDialog.Builder(AddProduct.this);
+                            View dialogView = getLayoutInflater().inflate(R.layout.store_name_dialog_view, null);
+                            storeNamesListView = (ListView) dialogView.findViewById(R.id.dialog_stores_name_lv);
+                            storeNameSearchView = (SearchView) dialogView.findViewById(R.id.store_name_dialog_choose_store_sv);
+                            storeNameSearchView.setIconified(false);
+                            storeNameSearchView.clearFocus();
+                            storeNameSearchView.setOnQueryTextListener(AddProduct.this);
+                            storeNameAdapter = new ArrayAdapter<String>(AddProduct.this, android.R.layout.simple_list_item_1, storeNames);
+                            storeNamesListView.setAdapter(storeNameAdapter);
+                            storeNamesListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+                                //NICE
+                                View previousViewOfLV = null;
+
+                                @Override
+                                public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+
+
+                                    productStoreNameET.setText(storeNames.get(position));
+                                    productStoreId = storeKeys.get(position);
+                                    if (previousViewOfLV != null) {
+                                        previousViewOfLV.setBackground(null);
+                                    }
+                                    view.setBackground(ResourcesCompat.getDrawable(getResources(),R.drawable.blue,null));
+
+                                    previousViewOfLV = view;
+                                }
+
+                            });
+                            builder.setTitle("Choose Store");
+                            builder.setView(dialogView);
+                            builder.setPositiveButton("OK", new DialogInterface.OnClickListener() {
+                                @Override
+                                public void onClick(DialogInterface dialog, int which) {
+                                    if (productStoreNameET.getText().toString().equals("Other")) {
+                                        dialog.dismiss();
+                                        startActivityForResult(new Intent(AddProduct.this, AddStore.class).putExtra("callFromAddProduct", "true"), ADD_NEW_STORE);
+
+                                    }
+                                    else
+                                        dialog.dismiss();
+                                }
+                            });
+                            alertDialog = builder.create();
+                            alertDialog.show();
                         }
 
                     }
@@ -206,47 +259,6 @@ public class AddProduct extends AppCompatActivity implements SearchView.OnQueryT
 
                     }
                 });
-                final AlertDialog.Builder builder = new AlertDialog.Builder(AddProduct.this);
-                View dialogView = getLayoutInflater().inflate(R.layout.store_name_dialog_view, null);
-                storeNamesListView = (ListView) dialogView.findViewById(R.id.dialog_stores_name_lv);
-                storeNameSearchView = (SearchView) dialogView.findViewById(R.id.store_name_dialog_choose_store_sv);
-                storeNameSearchView.setIconified(false);
-                storeNameSearchView.clearFocus();
-                storeNameSearchView.setOnQueryTextListener(AddProduct.this);
-                storeNameAdapter = new ArrayAdapter<String>(AddProduct.this, android.R.layout.simple_list_item_1, storeNames);
-                storeNamesListView.setAdapter(storeNameAdapter);
-                storeNamesListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-                    //NICE
-                    View previousViewOfLV = null;
-
-                    @Override
-                    public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-
-
-                        productStoreNameET.setText(storeNames.get(position));
-                        productStoreId = storeKeys.get(position);
-                        if (previousViewOfLV != null) {
-                            previousViewOfLV.setBackground(null);
-                        }
-                        view.setBackground(ResourcesCompat.getDrawable(getResources(),R.drawable.blue,null));
-                        previousViewOfLV = view;
-                    }
-
-                });
-                builder.setTitle("Choose Store");
-                builder.setView(dialogView);
-                builder.setPositiveButton("OK", new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int which) {
-                        if (productStoreNameET.getText().toString().equals("Other")) {
-                            startActivityForResult(new Intent(AddProduct.this, AddStore.class).putExtra("callFromAddProduct", "true"), ADD_NEW_STORE);
-                            dialog.dismiss();
-                        }
-                    }
-                });
-                alertDialog = builder.create();
-                alertDialog.show();
-
             }
         });
         //ASSIGN REFERENCES

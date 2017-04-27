@@ -29,6 +29,7 @@ public class ProductDescription extends AppCompatActivity implements View.OnClic
     int productPopularity;
     //FIELDS FOR VIEWS AND STRINGS
     private String product_key_id = null;
+    private String product_store_key_id = null;
     private TextView productName, retailPrice, wholeSalePrice, originalPrice, discountPrice, category, brandName, specification, color, quantity;
     private ImageView productDisplay;
     private ImageButton like, dislike;
@@ -57,13 +58,14 @@ public class ProductDescription extends AppCompatActivity implements View.OnClic
         dislike.setOnClickListener(this);
         //GET INTENT EXTRA
         product_key_id = getIntent().getStringExtra("product_id");
+        product_store_key_id = getIntent().getStringExtra("product_store_id");
 
         if (!TextUtils.isEmpty(product_key_id)) {
 
             Log.d("halwa", product_key_id);
 
             //ASSIGN FIREBASE DATABASE INSTANCE
-            mFirebaseDatabase = FirebaseDatabase.getInstance().getReference().child("Products");
+            mFirebaseDatabase = FirebaseDatabase.getInstance().getReference().child("Store").child(product_store_key_id).child("Products");
         } else {
 
             Toast.makeText(ProductDescription.this, "Unable to retrieve the product info", Toast.LENGTH_LONG).show();

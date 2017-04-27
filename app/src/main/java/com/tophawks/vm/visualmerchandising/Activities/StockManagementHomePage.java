@@ -8,8 +8,10 @@ import android.view.View;
 import android.widget.FrameLayout;
 
 import com.tophawks.vm.visualmerchandising.Modules.StockManagement.AddStore;
+import com.tophawks.vm.visualmerchandising.Modules.StockManagement.AvailableProductActivity;
 import com.tophawks.vm.visualmerchandising.Modules.StockManagement.StockReport;
 import com.tophawks.vm.visualmerchandising.Modules.StockManagement.UpdateProductList;
+import com.tophawks.vm.visualmerchandising.Modules.StockManagement.UpdateStore;
 import com.tophawks.vm.visualmerchandising.R;
 import com.tophawks.vm.visualmerchandising.fragment.StockMHomeFragment;
 
@@ -35,8 +37,10 @@ public class StockManagementHomePage extends AppCompatActivity implements StockM
                 startActivity(new Intent(StockManagementHomePage.this, AddStore.class));
                 break;
             case R.id.stock_home_update_store_iv:
+                startActivity(new Intent(StockManagementHomePage.this, UpdateStore.class));
                 break;
             case R.id.stock_home_check_product_iv:
+                startActivity(new Intent(StockManagementHomePage.this, AvailableProductActivity.class));
                 break;
             case R.id.stock_home_update_product_iv:
                 startActivity(new Intent(StockManagementHomePage.this, UpdateProductList.class));

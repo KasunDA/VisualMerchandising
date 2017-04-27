@@ -101,6 +101,7 @@ public class SearchViewRecyclerAdapterAllProduct extends RecyclerView.Adapter<Se
             int position = getAdapterPosition();
             Intent descriptionIntent = new Intent(context, ProductDescription.class);
             descriptionIntent.putExtra("product_id", products.get(position).getProductId());
+            descriptionIntent.putExtra("product_store_id", products.get(position).getStoreId());
             context.startActivity(descriptionIntent);
 
         }

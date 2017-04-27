@@ -56,14 +56,7 @@ public class StockMHomeFragment extends Fragment implements View.OnClickListener
         addStoreIV.setOnClickListener(this);
         updateProductIV.setOnClickListener(this);
         updateStoreIV.setOnClickListener(this);
-        checkProductIV.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-
-                startActivity(new Intent(getContext(), AvailableProductActivity.class));
-
-            }
-        });
+        checkProductIV.setOnClickListener(this);
         stockReport.setOnClickListener(this);
 
         return v;

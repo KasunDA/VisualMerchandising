@@ -27,7 +27,7 @@ public class DealsAdapter extends BaseAdapter{
       public DealsAdapter(Context context){
           this.context = context;
           inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-          dealsList = SalesDealsFragment.dealsList;
+          dealsList = SalesHomeActivity.dealsList;
       }
 
       @Override

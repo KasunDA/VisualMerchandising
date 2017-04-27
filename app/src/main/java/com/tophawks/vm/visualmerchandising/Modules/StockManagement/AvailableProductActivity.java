@@ -1,8 +1,12 @@
 package com.tophawks.vm.visualmerchandising.Modules.StockManagement;
 
+import android.app.ProgressDialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.os.Bundle;
+import android.support.v4.content.res.ResourcesCompat;
 import android.support.v4.view.MenuItemCompat;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -12,13 +16,20 @@ import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
 import android.widget.ImageView;
+import android.widget.ListView;
 import android.widget.TextView;
 
 import com.firebase.ui.database.FirebaseRecyclerAdapter;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 import com.squareup.picasso.Picasso;
+import com.tophawks.vm.visualmerchandising.Modules.VisualMerchandising.AllProducts;
 import com.tophawks.vm.visualmerchandising.R;
 import com.tophawks.vm.visualmerchandising.adapter.SearchViewRecyclerAdapterAllProduct;
 import com.tophawks.vm.visualmerchandising.model.Product;
@@ -26,6 +37,7 @@ import com.tophawks.vm.visualmerchandising.model.Product;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
+import java.util.HashMap;
 
 public class AvailableProductActivity extends AppCompatActivity implements SearchView.OnQueryTextListener {
 
@@ -42,6 +54,13 @@ public class AvailableProductActivity extends AppCompatActivity implements Searc
 
     FirebaseRecyclerAdapter<Product, AvailableViewHolder> availableProductAdapter;
 
+    ProgressDialog progressDialog;
+    ArrayList<String> storeNames, storeKeys;
+    ArrayAdapter<String> storeNameAdapter;
+    SearchView storeNameSearchView;
+    ListView storeNamesListView;
+    private String productStoreId;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -49,35 +68,121 @@ public class AvailableProductActivity extends AppCompatActivity implements Searc
 
         toolbar_search = (Toolbar) findViewById(R.id.search_toolbar);
         setSupportActionBar(toolbar_search);
+        progressDialog=new ProgressDialog(AvailableProductActivity.this);
+        progressDialog.setMessage("Please Wait!!");
+        progressDialog.setCanceledOnTouchOutside(false);
+        progressDialog.show();
+
+
+
         getSupportActionBar().setTitle("Available Products");
         getSupportParentActivityIntent();
 
         productArrayList = new ArrayList<>();
 
         //ASSIGN FIREBASE INSTANCE
-        mAvailableProductList = FirebaseDatabase.getInstance().getReference().child("Store").child("-KfkgMztV_d6Pxo8vVm1").child("Products");
 
-        //ASSIGN RECYCLERVIEW ID
+
+        //ASSIGN RECYCLER VIEW ID
         mAvailableProductRecyclerView = (RecyclerView) findViewById(R.id.availableProductListRecycler);
         mAvailableProductRecyclerView.setHasFixedSize(true);
         mAvailableProductRecyclerView.setLayoutManager(new LinearLayoutManager(AvailableProductActivity.this));
-
+        fetchStoreNames();
     }
 
-    @Override
-    protected void onStart() {
-        super.onStart();
+    private void fetchStoreNames() {
+        storeNames = new ArrayList<>();
+        storeKeys = new ArrayList<>();
+        final DatabaseReference databaseReference = FirebaseDatabase.getInstance().getReference().child("StoreNames");
+        databaseReference.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
 
-        //SET FIREBASE ADATAPTER WITH 4 PARAMETERS AS ARGUMENTS
-        availableProductAdapter =
+                HashMap<String, String> nameMap = (HashMap<String, String>) dataSnapshot.getValue();
+                if (nameMap != null) {
+                    for (String key : nameMap.keySet()) {
+                        storeNames.add(nameMap.get(key));
+                        storeKeys.add(key);
+                    }
+                    progressDialog.dismiss();
+                    final AlertDialog alertDialog;
+                    final AlertDialog.Builder builder = new AlertDialog.Builder(AvailableProductActivity.this);
+                    View dialogView = getLayoutInflater().inflate(R.layout.store_name_dialog_view, null);
+                    storeNamesListView = (ListView) dialogView.findViewById(R.id.dialog_stores_name_lv);
+                    storeNameSearchView = (SearchView) dialogView.findViewById(R.id.store_name_dialog_choose_store_sv);
+                    storeNameSearchView.setIconified(false);
+                    storeNameSearchView.clearFocus();
+                    storeNameSearchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
+                        @Override
+                        public boolean onQueryTextSubmit(String query) {
+                            return false;
+                        }
 
-                new FirebaseRecyclerAdapter<Product, AvailableViewHolder>(
+                        @Override
+                        public boolean onQueryTextChange(String newText) {
+                            newText = newText.toLowerCase();
+                            ArrayList<String> newList = new ArrayList<>();
+                            for (String storeNameSearch : storeNames) {
+                                if (storeNameSearch.toLowerCase().contains(newText)) {
+                                    newList.add(storeNameSearch);
+                                }
 
+                            }
+
+                            storeNamesListView.setAdapter(new ArrayAdapter<>(AvailableProductActivity.this, android.R.layout.simple_list_item_1, newList));
+                            return true;
+                        }
+                    });
+                    storeNameAdapter = new ArrayAdapter<>(AvailableProductActivity.this, android.R.layout.simple_list_item_1, storeNames);
+                    storeNamesListView.setAdapter(storeNameAdapter);
+                    storeNamesListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+                        //NICE
+                        View previousViewOfLV = null;
+
+                        @Override
+                        public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+
+                            productStoreId = storeKeys.get(position);
+                            if (previousViewOfLV != null) {
+                                previousViewOfLV.setBackground(null);
+                            }
+                            view.setBackground(ResourcesCompat.getDrawable(getResources(), R.drawable.blue, null));
+
+                            previousViewOfLV = view;
+                        }
+
+                    });
+                    builder.setTitle("Choose Store");
+                    builder.setView(dialogView);
+                    builder.setPositiveButton("OK", new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int which) {
+                            dialog.dismiss();
+                            populatingRecycler();
+                        }
+                    });
+                    alertDialog = builder.create();
+                    alertDialog.show();
+                }
+
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+
+            }
+        });
+    }
+
+    private void populatingRecycler() {
+        mAvailableProductList = FirebaseDatabase.getInstance().getReference().child("Store").child(productStoreId).child("Products");
+
+        //SET FIREBASE ADAPTER WITH 4 PARAMETERS AS ARGUMENTS
+        availableProductAdapter = new FirebaseRecyclerAdapter<Product, AvailableViewHolder>(
                         Product.class,
                         R.layout.product_list_edit_card,
                         AvailableViewHolder.class,
                         mAvailableProductList
-
                 ) {
                     @Override
                     protected void populateViewHolder(AvailableViewHolder viewHolder, Product model, int position) {
@@ -100,11 +205,11 @@ public class AvailableProductActivity extends AppCompatActivity implements Searc
                 };
 
         searchViewAdapter = new SearchViewRecyclerAdapterAllProduct(AvailableProductActivity.this ,productArrayList);
-
         //SET ADAPTER
         mAvailableProductRecyclerView.setAdapter(availableProductAdapter);
 
     }
+
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
@@ -202,7 +307,7 @@ public class AvailableProductActivity extends AppCompatActivity implements Searc
     }
 
     //VIEWHOLDER CLASS FOR HOLDING THE VIEW OF EACH CARD
-    private static class AvailableViewHolder extends RecyclerView.ViewHolder
+    public static class AvailableViewHolder extends RecyclerView.ViewHolder
     {
 
         //VIEWHOLDER FIELDS

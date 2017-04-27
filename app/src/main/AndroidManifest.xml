@@ -18,7 +18,6 @@
 
                 <category android:name="android.intent.category.DEFAULT" />
             </intent-filter>
-
         </activity>
         <activity android:name=".Modules.VisualMerchandising.AddProduct">
             <intent-filter>
@@ -73,7 +72,7 @@
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
-                <category android:name="android.intent.category.LAUNCHER" />
+                <category android:name="android.intent.category.DEFAULT" />
             </intent-filter>
         </activity>
         <activity
@@ -88,7 +87,13 @@
             android:smallScreens="true"
             android:xlargeScreens="true" />
 
-        <activity android:name=".Modules.StockManagement.AvailableProductActivity" />
+        <activity android:name=".Modules.StockManagement.AvailableProductActivity">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+
+                <category android:name="android.intent.category.DEFAULT" />
+            </intent-filter>
+        </activity>
         <activity android:name=".Activities.LauncherActivity" />
         <activity
             android:name=".Modules.SalesManagement.SalesHomeActivity"
@@ -100,10 +105,24 @@
                 <category android:name="android.intent.category.DEFAULT" />
             </intent-filter>
         </activity>
-        <!--<activity android:name=".Modules.SalesManagement.AddDealActivity" />-->
+        <!-- <activity android:name=".Modules.SalesManagement.AddDealActivity" /> -->
 
         <activity android:name=".Modules.AttendanceManagement.AttendanceHomeActivity" />
-        <activity android:name=".Modules.AttendanceManagement.EnrollActivity"></activity>
+        <activity android:name=".Modules.AttendanceManagement.EnrollActivity" />
+        <activity android:name=".Modules.VisualMerchandising.VMReport">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+
+                <category android:name="android.intent.category.DEFAULT" />
+            </intent-filter>
+        </activity>
+        <activity android:name=".Modules.StockManagement.UpdateStore">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
     </application>
 
 </manifest>

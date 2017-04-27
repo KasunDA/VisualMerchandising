@@ -78,12 +78,13 @@ public class EditProductActivity extends AppCompatActivity implements SearchView
     //DATABASE AND STORAGE REFERENCES
     StorageReference mStorageReference;
     DatabaseReference mDatabaseReference;
-    ArrayAdapter brandNameAdapter, categoryAdapter;
+    ArrayAdapter categoryAdapter;
     //PROGRESS DIALOG
     ProgressDialog mProgress;
     ArrayList<String> storeNames, storeKeys, categoryNames;
     //PRODUCT KEY FROM LIST INTENT
     private String product_key = "";
+    private String product_store_key = "";
     private Uri outputFileUri;
     private String productStoreId;
 
@@ -112,6 +113,7 @@ public class EditProductActivity extends AppCompatActivity implements SearchView
 
         //GET PRODUCT KEY
         product_key = getIntent().getStringExtra("product_key_edit").toString();
+        product_store_key = getIntent().getStringExtra("product_store_key_edit").toString();
 
         mProgress = new ProgressDialog(this);
 
@@ -154,15 +156,14 @@ public class EditProductActivity extends AppCompatActivity implements SearchView
                     AlertDialog.Builder newCategoryBuilder = new AlertDialog.Builder(EditProductActivity.this);
                     newCategoryBuilder.setTitle("Add Category");
                     View addCategoryView = getLayoutInflater().inflate(R.layout.add_category_dialog, null);
-                    final EditText adCategoryET = (EditText) addCategoryView.findViewById(R.id.add_category_dialog_category_et);
+                    final EditText addCategoryET = (EditText) addCategoryView.findViewById(R.id.add_category_dialog_category_et);
                     newCategoryBuilder.setPositiveButton("OK", new DialogInterface.OnClickListener() {
                         @Override
                         public void onClick(DialogInterface dialog, int which) {
-                            String newCategory = adCategoryET.getText().toString();
+                            String newCategory = addCategoryET.getText().toString();
                             if (!TextUtils.isEmpty(newCategory)) {
                                 category = newCategory;
                                 dialog.dismiss();
-
                             }
                         }
                     })
@@ -261,7 +262,7 @@ public class EditProductActivity extends AppCompatActivity implements SearchView
 
 
         //ASSIGN REFERENCES
-        mDatabaseReference = FirebaseDatabase.getInstance().getReference().child("Products").child(product_key);
+        mDatabaseReference = FirebaseDatabase.getInstance().getReference().child("Store").child(product_store_key).child("Products").child(product_key);
         mStorageReference = FirebaseStorage.getInstance().getReference();
 
 
@@ -391,8 +392,9 @@ public class EditProductActivity extends AppCompatActivity implements SearchView
                 //ENTER ALL THE PRODUCTS WITH KEYS IN THE DATASBSE
                 Product productRef = new Product(product_key
                         , productStoreId
-                        , proName, proColorName
+                        , proName
                         , storename
+                        , proColorName
                         , proSpecification
                         , imageUrlIfNotChanged
                         , Float.valueOf(whoPrice)
